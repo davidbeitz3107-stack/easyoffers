@@ -1,1 +1,589 @@
-const K='easyoffer_v10';const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));const eur=n=>new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(Number(n)||0);const id=()=>Date.now().toString(36)+Math.random().toString(36).slice(2);const catalog=[['Anfahrt','pa',85],['Arbeitszeit Monteur','Std.',78],['Demontage Altgerät','Stk.',250],['Entsorgung Altgerät','Stk.',150],['Heizungsanlage','Stk.',4800],['Wärmepumpe','Stk.',8200],['Montage Heizungsanlage','Stk.',1200],['Hydraulischer Abgleich','pa',390],['Inbetriebnahme','Stk.',350],['Wartung Heizungsanlage','Stk.',190],['Fehlerdiagnose','Stk.',120],['Waschtisch inkl. Montage','Stk.',690],['WC inkl. Montage','Stk.',620],['Armatur inkl. Montage','Stk.',280],['Klimagerät Split','Stk.',1450],['Montage Klimagerät','Stk.',650],['Rohrleitung','m',42],['Kleinteile / Verbrauchsmaterial','pa',95]];let db=JSON.parse(localStorage.getItem(K)||'null')||{offers:[],settings:{company:'Dein SHK-Betrieb',address:'',email:'',phone:'',vat:19,next:1001}};let st={page:'home',step:1,o:null,photos:[]};function save(){localStorage.setItem(K,JSON.stringify(db))}function money(o){return o.items.reduce((a,x)=>a+(+x.qty||0)*(+x.price||0),0)}function toast(t){let d=document.createElement('div');d.className='toast';d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),1800)}function nav(){return `<aside class="side"><div class="brand"><div class="logo">E</div><div><b>easyoffer</b><small>SHK-Angebote</small></div></div><nav><button class="nav ${st.page==='home'?'active':''}" onclick="go('home')">⌂ <span>Übersicht</span></button><button class="nav ${st.page==='new'?'active':''}" onclick="newOffer()">＋ <span>Neues Angebot</span></button><button class="nav ${st.page==='offers'?'active':''}" onclick="go('offers')">▤ <span>Angebote</span></button><button class="nav ${st.page==='customers'?'active':''}" onclick="go('customers')">♙ <span>Kunden</span></button></nav><div class="sideBottom"><div class="trial"><b>EasyOffer</b><span>Von der Anfrage zum Angebot.</span></div></div></aside>`}function layout(c){$('#app').innerHTML=`<div class="app">${nav()}<main>${c}</main></div>`}function go(p){st.page=p;render()}function home(){let sum=db.offers.reduce((a,o)=>a+money(o),0);return `<div class="top"><div><span class="eyebrow">EASYOFFER FÜR SHK</span><h1>Angebote, die sich<br><em>schnell anfühlen.</em></h1><p class="lead">Kundenanfrage rein. Leistungen prüfen. Angebot raus.</p></div><button class="primary big" onclick="newOffer()">＋ Neues Angebot</button></div><div class="hero"><div class="heroCard"><div class="spark">✦ DEIN DIGITALER ANGEBOTSASSISTENT</div><h2>Mach aus einer chaotischen Anfrage ein sauberes Angebot.</h2><p>Text, Sprache und Fotos können später gemeinsam analysiert werden. Du entscheidest immer selbst, was ins Angebot kommt.</p><button class="primary" onclick="newOffer()">In 2 Minuten starten →</button><div class="flow"><span>01 Kunde</span><span>02 Anfrage</span><span>03 KI</span><span>04 Positionen</span><span>05 Angebot</span></div></div><div class="stats"><div class="stat"><small>ANGEBOTE</small><strong>${db.offers.length}</strong><span>gespeichert</span></div><div class="stat"><small>VOLUMEN</small><strong>${eur(sum)}</strong><span>Gesamtwert</span></div><div class="stat"><small>PREISKATALOG</small><strong>${catalog.length}</strong><span>SHK-Leistungen</span></div></div></div><section class="section"><div class="sectionHead"><div><h2>Letzte Angebote</h2><p class="lead">Deine letzten Entwürfe und Angebote.</p></div><button class="ghost" onclick="go('offers')">Alle →</button></div><div class="card rows">${db.offers.length?db.offers.slice(-5).reverse().map(row).join(''):`<div class="empty"><h3>Noch kein Angebot</h3><p>Starte mit einer Kundenanfrage.</p><button class="primary" onclick="newOffer()">Erstes Angebot erstellen</button></div>`}</div></section>`}function row(o){return `<div class="row" onclick="openOffer('${o.id}')"><b>#${o.no}</b><div><b>${esc(o.customer.name||'Unbenannter Kunde')}</b><br><span>${esc(o.title||'SHK-Angebot')}</span></div><span class="badge ${o.status==='offen'?'open':''}">${o.status==='offen'?'Offen':'Entwurf'}</span><strong>${eur(money(o))}</strong><b>›</b></div>`}function newOffer(){st.o={id:id(),no:db.settings.next++,customer:{name:'',email:'',phone:'',address:''},request:'',title:'',items:[],notes:'',status:'entwurf',vat:db.settings.vat,validity:14};st.photos=[];st.page='new';st.step=1;save();render()}function progress(){return `<div class="progress">${['Kunde','Anfrage','Analyse','Positionen','Fertig'].map((x,i)=>`<div class="pstep ${i+1===st.step?'current':''} ${i+1<st.step?'done':''}"><i>${i+1<st.step?'✓':i+1}</i><span>${x}</span></div>`).join('')}</div>`}function wizard(){let o=st.o;let body=[customer,request,analysis,items,finish][st.step-1](o);return `<div class="wizardTop"><button class="back" onclick="go('home')">← Übersicht</button><b>Angebot #${o.no}</b><button class="ghost" onclick="persist();toast('Gespeichert')">Speichern</button></div><div class="wizard"><div class="wizardIntro"><span class="eyebrow">ANGEBOT ERSTELLEN</span><h1>${['Für wen ist das Angebot?','Was möchte der Kunde?','EasyOffer analysiert.','Prüfen & anpassen.','Fertig.'][st.step-1]}</h1><p class="lead">${['Kundendaten einmal eingeben.','Schreib die Anfrage genau so, wie du sie bekommen hast.','Wir schlagen passende SHK-Leistungen vor.','Preise und Mengen bleiben unter deiner Kontrolle.','Noch einmal prüfen und als PDF ausgeben.'][st.step-1]}</p></div>${progress()}${body}</div>`}function customer(o){return `<div class="card formgrid">${field('Kundenname *','name',o.customer.name,'Familie Müller')}${field('E-Mail','email',o.customer.email,'kunde@email.de')}${field('Telefon','phone',o.customer.phone,'0561 ...')}${field('Adresse','address',o.customer.address,'Straße, PLZ Ort')}</div><div class="actions"><span></span><button class="primary" onclick="saveCustomer()">Weiter →</button></div>`}function field(l,id,v,p){return `<label class="field"><span>${l}</span><input id="${id}" value="${esc(v)}" placeholder="${p}"></label>`}function request(o){return `<div class="card"><textarea id="req" class="request" placeholder="z. B. Kunde möchte die alte Gastherme austauschen. Eine neue Wärmepumpe soll eingebaut werden. Alte Anlage bitte entsorgen.">${esc(o.request)}</textarea><div class="upload"><b>📸 Fotos hinzufügen</b><br><small>Baustellenfotos für die spätere KI-Analyse</small><br><input type="file" accept="image/*" multiple onchange="photos(event)"><div class="photos">${st.photos.map(x=>`<img src="${x}">`).join('')}</div></div></div><div class="actions"><button class="ghost" onclick="back()">← Zurück</button><button class="primary" onclick="analyze()">Anfrage analysieren ✦</button></div>`}function photos(e){[...e.target.files].slice(0,5).forEach(f=>{let r=new FileReader();r.onload=()=>{st.photos.push(r.result);render()};r.readAsDataURL(f)})}function analysis(o){return `<div class="card"><div class="aiBox"><b>✦ Analyse bereit</b><p>${esc(o.title||'SHK-Anfrage')} – EasyOffer hat passende Leistungen aus deiner Anfrage vorgeschlagen.</p><small>Hinweis: Preise und technische Details immer vor Versand prüfen.</small></div><div class="actions"><button class="ghost" onclick="back()">← Anfrage</button><button class="primary" onclick="st.step=4;render()">Vorschläge prüfen →</button></div></div>`}function find(n){let x=catalog.find(c=>c[0]===n);return x?{name:x[0],unit:x[1],price:x[2]}:{name:n,unit:'Stk.',price:0}}function parse(t){let a=[],add=n=>{if(!a.some(x=>x.name===n))a.push({...find(n),qty:1})};if(/wärmepumpe/i.test(t)){['Demontage Altgerät','Entsorgung Altgerät','Wärmepumpe','Montage Heizungsanlage','Hydraulischer Abgleich','Inbetriebnahme'].forEach(add)}else if(/gastherme|heizung|heizungsanlage/i.test(t)){['Demontage Altgerät','Entsorgung Altgerät','Heizungsanlage','Montage Heizungsanlage','Inbetriebnahme'].forEach(add)}if(/wartung/i.test(t))add('Wartung Heizungsanlage');if(/störung|kaputt|fehler|problem/i.test(t)){add('Anfahrt');add('Fehlerdiagnose')}if(/waschbecken/i.test(t))add('Waschtisch inkl. Montage');if(/wc|toilette/i.test(t))add('WC inkl. Montage');if(/armatur/i.test(t))add('Armatur inkl. Montage');if(/klima/i.test(t)){add('Klimagerät Split');add('Montage Klimagerät')}if(/rohr|leitung/i.test(t))add('Rohrleitung');if(!a.length)add('Arbeitszeit Monteur');return a}function analyze(){let o=st.o;o.request=$('#req').value.trim();if(!o.request)return toast('Bitte Anfrage eingeben');o.title=/wärmepumpe/i.test(o.request)?'Heizungsmodernisierung – Wärmepumpe':/klima/i.test(o.request)?'Klimaanlage':/wc|waschbecken|armatur/i.test(o.request)?'Sanitärarbeiten':'SHK-Arbeiten';o.items=parse(o.request);st.step=3;render()}function items(o){return `<div class="card"><div class="items">${o.items.map((x,i)=>`<div class="item"><input value="${esc(x.name)}" onchange="chg(${i},'name',this.value)"><input type="number" min="0" step="0.1" value="${x.qty}" onchange="chg(${i},'qty',this.value)"><input value="${esc(x.unit)}" onchange="chg(${i},'unit',this.value)"><input type="number" min="0" step="0.01" value="${x.price}" onchange="chg(${i},'price',this.value)"><button class="ghost" onclick="del(${i})">×</button></div>`).join('')}</div><button class="ghost" style="margin-top:14px" onclick="addItem()">＋ Position hinzufügen</button><div class="totals"><div class="totalLine"><span>Netto</span><b>${eur(money(o))}</b></div><div class="totalLine"><span>MwSt. ${o.vat}%</span><b>${eur(money(o)*o.vat/100)}</b></div><div class="totalLine grand"><span>Gesamt</span><b>${eur(money(o)*(1+o.vat/100))}</b></div></div></div><div class="actions"><button class="ghost" onclick="st.step=2;render()">← Zurück</button><button class="primary" onclick="st.step=5;render()">Angebot erstellen →</button></div>`}function chg(i,k,v){st.o.items[i][k]=['qty','price'].includes(k)?Number(v):v;render()}function addItem(){st.o.items.push({name:'Neue Position',qty:1,unit:'Stk.',price:0});render()}function del(i){st.o.items.splice(i,1);render()}function finish(o){let net=money(o),gross=net*(1+o.vat/100);return `<div class="preview"><div class="paper"><div class="paperHead"><div><b>${esc(db.settings.company)}</b><br><small>${esc(db.settings.address)}<br>${esc(db.settings.email)} · ${esc(db.settings.phone)}</small></div><b>ANGEBOT #${o.no}</b></div><h2>${esc(o.title||'SHK-Angebot')}</h2><p><b>An:</b><br>${esc(o.customer.name)}<br>${esc(o.customer.address)}</p><table><tr><th>Position</th><th>Menge</th><th>Einzelpreis</th><th class="right">Gesamt</th></tr>${o.items.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.qty} ${esc(x.unit)}</td><td>${eur(x.price)}</td><td class="right">${eur(x.qty*x.price)}</td></tr>`).join('')}</table><div class="totals"><div class="totalLine"><span>Netto</span><b>${eur(net)}</b></div><div class="totalLine"><span>MwSt. ${o.vat}%</span><b>${eur(net*o.vat/100)}</b></div><div class="totalLine grand"><span>Gesamt</span><b>${eur(gross)}</b></div></div></div><div><div class="card"><span class="eyebrow">BEREIT</span><h2>Sieht gut aus.</h2><p class="lead">Prüfe alles noch einmal. Danach kannst du das Angebot als PDF drucken.</p><button class="primary" onclick="printOffer()">▣ PDF / Drucken</button><button class="ghost" style="width:100%;margin-top:10px" onclick="st.o.status='offen';persist();toast('Als offen gespeichert')">Als offen markieren</button><button class="ghost" style="width:100%;margin-top:10px" onclick="go('offers')">Zu meinen Angeboten</button></div></div></div>`}function saveCustomer(){let o=st.o;o.customer.name=$('#name').value;o.customer.email=$('#email').value;o.customer.phone=$('#phone').value;o.customer.address=$('#address').value;if(!o.customer.name)return toast('Kundenname fehlt');st.step=2;render()}function persist(){let i=db.offers.findIndex(x=>x.id===st.o.id);if(i<0)db.offers.push(st.o);else db.offers[i]=st.o;save()}function openOffer(i){st.o=JSON.parse(JSON.stringify(db.offers.find(x=>x.id===i)));st.page='new';st.step=5;render()}function offers(){return `<div class="top"><div><span class="eyebrow">VERWALTUNG</span><h1>Deine Angebote.</h1></div><button class="primary" onclick="newOffer()">＋ Neues Angebot</button></div><div class="toolbar"><input id="q" placeholder="⌕ Kunde oder Nummer suchen" oninput="filter()"><select id="f" onchange="filter()"><option value="all">Alle</option><option value="entwurf">Entwürfe</option><option value="offen">Offen</option></select></div><div id="list" class="card rows">${db.offers.slice().reverse().map(row).join('')||'<div class="empty">Noch keine Angebote.</div>'}</div>`}function filter(){let q=$('#q').value.toLowerCase(),f=$('#f').value,a=db.offers.slice().reverse().filter(o=>(f==='all'||o.status===f)&&(`${o.no} ${o.customer.name}`.toLowerCase().includes(q)));$('#list').innerHTML=a.map(row).join('')||'<div class="empty">Nichts gefunden.</div>'}function customers(){let names=[...new Map(db.offers.map(o=>[o.customer.name,o.customer])).values()].filter(x=>x.name);return `<div class="top"><div><span class="eyebrow">KUNDEN</span><h1>Deine Kunden.</h1></div></div><div class="card rows">${names.map(c=>`<div class="row" style="cursor:default"><b>♙</b><div><b>${esc(c.name)}</b><br><span>${esc(c.email||c.phone||'')}</span></div><span>${esc(c.address||'')}</span></div>`).join('')||'<div class="empty">Kunden werden automatisch aus deinen Angeboten übernommen.</div>'}</div>`}function render(){if(st.page==='home')layout(home());else if(st.page==='new')layout(wizard());else if(st.page==='offers')layout(offers());else layout(customers())}function printOffer(){persist();let o=st.o,w=window.open('','_blank');if(!w)return toast('Popup blockiert – bitte erlauben');w.document.write(`<html><head><title>EasyOffer #${o.no}</title><style>body{font-family:Arial;color:#172033;max-width:850px;margin:40px auto}table{width:100%;border-collapse:collapse;margin-top:30px}td,th{padding:10px;border-bottom:1px solid #ddd;text-align:left}.r{text-align:right}.total{font-size:20px;font-weight:bold}</style></head><body><b>${esc(db.settings.company)}</b><p>${esc(db.settings.address)}<br>${esc(db.settings.email)} · ${esc(db.settings.phone)}</p><h1>ANGEBOT #${o.no}</h1><p><b>${esc(o.customer.name)}</b><br>${esc(o.customer.address)}</p><h2>${esc(o.title)}</h2><table><tr><th>Position</th><th>Menge</th><th>Einzelpreis</th><th class="r">Gesamt</th></tr>${o.items.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.qty} ${esc(x.unit)}</td><td>${eur(x.price)}</td><td class="r">${eur(x.qty*x.price)}</td></tr>`).join('')}</table><p class="r">Netto: ${eur(money(o))}<br>MwSt. ${o.vat}%: ${eur(money(o)*o.vat/100)}<br><span class="total">Gesamt: ${eur(money(o)*(1+o.vat/100))}</span></p></body></html>`);w.document.close();w.print()}function back(){st.step=Math.max(1,st.step-1);render()}Object.assign(window,{go,newOffer,openOffer,saveCustomer,analyze,photos,chg,addItem,del,back,printOffer,persist,filter});render();
+const K='easyoffer_v22';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const eur=n=>new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(Number(n)||0);
+const uid=()=>crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);
+const defaults=[
+ ['SHK-001','Gas-Brennwerttherme','Stk.',4800,3200],['SHK-002','Wärmepumpe','Stk.',8200,5600],['SHK-003','Heizkörper','Stk.',390,210],['SHK-004','Waschtisch','Stk.',690,390],['SHK-005','Toilette','Stk.',620,330],['SHK-006','Montage / Arbeitszeit','Std.',78,42],['SHK-007','Demontage','Stk.',250,120],['SHK-008','Anfahrt','pa.',85,20]
+];
+function normalize(x){const d={offers:[],settings:{company:'Dein SHK-Betrieb',owner:'',address:'',email:'',phone:'',website:'',taxNo:'',vatId:'',bank:'',logo:'',language:'de',theme:'light',accent:'#16a36a',density:'normal',currency:'EUR',offerValidity:14,paymentTerm:14,offerPrefix:'ANG-',offerNext:1001,offerFooter:'Vielen Dank für Ihre Anfrage.',offerTerms:'',emailSubject:'Ihr Angebot von {firma} – #{nummer}',emailText:'Guten Tag {kunde},\n\nhier erhalten Sie unser Angebot #{nummer}.\n\nViele Grüße\n{firma}',emailSignature:'',autoFollowups:true,notifications:true,aiSuggestions:true,next:1001},catalog:defaults.map(a=>({id:uid(),article:a[0],name:a[1],unit:a[2],price:a[3],cost:a[4]}))}; if(!x)return d; x.settings={...d.settings,...(x.settings||{})}; x.settings.next=Number(x.settings.next)||1001; x.settings.offerNext=Number(x.settings.offerNext)||x.settings.next; x.catalog=(x.catalog||d.catalog).map(a=>({...a,id:a.id||uid(),article:a.article||'',unit:a.unit||'Stk.',price:+a.price||0,cost:+a.cost||0})); x.offers=(x.offers||[]).map(o=>({...o,id:o.id||uid(),no:o.no||x.settings.next++,customer:{name:'',email:'',phone:'',address:'',...(o.customer||{})},items:(o.items||[]).map(i=>({...i,qty:+i.qty||1,price:+i.price||0,cost:+i.cost||0})),status:o.status||'entwurf',vat:+o.vat||19,created:o.created||new Date().toISOString(),followUp:o.followUp||'',notes:o.notes||'',request:o.request||'',title:o.title||'SHK-Angebot'})); x.settings.next=Math.max(x.settings.next||1001,...x.offers.map(o=>(+o.no||0)+1)); return x;}
+let db=normalize(JSON.parse(localStorage.getItem(K)||localStorage.getItem('easyoffer_v21')||'null')); localStorage.setItem(K,JSON.stringify(db));
+let st={page:'home',step:1,o:null,photos:[],settingsTab:'company'};
+const save=()=>localStorage.setItem(K,JSON.stringify(db));
+const net=o=>(o.items||[]).reduce((a,x)=>a+(+x.qty||0)*(+x.price||0),0);
+const cost=o=>(o.items||[]).reduce((a,x)=>a+(+x.qty||0)*(+x.cost||0),0);
+const gross=o=>net(o)*(1+(+o.vat||0)/100); const profit=o=>net(o)-cost(o);
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),1800)}
+function nav(){return `<aside class="side"><div class="brand"><div class="logo">E</div><div><b>easyoffer</b><small>SHK-Angebote</small></div></div><nav>${[['home','⌂','Übersicht'],['new','＋','Neues Angebot'],['offers','▤','Angebote'],['customers','♙','Kunden'],['catalog','◫','Preiskatalog'],['stats','◈','Statistik'],['settings','⚙','Einstellungen']].map(([p,i,t])=>`<button class="nav ${st.page===p?'active':''}" onclick="${p==='new'?'newOffer()':`go('${p}')`}">${i} <span>${t}</span></button>`).join('')}</nav><div class="sideBottom"><div class="trial"><b>EasyOffer</b><span>Vom Kundenkontakt zum Angebot.</span></div></div></aside>`}
+function layout(c){$('#app').innerHTML=`<div class="app">${nav()}<main>${c}</main></div>`}
+function go(p){st.page=p;render()}
+function home(){const won=db.offers.filter(o=>o.status==='angenommen');return `<div class="top"><div><span class="eyebrow">EASYOFFER FÜR SHK</span><h1>Deine Angebote.<br><em>Schneller fertig.</em></h1><p class="lead">Kundenanfrage rein. Leistungen prüfen. Angebot raus.</p></div><button class="primary big" onclick="newOffer()">＋ Neues Angebot</button></div><div class="hero"><div class="heroCard"><div class="spark">✦ DIGITALER ANGEBOTSASSISTENT</div><h2>Von der Anfrage zur sauberen Kalkulation.</h2><p>EasyOffer schlägt Leistungen aus deiner eigenen Preisliste vor. Du prüfst, änderst und versendest.</p><button class="primary" onclick="newOffer()">Angebot starten →</button><div class="flow"><span>01 Kunde</span><span>02 Anfrage</span><span>03 Analyse</span><span>04 Kalkulation</span><span>05 Angebot</span></div></div><div class="stats"><div class="stat"><small>ANGEBOTE</small><strong>${db.offers.length}</strong><span>gesamt</span></div><div class="stat"><small>GEWONNEN</small><strong>${eur(won.reduce((a,o)=>a+net(o),0))}</strong><span>Auftragswert netto</span></div><div class="stat"><small>ARTIKEL</small><strong>${db.catalog.length}</strong><span>im Katalog</span></div></div></div><section class="section"><div class="sectionHead"><div><h2>Letzte Angebote</h2><p class="lead">Schnell wieder öffnen.</p></div><button class="ghost" onclick="go('offers')">Alle →</button></div><div class="card rows">${db.offers.length?db.offers.slice(-6).reverse().map(row).join(''):`<div class="empty"><h3>Noch kein Angebot</h3><p>Starte mit einer Kundenanfrage.</p><button class="primary" onclick="newOffer()">Erstes Angebot erstellen</button></div>`}</div></section>`}
+function statusLabel(s){return ({entwurf:'Entwurf',offen:'Offen',angenommen:'Angenommen',abgelehnt:'Abgelehnt',abgelaufen:'Abgelaufen'})[s]||s}
+function row(o){return `<div class="row" onclick="openOffer('${o.id}')"><b>#${o.no}</b><div><b>${esc(o.customer.name||'Unbenannter Kunde')}</b><br><span>${esc(o.title)}</span></div><span class="badge ${o.status==='angenommen'?'open':''}">${statusLabel(o.status)}</span><strong>${eur(net(o))}</strong><b>›</b></div>`}
+function newOffer(){st.o={id:uid(),no:db.settings.next++,customer:{name:'',email:'',phone:'',address:''},request:'',title:'',items:[],notes:'',status:'entwurf',vat:db.settings.vat,validity:14,followUp:''};st.photos=[];st.page='new';st.step=1;save();render()}
+function progress(){return `<div class="progress">${['Kunde','Anfrage','Analyse','Positionen','Fertig'].map((x,i)=>`<div class="pstep ${i+1===st.step?'current':''} ${i+1<st.step?'done':''}"><i>${i+1<st.step?'✓':i+1}</i><span>${x}</span></div>`).join('')}</div>`}
+function wizard(){const o=st.o;const bodies=[customer,request,analysis,items,finish];return `<div class="wizardTop"><button class="back" onclick="go('home')">← Übersicht</button><b>Angebot #${o.no}</b><button class="ghost" onclick="persist();toast('Gespeichert')">Speichern</button></div><div class="wizard"><div class="wizardIntro"><span class="eyebrow">ANGEBOT ERSTELLEN</span><h1>${['Für wen ist das Angebot?','Was möchte der Kunde?','EasyOffer analysiert.','Prüfen & kalkulieren.','Fertig.'][st.step-1]}</h1><p class="lead">${['Kundendaten eingeben.','Anfrage so einfügen, wie sie eingegangen ist.','Vorschläge aus deinem Katalog prüfen.','Preise, Mengen und Marge kontrollieren.','Alles prüfen und als PDF ausgeben.'][st.step-1]}</p></div>${progress()}${bodies[st.step-1](o)}</div>`}
+function field(l,id,v,p){return `<label class="field"><span>${l}</span><input id="${id}" value="${esc(v)}" placeholder="${p||''}"></label>`}
+function customer(o){return `<div class="card formgrid">${field('Kundenname *','name',o.customer.name,'Familie Müller')}${field('E-Mail','email',o.customer.email,'kunde@email.de')}${field('Telefon','phone',o.customer.phone,'0561 ...')}${field('Adresse','address',o.customer.address,'Straße, PLZ Ort')}</div><div class="actions"><span></span><button class="primary" onclick="saveCustomer()">Weiter →</button></div>`}
+function request(o){return `<div class="card"><textarea id="req" class="request" placeholder="z. B. Kunde möchte die alte Gastherme austauschen. Eine neue Wärmepumpe soll eingebaut werden.">${esc(o.request)}</textarea><div class="upload"><b>📸 Baustellenfotos</b><br><small>Fotos können später von der echten KI analysiert werden.</small><br><input type="file" accept="image/*" multiple onchange="photos(event)"><div class="photos">${st.photos.map(x=>`<img src="${x}">`).join('')}</div></div></div><div class="actions"><button class="ghost" onclick="back()">← Zurück</button><button class="primary" onclick="analyze()">Anfrage analysieren ✦</button></div>`}
+function photos(e){[...e.target.files].slice(0,5).forEach(f=>{const r=new FileReader();r.onload=()=>{st.photos.push(r.result);render()};r.readAsDataURL(f)})}
+function analysis(o){return `<div class="card"><div class="aiBox"><b>✦ Analyse bereit</b><p><strong>${esc(o.title)}</strong></p><p>${o.items.length} passende Positionen aus deinem Katalog wurden vorgeschlagen.</p><small>Dies ist aktuell eine lokale Demo-Analyse. Vor Versand technische Details prüfen.</small></div><div class="card" style="margin-top:12px"><b>Vorgeschlagene Positionen</b>${o.items.map(x=>`<div class="row" style="cursor:default"><span>${x.qty} ${esc(x.unit)}</span><div>${esc(x.name)}<br><small>${eur(x.price)} netto</small></div></div>`).join('')}</div><div class="actions"><button class="ghost" onclick="back()">← Anfrage</button><button class="primary" onclick="st.step=4;render()">Vorschläge prüfen →</button></div></div>`}
+function find(n){return db.catalog.find(x=>x.name===n)||{name:n,unit:'Stk.',price:0,cost:0}}
+function parse(t){
+  const a=[],add=n=>{if(!a.some(x=>x.name===n)){const f=find(n);a.push({...f,qty:1})}};
+  if(/wärmepumpe/i.test(t)){
+    ['Demontage','Entsorgung Altgerät','Wärmepumpe','Montage Heizungsanlage','Hydraulischer Abgleich','Inbetriebnahme'].forEach(add)
+  }else if(/gastherme|heizung|heizungsanlage/i.test(t)){
+    ['Demontage','Entsorgung Altgerät','Heizungsanlage','Montage Heizungsanlage','Inbetriebnahme'].forEach(add)
+  }
+  if(/wartung/i.test(t))add('Wartung Heizungsanlage');
+  if(/störung|kaputt|fehler|problem/i.test(t)){add('Anfahrt');add('Fehlerdiagnose')}
+  if(/waschbecken|waschtisch/i.test(t))add('Waschtisch');
+  if(/wc|toilette/i.test(t))add('Toilette');
+  if(/armatur/i.test(t))add('Armatur');
+  if(/klima/i.test(t)){add('Klimagerät Split');add('Montage Klimagerät')}
+  if(/rohr|leitung/i.test(t))add('Rohrleitung');
+  if(!a.length)add('Montage / Arbeitszeit');
+  return a
+}
+function analyze(){
+  const o=st.o;
+  o.request=$('#req').value.trim();
+  if(!o.request)return toast('Bitte Anfrage eingeben');
+  o.title=/wärmepumpe/i.test(o.request)
+    ?'Heizungsmodernisierung – Wärmepumpe'
+    :/klima/i.test(o.request)
+    ?'Klimaanlage'
+    :/wc|waschbecken|waschtisch|armatur/i.test(o.request)
+    ?'Sanitärarbeiten'
+    :/wartung/i.test(o.request)
+    ?'Wartung Heizungsanlage'
+    :'SHK-Arbeiten';
+  o.items=parse(o.request);
+  st.step=3;
+  render()
+}
+function items(o){
+  return `<div class="card">
+    <div class="items">
+      ${o.items.map((x,i)=>`
+        <div class="item">
+          <input value="${esc(x.name)}" onchange="chg(${i},'name',this.value)">
+          <input type="number" min="0" step="0.1" value="${x.qty}" onchange="chg(${i},'qty',this.value)">
+          <input value="${esc(x.unit)}" onchange="chg(${i},'unit',this.value)">
+          <input type="number" min="0" step="0.01" value="${x.price}" onchange="chg(${i},'price',this.value)">
+          <input type="number" min="0" step="0.01" value="${x.cost||0}" onchange="chg(${i},'cost',this.value)">
+          <button class="ghost" onclick="del(${i})">×</button>
+        </div>`).join('')}
+    </div>
+    <button class="ghost" style="margin-top:14px" onclick="addItem()">＋ Position hinzufügen</button>
+    <div class="totals">
+      <div class="totalLine"><span>Netto</span><b>${eur(net(o))}</b></div>
+      <div class="totalLine"><span>MwSt. ${o.vat}%</span><b>${eur(net(o)*o.vat/100)}</b></div>
+      <div class="totalLine grand"><span>Gesamt</span><b>${eur(gross(o))}</b></div>
+    </div>
+    <div class="marginBox">
+      <span>Deckungsbeitrag</span>
+      <strong>${eur(profit(o))}</strong>
+      <small>Marge: ${net(o)?Math.round(profit(o)/net(o)*100):0}%</small>
+    </div>
+  </div>
+  <div class="actions">
+    <button class="ghost" onclick="st.step=2;render()">← Zurück</button>
+    <button class="primary" onclick="st.step=5;render()">Angebot erstellen →</button>
+  </div>`
+}
+function chg(i,k,v){
+  st.o.items[i][k]=['qty','price','cost'].includes(k)?Number(v):v;
+  render()
+}
+function addItem(){
+  st.o.items.push({name:'Neue Position',qty:1,unit:'Stk.',price:0,cost:0});
+  render()
+}
+function del(i){
+  st.o.items.splice(i,1);
+  render()
+}
+function finish(o){
+  const n=net(o),g=gross(o),p=profit(o);
+  return `<div class="preview">
+    <div class="paper">
+      <div class="paperHead">
+        <div>
+          ${db.settings.logo?`<img class="offerLogo" src="${db.settings.logo}">`:''}
+          <b>${esc(db.settings.company)}</b><br>
+          <small>${esc(db.settings.address)}<br>${esc(db.settings.email)} · ${esc(db.settings.phone)}</small>
+        </div>
+        <b>ANGEBOT #${o.no}</b>
+      </div>
+      <h2>${esc(o.title||'SHK-Angebot')}</h2>
+      <p><b>An:</b><br>${esc(o.customer.name)}<br>${esc(o.customer.address)}</p>
+      <p><b>Anfrage:</b><br>${esc(o.request)}</p>
+      <table>
+        <tr>
+          <th>Position</th>
+          <th>Menge</th>
+          <th>Einzelpreis</th>
+          <th class="right">Gesamt</th>
+        </tr>
+        ${o.items.map(x=>`
+          <tr>
+            <td>${esc(x.name)}</td>
+            <td>${x.qty} ${esc(x.unit)}</td>
+            <td>${eur(x.price)}</td>
+            <td class="right">${eur(x.qty*x.price)}</td>
+          </tr>`).join('')}
+      </table>
+      <div class="totals">
+        <div class="totalLine"><span>Netto</span><b>${eur(n)}</b></div>
+        <div class="totalLine"><span>MwSt. ${o.vat}%</span><b>${eur(n*o.vat/100)}</b></div>
+        <div class="totalLine grand"><span>Gesamt</span><b>${eur(g)}</b></div>
+      </div>
+      <div class="offerMeta">
+        Angebot gültig ${o.validity} Tage.<br>
+        ${esc(db.settings.offerFooter)}
+      </div>
+      ${db.settings.offerTerms?`<div class="terms"><b>Hinweise & Bedingungen</b><br>${esc(db.settings.offerTerms)}</div>`:''}
+    </div>
+    <div>
+      <div class="card">
+        <span class="eyebrow">BEREIT</span>
+        <h2>Sieht gut aus.</h2>
+        <p class="lead">Prüfe alles noch einmal. Danach kannst du das Angebot als PDF ausgeben.</p>
+        <div class="miniStats">
+          <div><small>NETTO</small><b>${eur(n)}</b></div>
+          <div><small>GEWINN</small><b>${eur(p)}</b></div>
+          <div><small>MARGE</small><b>${n?Math.round(p/n*100):0}%</b></div>
+        </div>
+        <button class="primary" onclick="persist();printOffer()">▣ PDF / Drucken</button>
+        <button class="ghost" style="width:100%;margin-top:10px" onclick="markOpen()">Als offen speichern</button>
+        <button class="ghost" style="width:100%;margin-top:10px" onclick="go('offers')">Zu meinen Angeboten</button>
+      </div>
+    </div>
+  </div>`
+}
+function saveCustomer(){
+  const o=st.o;
+  o.customer.name=$('#name').value.trim();
+  o.customer.email=$('#email').value.trim();
+  o.customer.phone=$('#phone').value.trim();
+  o.customer.address=$('#address').value.trim();
+  if(!o.customer.name)return toast('Kundenname fehlt');
+  st.step=2;
+  render()
+}
+function persist(){
+  const i=db.offers.findIndex(x=>x.id===st.o.id);
+  if(i<0)db.offers.push(JSON.parse(JSON.stringify(st.o)));
+  else db.offers[i]=JSON.parse(JSON.stringify(st.o));
+  save()
+}
+function markOpen(){
+  st.o.status='offen';
+  persist();
+  toast('Angebot gespeichert');
+  go('offers')
+}
+function openOffer(i){
+  const x=db.offers.find(x=>x.id===i);
+  if(!x)return;
+  st.o=JSON.parse(JSON.stringify(x));
+  st.page='new';
+  st.step=5;
+  st.photos=[];
+  render()
+}
+function back(){
+  if(st.step>1){st.step--;render()}
+  else go('home')
+}function offers(){
+  return `<div class="top">
+    <div>
+      <span class="eyebrow">VERWALTUNG</span>
+      <h1>Deine Angebote.</h1>
+      <p class="lead">Alle Angebote zentral verwalten.</p>
+    </div>
+    <button class="primary" onclick="newOffer()">＋ Neues Angebot</button>
+  </div>
+  <div class="toolbar">
+    <input id="q" placeholder="⌕ Kunde oder Nummer suchen" oninput="filterOffers()">
+    <select id="f" onchange="filterOffers()">
+      <option value="all">Alle Status</option>
+      <option value="entwurf">Entwürfe</option>
+      <option value="offen">Offen</option>
+      <option value="angenommen">Angenommen</option>
+      <option value="abgelehnt">Abgelehnt</option>
+    </select>
+  </div>
+  <div id="offerRows" class="card rows">${offerRows(db.offers)}</div>`
+}
+function offerRows(arr){
+  if(!arr.length)return `<div class="empty"><h3>Keine Angebote gefunden</h3><p>Erstelle dein erstes Angebot.</p></div>`;
+  return arr.slice().reverse().map(row).join('')
+}
+function filterOffers(){
+  const q=($('#q')?.value||'').toLowerCase();
+  const f=$('#f')?.value||'all';
+  const a=db.offers.filter(o=>{
+    const text=`${o.no} ${o.customer.name} ${o.customer.email} ${o.title}`.toLowerCase();
+    return (!q||text.includes(q))&&(f==='all'||o.status===f)
+  });
+  $('#offerRows').innerHTML=offerRows(a)
+}
+function customers(){
+  const map={};
+  db.offers.forEach(o=>{
+    const k=o.customer.email||o.customer.name||'Unbekannt';
+    if(!map[k])map[k]={...o.customer,count:0,value:0};
+    map[k].count++;
+    map[k].value+=net(o)
+  });
+  const a=Object.values(map);
+  return `<div class="top">
+    <div>
+      <span class="eyebrow">KUNDEN</span>
+      <h1>Deine Kunden.</h1>
+      <p class="lead">Kunden aus deinen Angeboten.</p>
+    </div>
+    <button class="primary" onclick="newOffer()">＋ Neuer Kunde</button>
+  </div>
+  <div class="card rows">${a.length?a.map(c=>`
+    <div class="row" style="cursor:default">
+      <div>
+        <b>${esc(c.name||'Unbenannt')}</b><br>
+        <span>${esc(c.email||'Keine E-Mail')} · ${esc(c.phone||'Keine Telefonnummer')}</span>
+      </div>
+      <span class="badge">${c.count} Angebot${c.count===1?'':'e'}</span>
+      <strong>${eur(c.value)}</strong>
+    </div>`).join(''):`<div class="empty"><h3>Noch keine Kunden</h3><p>Deine Kunden werden automatisch aus Angeboten übernommen.</p></div>`}</div>`
+}
+function catalogPage(){
+  return `<div class="top">
+    <div>
+      <span class="eyebrow">PREISKATALOG</span>
+      <h1>Deine Preise.</h1>
+      <p class="lead">Eigene Leistungen und Verkaufspreise verwalten.</p>
+    </div>
+    <button class="primary" onclick="addCatalog()">＋ Position</button>
+  </div>
+  <div class="card">
+    <div class="catalogHead">
+      <span>Artikel</span><span>Bezeichnung</span><span>Einheit</span><span>VK netto</span><span>EK</span><span></span>
+    </div>
+    <div class="catalogRows">
+      ${db.catalog.map((x,i)=>`
+        <div class="catalogRow">
+          <input value="${esc(x.article)}" onchange="catalogChange(${i},'article',this.value)">
+          <input value="${esc(x.name)}" onchange="catalogChange(${i},'name',this.value)">
+          <input value="${esc(x.unit)}" onchange="catalogChange(${i},'unit',this.value)">
+          <input type="number" min="0" step="0.01" value="${x.price}" onchange="catalogChange(${i},'price',this.value)">
+          <input type="number" min="0" step="0.01" value="${x.cost}" onchange="catalogChange(${i},'cost',this.value)">
+          <button class="ghost" onclick="removeCatalog(${i})">×</button>
+        </div>`).join('')}
+    </div>
+  </div>`
+}
+function catalogChange(i,k,v){
+  db.catalog[i][k]=['price','cost'].includes(k)?Number(v):v;
+  save()
+}
+function addCatalog(){
+  db.catalog.push({id:uid(),article:'',name:'Neue Leistung',unit:'Stk.',price:0,cost:0});
+  save();
+  render()
+}
+function removeCatalog(i){
+  if(!confirm('Position wirklich löschen?'))return;
+  db.catalog.splice(i,1);
+  save();
+  render()
+}
+function stats(){
+  const total=db.offers.length;
+  const accepted=db.offers.filter(o=>o.status==='angenommen');
+  const volume=db.offers.reduce((a,o)=>a+net(o),0);
+  const profitTotal=db.offers.reduce((a,o)=>a+profit(o),0);
+  const avg=total?volume/total:0;
+  return `<div class="top">
+    <div>
+      <span class="eyebrow">AUSWERTUNG</span>
+      <h1>Deine Zahlen.</h1>
+      <p class="lead">Ein schneller Überblick über deine Angebote.</p>
+    </div>
+    <button class="ghost" onclick="exportData()">Daten exportieren</button>
+  </div>
+  <div class="metricGrid">
+    <div class="metric card"><small>ANGEBOTE</small><strong>${total}</strong><span>Gesamt</span></div>
+    <div class="metric card"><small>VOLUMEN</small><strong>${eur(volume)}</strong><span>Netto</span></div>
+    <div class="metric card"><small>ANGENOMMEN</small><strong>${accepted.length}</strong><span>Aufträge</span></div>
+    <div class="metric card"><small>Ø ANGEBOT</small><strong>${eur(avg)}</strong><span>Netto</span></div>
+    <div class="metric card"><small>GEWINN</small><strong>${eur(profitTotal)}</strong><span>Deckungsbeitrag</span></div>
+  </div>
+  <div class="card sectionCard">
+    <h2>Status</h2>
+    ${['entwurf','offen','angenommen','abgelehnt'].map(s=>{
+      const n=db.offers.filter(o=>o.status===s).length;
+      const pct=total?Math.round(n/total*100):0;
+      return `<div class="barRow"><span>${statusLabel(s)}</span><div class="bar"><i style="width:${pct}%"></i></div><b>${n}</b></div>`
+    }).join('')}
+  </div>`
+}
+function settings(){
+  const s=db.settings;
+  const tabs=[['company','Unternehmen'],['design','Design'],['offers','Angebote'],['email','E-Mail'],['ai','KI'],['notifications','Benachrichtigungen']];
+  return `<div class="top">
+    <div>
+      <span class="eyebrow">EINSTELLUNGEN</span>
+      <h1>EasyOffer anpassen.</h1>
+      <p class="lead">Deine Daten, Preise und Vorlagen.</p>
+    </div>
+    <button class="primary" onclick="saveSettings()">Speichern</button>
+  </div>
+  <div class="settingsTabs">${tabs.map(t=>`<button class="${st.settingsTab===t[0]?'active':''}" onclick="settingsTab('${t[0]}')">${t[1]}</button>`).join('')}</div>
+  <div class="settingsBody">${settingsContent()}</div>`
+}
+function settingsTab(t){
+  st.settingsTab=t;
+  render()
+}
+function settingsContent(){
+  const s=db.settings;
+  if(st.settingsTab==='company')return `<div class="card formgrid">
+    ${field('Firmenname','company',s.company,'Muster SHK GmbH')}
+    ${field('Inhaber / Ansprechpartner','owner',s.owner,'Max Mustermann')}
+    ${field('Adresse','address',s.address,'Musterstraße 1, 12345 Musterstadt')}
+    ${field('E-Mail','email',s.email,'info@firma.de')}
+    ${field('Telefon','phone',s.phone,'01234 56789')}
+    ${field('Website','website',s.website,'www.firma.de')}
+    ${field('Steuernummer','taxNo',s.taxNo,'123/456/78901')}
+    ${field('USt-IdNr.','vatId',s.vatId,'DE123456789')}
+    ${field('Bankverbindung','bank',s.bank,'IBAN ...')}
+    ${field('Logo URL','logo',s.logo,'https://...')}
+  </div>`;
+  if(st.settingsTab==='design')return `<div class="card formgrid">
+    <label class="field"><span>Theme</span><select id="theme"><option value="light" ${s.theme==='light'?'selected':''}>Hell</option><option value="dark" ${s.theme==='dark'?'selected':''}>Dunkel</option></select></label>
+    <label class="field"><span>Akzentfarbe</span><input id="accent" type="color" value="${s.accent}"></label>
+    <label class="field"><span>Dichte</span><select id="density"><option value="normal" ${s.density==='normal'?'selected':''}>Normal</option><option value="compact" ${s.density==='compact'?'selected':''}>Kompakt</option></select></label>
+    <label class="field"><span>Sprache</span><select id="language"><option value="de">Deutsch</option><option value="en">English</option></select></label>
+  </div>`;
+  if(st.settingsTab==='offers')return `<div class="card formgrid">
+    <label class="field"><span>MwSt. (%)</span><input id="vat" type="number" value="${s.vat}"></label>
+    <label class="field"><span>Angebotsnummer Präfix</span><input id="offerPrefix" value="${esc(s.offerPrefix)}"></label>
+    <label class="field"><span>Nächste Angebotsnummer</span><input id="offerNext" type="number" value="${s.offerNext}"></label>
+    <label class="field"><span>Gültigkeit (Tage)</span><input id="offerValidity" type="number" value="${s.offerValidity}"></label>
+    <label class="field"><span>Zahlungsziel (Tage)</span><input id="paymentTerm" type="number" value="${s.paymentTerm}"></label>
+    ${textareaField('Footer','offerFooter',s.offerFooter)}
+    ${textareaField('Bedingungen','offerTerms',s.offerTerms)}
+  </div>`;
+  if(st.settingsTab==='email')return `<div class="card">
+    ${field('Betreff','emailSubject',s.emailSubject,'Ihr Angebot von {firma}')}
+    ${textareaField('E-Mail Text','emailText',s.emailText)}
+    ${textareaField('Signatur','emailSignature',s.emailSignature)}
+  </div>`;
+  if(st.settingsTab==='ai')return `<div class="card">
+    <label class="toggle"><input id="aiSuggestions" type="checkbox" ${s.aiSuggestions?'checked':''}><span>KI-Vorschläge aktivieren</span></label>
+    <div class="aiBox"><b>✦ Aktueller KI-Modus</b><p>EasyOffer nutzt momentan eine lokale Erkennung für typische SHK-Anfragen. Eine echte API-Anbindung kann später ergänzt werden.</p></div>
+  </div>`;
+  return `<div class="card">
+    <label class="toggle"><input id="notifications" type="checkbox" ${s.notifications?'checked':''}><span>Benachrichtigungen aktivieren</span></label>
+    <label class="toggle"><input id="autoFollowups" type="checkbox" ${s.autoFollowups?'checked':''}><span>Automatische Follow-ups vorbereiten</span></label>
+  </div>`
+}
+function textareaField(label,id,value){
+  return `<label class="field full"><span>${label}</span><textarea id="${id}">${esc(value||'')}</textarea></label>`
+}function saveSettings(){
+  const s=db.settings;
+  ['company','owner','address','email','phone','website','taxNo','vatId','bank','logo','offerPrefix','offerFooter','offerTerms','emailSubject','emailText','emailSignature'].forEach(k=>{
+    const el=document.getElementById(k);
+    if(el)s[k]=el.value;
+  });
+  ['vat','offerNext','offerValidity','paymentTerm'].forEach(k=>{
+    const el=document.getElementById(k);
+    if(el)s[k]=Number(el.value);
+  });
+  ['theme','accent','density','language'].forEach(k=>{
+    const el=document.getElementById(k);
+    if(el)s[k]=el.value;
+  });
+  ['aiSuggestions','notifications','autoFollowups'].forEach(k=>{
+    const el=document.getElementById(k);
+    if(el)s[k]=!!el.checked;
+  });
+  s.next=s.offerNext;
+  save();
+  applyAppearance();
+  toast('Einstellungen gespeichert');
+  render()
+}
+function exportData(){
+  const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download='easyoffer-backup.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Backup exportiert')
+}
+function importData(){
+  const input=document.createElement('input');
+  input.type='file';
+  input.accept='.json,application/json';
+  input.onchange=()=>{
+    const f=input.files[0];
+    if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{
+      try{
+        db=normalize(JSON.parse(r.result));
+        save();
+        render();
+        toast('Backup importiert')
+      }catch(e){
+        toast('Datei ist ungültig')
+      }
+    };
+    r.readAsText(f)
+  };
+  input.click()
+}
+function printOffer(){
+  const o=st.o;
+  const n=net(o);
+  const g=gross(o);
+  const w=window.open('','_blank');
+  if(!w){
+    toast('Popup blockiert – bitte Popups erlauben');
+    return
+  }
+  const s=db.settings;
+  w.document.write(`<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Angebot #${esc(o.no)} – ${esc(s.company)}</title>
+<style>
+body{font-family:Arial,sans-serif;color:#111;margin:0;background:#fff}
+.page{max-width:850px;margin:40px auto;padding:30px}
+.head{display:flex;justify-content:space-between;gap:30px;border-bottom:2px solid #111;padding-bottom:25px}
+.logo{max-width:180px;max-height:70px;object-fit:contain}
+h1{font-size:30px;margin:35px 0 10px}
+.meta{margin:25px 0}
+table{width:100%;border-collapse:collapse;margin-top:30px}
+th,td{padding:12px 8px;border-bottom:1px solid #ddd;text-align:left}
+.right{text-align:right}
+.total{margin-left:auto;width:320px;margin-top:25px}
+.line{display:flex;justify-content:space-between;padding:8px 0}
+.grand{font-size:20px;font-weight:700;border-top:2px solid #111;margin-top:5px;padding-top:12px}
+.footer{margin-top:50px;border-top:1px solid #ddd;padding-top:20px;font-size:13px}
+@media print{
+ body{margin:0}
+ .page{margin:0;max-width:none}
+}
+</style>
+</head>
+<body>
+<div class="page">
+<div class="head">
+<div>
+${s.logo?`<img class="logo" src="${s.logo}">`:''}
+<h2>${esc(s.company)}</h2>
+<div>${esc(s.address).replace(/\n/g,'<br>')}</div>
+<div>${esc(s.email)} · ${esc(s.phone)}</div>
+${s.website?`<div>${esc(s.website)}</div>`:''}
+</div>
+<div>
+<strong>ANGEBOT</strong><br>
+Nr. ${esc(o.no)}<br>
+Datum: ${new Date(o.created).toLocaleDateString('de-DE')}
+</div>
+</div>
+
+<h1>${esc(o.title||'SHK-Angebot')}</h1>
+
+<div class="meta">
+<strong>Für:</strong><br>
+${esc(o.customer.name)}<br>
+${esc(o.customer.address).replace(/\n/g,'<br>')}<br>
+${esc(o.customer.email)}<br>
+${esc(o.customer.phone)}
+</div>
+
+${o.request?`<p><strong>Ihre Anfrage:</strong><br>${esc(o.request).replace(/\n/g,'<br>')}</p>`:''}
+
+<table>
+<thead>
+<tr>
+<th>Position</th>
+<th>Menge</th>
+<th>Einzelpreis netto</th>
+<th class="right">Gesamt netto</th>
+</tr>
+</thead>
+<tbody>
+${o.items.map(x=>`
+<tr>
+<td>${esc(x.name)}</td>
+<td>${x.qty} ${esc(x.unit)}</td>
+<td>${eur(x.price)}</td>
+<td class="right">${eur(x.qty*x.price)}</td>
+</tr>`).join('')}
+</tbody>
+</table>
+
+<div class="total">
+<div class="line"><span>Netto</span><strong>${eur(n)}</strong></div>
+<div class="line"><span>MwSt. ${o.vat}%</span><strong>${eur(n*o.vat/100)}</strong></div>
+<div class="line grand"><span>Gesamt</span><strong>${eur(g)}</strong></div>
+</div>
+
+<p style="margin-top:35px">
+Dieses Angebot ist ${o.validity} Tage gültig.
+</p>
+
+<div class="footer">
+${esc(s.offerFooter).replace(/\n/g,'<br>')}
+${s.offerTerms?`<br><br><strong>Bedingungen:</strong><br>${esc(s.offerTerms).replace(/\n/g,'<br>')}`:''}
+${s.bank?`<br><br>${esc(s.bank).replace(/\n/g,'<br>')}`:''}
+${s.taxNo?`<br>Steuernummer: ${esc(s.taxNo)}`:''}
+${s.vatId?`<br>USt-IdNr.: ${esc(s.vatId)}`:''}
+</div>
+</div>
+<script>
+window.onload=()=>setTimeout(()=>window.print(),400);
+<\/script>
+</body>
+</html>`);
+  w.document.close()
+}
+function applyAppearance(){
+  const s=db.settings;
+  document.documentElement.dataset.theme=s.theme||'light';
+  document.documentElement.dataset.density=s.density||'normal';
+  document.documentElement.style.setProperty('--accent',s.accent||'#16a36a')
+}
+function render(){
+  applyAppearance();
+  let c='';
+  if(st.page==='home')c=home();
+  else if(st.page==='new')c=wizard();
+  else if(st.page==='offers')c=offers();
+  else if(st.page==='customers')c=customers();
+  else if(st.page==='catalog')c=catalogPage();
+  else if(st.page==='stats')c=stats();
+  else if(st.page==='settings')c=settings();
+  else c=home();
+  layout(c)
+}
+window.addEventListener('beforeunload',()=>{
+  if(st.o&&st.page==='new')persist()
+});
+Object.assign(window,{
+  go,newOffer,saveCustomer,analyze,photos,back,
+  chg,addItem,del,openOffer,filterOffers,
+  catalogChange,addCatalog,removeCatalog,
+  settingsTab,saveSettings,exportData,importData,
+  printOffer,markOpen,persist
+});
+render();
