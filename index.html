@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111">
-<title>EasyOffer v2</title>
+<title>EasyOffer v2.1</title>
 
 <style>
 :root{
@@ -14,10 +14,10 @@
   --muted:#737373;
   --line:#e4e4e7;
   --dark:#111;
-  --dark2:#252525;
   --soft:#f8f8f8;
-  --success:#16803c;
-  --warning:#a15c00;
+  --green:#16803c;
+  --orange:#a15c00;
+  --red:#b42318;
   --shadow:0 8px 30px rgba(0,0,0,.06);
 }
 
@@ -32,8 +32,6 @@ html,body{
 
 button,input,textarea,select{font:inherit}
 button{cursor:pointer}
-
-.app{min-height:100vh}
 
 .sidebar{
   width:240px;
@@ -59,7 +57,7 @@ button{cursor:pointer}
   border:0;
   color:#aaa;
   text-align:left;
-  padding:13px 12px;
+  padding:12px;
   border-radius:9px;
   margin:2px 0;
 }
@@ -97,7 +95,7 @@ button{cursor:pointer}
 .btn{
   border:1px solid var(--line);
   background:#fff;
-  padding:11px 16px;
+  padding:10px 15px;
   border-radius:9px;
   font-weight:650;
 }
@@ -109,7 +107,7 @@ button{cursor:pointer}
 }
 
 .btn.small{
-  padding:8px 11px;
+  padding:7px 10px;
   font-size:13px;
 }
 
@@ -119,14 +117,18 @@ button{cursor:pointer}
   gap:14px;
 }
 
-.card,.panel{
+.card,
+.panel,
+.feature{
   background:#fff;
   border:1px solid var(--line);
   border-radius:14px;
   box-shadow:var(--shadow);
 }
 
-.card{padding:19px}
+.card{
+  padding:19px;
+}
 
 .card .label{
   color:var(--muted);
@@ -134,7 +136,7 @@ button{cursor:pointer}
 }
 
 .card .value{
-  font-size:28px;
+  font-size:27px;
   font-weight:800;
   margin-top:8px;
 }
@@ -149,13 +151,21 @@ button{cursor:pointer}
   margin:0 0 16px;
 }
 
+.grid2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
 .formgrid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:14px;
 }
 
-.full{grid-column:1/-1}
+.full{
+  grid-column:1/-1;
+}
 
 .field label{
   display:block;
@@ -171,125 +181,14 @@ button{cursor:pointer}
   width:100%;
   border:1px solid var(--line);
   border-radius:9px;
-  padding:11px;
+  padding:10px;
   background:#fff;
   outline:none;
 }
 
 .field textarea{
-  min-height:140px;
+  min-height:120px;
   resize:vertical;
-}
-
-.ai-box{
-  background:#111;
-  color:#fff;
-  border-radius:14px;
-  padding:22px;
-}
-
-.ai-box h2{
-  margin:0 0 6px;
-}
-
-.ai-box p{
-  color:#aaa;
-  margin-top:0;
-}
-
-.ai-box textarea{
-  width:100%;
-  min-height:150px;
-  border:0;
-  border-radius:10px;
-  padding:14px;
-  resize:vertical;
-  outline:none;
-}
-
-.ai-actions{
-  display:flex;
-  gap:10px;
-  margin-top:12px;
-  flex-wrap:wrap;
-}
-
-.btn.light{
-  background:#fff;
-  color:#111;
-  border-color:#fff;
-}
-
-.btn.outline-dark{
-  background:transparent;
-  color:#fff;
-  border-color:#555;
-}
-
-.steps{
-  display:flex;
-  gap:7px;
-  margin-bottom:18px;
-  overflow:auto;
-}
-
-.step{
-  padding:8px 12px;
-  border:1px solid var(--line);
-  border-radius:20px;
-  color:#777;
-  white-space:nowrap;
-}
-
-.step.active{
-  background:#111;
-  color:#fff;
-  border-color:#111;
-}
-
-.wizard-actions{
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  margin-top:18px;
-}
-
-.itemrow{
-  display:grid;
-  grid-template-columns:2fr .7fr .9fr 1fr auto;
-  gap:8px;
-  align-items:end;
-  margin-bottom:10px;
-}
-
-.itemrow input,
-.itemrow select{
-  width:100%;
-  padding:9px;
-  border:1px solid var(--line);
-  border-radius:7px;
-  background:#fff;
-}
-
-.notice{
-  background:#f2f2f2;
-  border:1px solid var(--line);
-  padding:13px;
-  border-radius:9px;
-  margin-bottom:14px;
-}
-
-.ai-result{
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:14px;
-  margin-top:14px;
-  background:var(--soft);
-}
-
-.ai-result strong{
-  display:block;
-  margin-bottom:8px;
 }
 
 .table{
@@ -300,7 +199,7 @@ button{cursor:pointer}
 .table th,
 .table td{
   text-align:left;
-  padding:12px 8px;
+  padding:11px 8px;
   border-bottom:1px solid var(--line);
   font-size:14px;
 }
@@ -308,12 +207,6 @@ button{cursor:pointer}
 .table th{
   color:var(--muted);
   font-size:12px;
-}
-
-.empty{
-  padding:35px;
-  text-align:center;
-  color:var(--muted);
 }
 
 .badge{
@@ -326,12 +219,152 @@ button{cursor:pointer}
 
 .badge.green{
   background:#e8f6ed;
-  color:var(--success);
+  color:var(--green);
 }
 
 .badge.orange{
   background:#fff2df;
-  color:var(--warning);
+  color:var(--orange);
+}
+
+.badge.red{
+  background:#fdecea;
+  color:var(--red);
+}
+
+.bar{
+  height:12px;
+  background:#eee;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.bar i{
+  display:block;
+  height:100%;
+  background:#111;
+}
+
+.kpi{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.mini{
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+
+.mini b{
+  display:block;
+  font-size:22px;
+  margin-top:5px;
+}
+
+.chart{
+  height:250px;
+  display:flex;
+  align-items:flex-end;
+  gap:12px;
+  padding:15px 5px 25px;
+  border-bottom:1px solid var(--line);
+}
+
+.chartcol{
+  flex:1;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  align-items:center;
+  gap:6px;
+}
+
+.chartcol i{
+  width:70%;
+  max-width:50px;
+  background:#111;
+  border-radius:5px 5px 0 0;
+  min-height:3px;
+}
+
+.chartcol span{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.calendar-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.calendar{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.cal-dayname{
+  padding:10px;
+  background:#f8f8f8;
+  font-size:12px;
+  font-weight:700;
+  color:#666;
+}
+
+.day{
+  min-height:115px;
+  border-top:1px solid var(--line);
+  border-right:1px solid var(--line);
+  padding:7px;
+}
+
+.day:nth-child(7n){
+  border-right:0;
+}
+
+.daynum{
+  font-size:12px;
+  font-weight:700;
+}
+
+.today{
+  outline:2px solid #111;
+  outline-offset:-2px;
+}
+
+.event{
+  display:block;
+  margin-top:5px;
+  padding:5px 6px;
+  border-radius:6px;
+  background:#111;
+  color:#fff;
+  font-size:11px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.event.accepted{
+  background:#e8f6ed;
+  color:var(--green);
+}
+
+.event.rejected{
+  background:#fdecea;
+  color:var(--red);
+}
+
+.event.expired{
+  background:#eee;
+  color:#666;
 }
 
 .preview{
@@ -389,10 +422,6 @@ button{cursor:pointer}
   font-weight:800;
 }
 
-.muted{color:var(--muted)}
-
-.right{text-align:right}
-
 .customer-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -416,28 +445,81 @@ button{cursor:pointer}
   font-size:14px;
 }
 
-.feature-grid{
+.itemrow{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-  margin-top:18px;
+  grid-template-columns:2fr .7fr .9fr 1fr auto;
+  gap:8px;
+  align-items:end;
+  margin-bottom:10px;
 }
 
-.feature{
-  background:#fff;
+.itemrow input,
+.itemrow select{
+  width:100%;
+  padding:9px;
   border:1px solid var(--line);
-  border-radius:13px;
-  padding:18px;
+  border-radius:7px;
+  background:#fff;
 }
 
-.feature b{
-  display:block;
-  margin-bottom:7px;
+.ai-box{
+  background:#111;
+  color:#fff;
+  border-radius:14px;
+  padding:22px;
 }
 
-.feature span{
-  color:var(--muted);
-  font-size:14px;
+.ai-box h2{
+  margin:0 0 6px;
+}
+
+.ai-box p{
+  color:#aaa;
+}
+
+.ai-box textarea{
+  width:100%;
+  min-height:145px;
+  border:0;
+  border-radius:10px;
+  padding:14px;
+  outline:none;
+}
+
+.ai-result{
+  border:1px solid #444;
+  border-radius:10px;
+  padding:14px;
+  margin-top:14px;
+  background:#222;
+}
+
+.steps{
+  display:flex;
+  gap:7px;
+  margin-bottom:18px;
+  overflow:auto;
+}
+
+.step{
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  color:#777;
+  white-space:nowrap;
+}
+
+.step.active{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+
+.wizard-actions{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:18px;
 }
 
 .mobilebar{
@@ -455,24 +537,34 @@ button{cursor:pointer}
   z-index:30;
 }
 
-.hidden{display:none!important}
+.hidden{
+  display:none!important;
+}
 
 @media(max-width:950px){
+
   .cards{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .feature-grid{
+  .grid2{
     grid-template-columns:1fr;
   }
 
   .customer-grid{
     grid-template-columns:1fr 1fr;
   }
+
+  .kpi{
+    grid-template-columns:1fr 1fr;
+  }
 }
 
 @media(max-width:650px){
-  .sidebar{display:none}
+
+  .sidebar{
+    display:none;
+  }
 
   .main{
     margin-left:0;
@@ -520,8 +612,18 @@ button{cursor:pointer}
     flex-direction:column;
   }
 
-  .right{
-    text-align:left;
+  .calendar{
+    font-size:11px;
+  }
+
+  .day{
+    min-height:85px;
+    padding:4px;
+  }
+
+  .event{
+    font-size:9px;
+    padding:3px;
   }
 
   .mobilebar{
@@ -540,7 +642,7 @@ button{cursor:pointer}
     background:none;
     border:0;
     color:#aaa;
-    font-size:11px;
+    font-size:10px;
   }
 
   .mobilebar button.active{
@@ -549,7 +651,6 @@ button{cursor:pointer}
 }
 
 @media print{
-  body{background:#fff}
 
   .sidebar,
   .mobilebar,
@@ -560,7 +661,6 @@ button{cursor:pointer}
 
   .main{
     margin:0;
-    width:100%;
     padding:0;
   }
 
@@ -581,29 +681,31 @@ button{cursor:pointer}
 
 <body>
 
-<div class="app">
-
 <aside class="sidebar">
-  <div class="brand">Easy<span>Offer</span></div>
+
+  <div class="brand">
+    Easy<span>Offer</span>
+  </div>
 
   <div class="nav">
     <button data-page="dashboard" class="active">▦ &nbsp; Dashboard</button>
     <button data-page="offers">▤ &nbsp; Angebote</button>
+    <button data-page="calendar">◫ &nbsp; Kalender</button>
+    <button data-page="analytics">◒ &nbsp; Analyse</button>
     <button data-page="customers">♙ &nbsp; Kunden</button>
     <button data-page="catalog">▧ &nbsp; Preiskatalog</button>
     <button data-page="settings">⚙ &nbsp; Einstellungen</button>
   </div>
+
 </aside>
 
 <main class="main" id="main"></main>
 
-</div>
-
 <div class="mobilebar">
-  <button data-page="dashboard" class="active">Dashboard</button>
+  <button data-page="dashboard" class="active">Home</button>
   <button data-page="offers">Angebote</button>
-  <button data-page="customers">Kunden</button>
-  <button data-page="catalog">Katalog</button>
+  <button data-page="calendar">Kalender</button>
+  <button data-page="analytics">Analyse</button>
   <button data-page="settings">Mehr</button>
 </div>
 
@@ -612,27 +714,75 @@ button{cursor:pointer}
 <script>
 "use strict";
 
-const KEY = "easyoffer_v2";
+const KEY="easyoffer_v21";
 
-const demoCatalog = [
-  {id:"1",name:"Gas-Brennwerttherme",unit:"Stk.",price:3200,cost:2200},
-  {id:"2",name:"Wärmepumpe",unit:"Stk.",price:8500,cost:6100},
-  {id:"3",name:"Heizkörper",unit:"Stk.",price:420,cost:260},
-  {id:"4",name:"Waschtisch",unit:"Stk.",price:280,cost:150},
-  {id:"5",name:"Toilette",unit:"Stk.",price:390,cost:210},
-  {id:"6",name:"Montage / Arbeitszeit",unit:"Std.",price:65,cost:32},
-  {id:"7",name:"Demontage",unit:"Std.",price:55,cost:28},
-  {id:"8",name:"Anfahrt",unit:"Pausch.",price:45,cost:15}
+const catalogDefault=[
+  {
+    id:"1",
+    name:"Gas-Brennwerttherme",
+    unit:"Stk.",
+    price:3200,
+    cost:2200
+  },
+  {
+    id:"2",
+    name:"Wärmepumpe",
+    unit:"Stk.",
+    price:8500,
+    cost:6100
+  },
+  {
+    id:"3",
+    name:"Heizkörper",
+    unit:"Stk.",
+    price:420,
+    cost:260
+  },
+  {
+    id:"4",
+    name:"Waschtisch",
+    unit:"Stk.",
+    price:280,
+    cost:150
+  },
+  {
+    id:"5",
+    name:"Toilette",
+    unit:"Stk.",
+    price:390,
+    cost:210
+  },
+  {
+    id:"6",
+    name:"Montage / Arbeitszeit",
+    unit:"Std.",
+    price:65,
+    cost:32
+  },
+  {
+    id:"7",
+    name:"Demontage",
+    unit:"Std.",
+    price:55,
+    cost:28
+  },
+  {
+    id:"8",
+    name:"Anfahrt",
+    unit:"Pausch.",
+    price:45,
+    cost:15
+  }
 ];
 
-const defaultState = {
+const defaults={
   settings:{
     company:"Muster SHK GmbH",
     owner:"Max Mustermann",
     address:"Musterstraße 1\n34117 Kassel",
     iban:"DE00 0000 0000 0000 0000 00"
   },
-  catalog:demoCatalog,
+  catalog:catalogDefault,
   offers:[],
   nextNo:1001
 };
@@ -640,19 +790,32 @@ const defaultState = {
 let state;
 
 try{
-  state = JSON.parse(localStorage.getItem(KEY)||"null") || defaultState;
+  state=JSON.parse(localStorage.getItem(KEY)||"null")||defaults;
 }catch(e){
-  state = defaultState;
+  state=defaults;
 }
 
-if(!state.catalog) state.catalog = demoCatalog;
-if(!state.offers) state.offers = [];
-if(!state.settings) state.settings = defaultState.settings;
-if(!state.nextNo) state.nextNo = 1001;
+if(!state.catalog||!state.catalog.length){
+  state.catalog=catalogDefault;
+}
 
-let page = "dashboard";
+if(!state.offers){
+  state.offers=[];
+}
 
-let draft = {
+if(!state.settings){
+  state.settings=defaults.settings;
+}
+
+if(!state.nextNo){
+  state.nextNo=1001;
+}
+
+let page="dashboard";
+
+let monthCursor=new Date();
+
+let draft={
   step:1,
   customer:{
     company:"",
@@ -662,7 +825,8 @@ let draft = {
   },
   request:"",
   items:[],
-  notes:""
+  notes:"",
+  followDate:""
 };
 
 function save(){
@@ -681,82 +845,115 @@ function esc(s){
     "&":"&amp;",
     "<":"&lt;",
     ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
+    "\"":"&quot;",
+    "'":"&#39;"
   }[m]));
 }
 
-function toast(text){
-  const el=document.getElementById("toast");
-  el.textContent=text;
-  el.classList.remove("hidden");
+function toast(message){
+  const box=document.getElementById("toast");
+
+  box.textContent=message;
+  box.classList.remove("hidden");
 
   setTimeout(()=>{
-    el.classList.add("hidden");
+    box.classList.add("hidden");
   },2200);
 }
 
-function setPage(p){
-  page=p;
+function totals(o){
 
-  document.querySelectorAll("[data-page]").forEach(btn=>{
-    btn.classList.toggle("active",btn.dataset.page===p);
-  });
-
-  render();
-}
-
-document.querySelectorAll("[data-page]").forEach(btn=>{
-  btn.onclick=()=>setPage(btn.dataset.page);
-});
-
-function layout(title,sub,actions=""){
-  return `
-    <div class="top">
-      <div>
-        <h1>${title}</h1>
-        <div class="sub">${sub}</div>
-      </div>
-      <div>${actions}</div>
-    </div>
-  `;
-}
-
-function render(){
-
-  if(page==="dashboard") renderDashboard();
-  else if(page==="offers") renderOffers();
-  else if(page==="customers") renderCustomers();
-  else if(page==="catalog") renderCatalog();
-  else if(page==="settings") renderSettings();
-  else if(page==="create") renderCreate();
-  else if(page==="preview") renderPreview();
-}
-
-function renderDashboard(){
-
-  const offers=state.offers;
-
-  const open=offers.filter(o=>o.status==="Offen").length;
-
-  const accepted=offers.filter(
-    o=>o.status==="Angenommen"
-  ).length;
-
-  const volume=offers.reduce(
-    (sum,o)=>sum+(Number(o.total)||0),
+  const net=(o.items||[]).reduce(
+    (sum,item)=>sum+(Number(item.qty)||0)*(Number(item.price)||0),
     0
   );
 
-  document.getElementById("main").innerHTML=
+  return{
+    net,
+    vat:net*.19,
+    gross:net*1.19
+  };
+}
 
-    layout(
-      "Dashboard",
-      "Dein digitaler Angebotsassistent",
-      `<button class="btn dark" onclick="startOffer()">+ Angebot erstellen</button>`
-    )
+function status(o){
+  return o.status||"Offen";
+}
 
-    +
+function badge(s){
+
+  let cls="";
+
+  if(s==="Angenommen")cls="green";
+  if(s==="Abgelehnt")cls="red";
+  if(s==="Offen")cls="orange";
+
+  return `<span class="badge ${cls}">${esc(s)}</span>`;
+}
+
+function nav(){
+
+  document.querySelectorAll("[data-page]").forEach(button=>{
+    button.classList.toggle(
+      "active",
+      button.dataset.page===page
+    );
+  });
+}
+
+function layout(title,sub,body,action=""){
+
+  main.innerHTML=`
+    <div class="top">
+
+      <div>
+        <h1>${title}</h1>
+        <div class="sub">${sub||""}</div>
+      </div>
+
+      ${action}
+
+    </div>
+
+    ${body}
+  `;
+
+  nav();
+}
+
+function dashboard(){
+
+  const offers=state.offers;
+
+  const open=offers.filter(
+    o=>status(o)==="Offen"
+  );
+
+  const accepted=offers.filter(
+    o=>status(o)==="Angenommen"
+  );
+
+  const volume=offers.reduce(
+    (sum,o)=>sum+totals(o).gross,
+    0
+  );
+
+  const won=accepted.reduce(
+    (sum,o)=>sum+totals(o).gross,
+    0
+  );
+
+  const openValue=open.reduce(
+    (sum,o)=>sum+totals(o).gross,
+    0
+  );
+
+  const quote=offers.length
+    ?Math.round(accepted.length/offers.length*100)
+    :0;
+
+  layout(
+    "Dashboard",
+    "Dein Überblick über Angebote und Umsatz",
 
     `
     <div class="cards">
@@ -767,13 +964,13 @@ function renderDashboard(){
       </div>
 
       <div class="card">
-        <div class="label">Offene Angebote</div>
-        <div class="value">${open}</div>
+        <div class="label">Offen</div>
+        <div class="value">${open.length}</div>
       </div>
 
       <div class="card">
         <div class="label">Angenommen</div>
-        <div class="value">${accepted}</div>
+        <div class="value">${accepted.length}</div>
       </div>
 
       <div class="card">
@@ -783,208 +980,186 @@ function renderDashboard(){
 
     </div>
 
-    <div class="panel">
-      <div class="ai-box">
+    <div class="grid2">
 
-        <h2>🤖 KI-Angebotsassistent</h2>
+      <div class="panel">
 
-        <p>
-          Kundenanfrage einfügen – EasyOffer erkennt passende Leistungen
-          aus deinem Preiskatalog.
-        </p>
+        <h2>Vertriebs-Pipeline</h2>
 
-        <textarea
-          id="quickRequest"
-          placeholder="Beispiel: Kunde möchte eine neue Wärmepumpe. Alte Heizung muss demontiert werden. Zusätzlich Montage und Anfahrt..."
-        ></textarea>
+        <div class="kpi">
 
-        <div class="ai-actions">
+          <div class="mini">
+            Offen
+            <b>${money(openValue)}</b>
+          </div>
 
-          <button
-            class="btn light"
-            onclick="quickAnalyze()"
-          >
-            Anfrage analysieren
-          </button>
+          <div class="mini">
+            Gewonnen
+            <b>${money(won)}</b>
+          </div>
 
-          <button
-            class="btn outline-dark"
-            onclick="startOffer()"
-          >
-            Manuell erstellen
-          </button>
+          <div class="mini">
+            Abschlussquote
+            <b>${quote}%</b>
+          </div>
 
         </div>
 
-        <div id="quickResult"></div>
+        <div style="margin-top:18px">
+
+          <div class="muted">
+            Abschlussquote
+          </div>
+
+          <div class="bar">
+            <i style="width:${quote}%"></i>
+          </div>
+
+        </div>
 
       </div>
-    </div>
 
-    <div class="feature-grid">
+      <div class="panel">
 
-      <div class="feature">
-        <b>⚡ Anfrage → Angebot</b>
-        <span>Kundenanfrage analysieren und passende Positionen übernehmen.</span>
-      </div>
+        <h2>Letzte Angebote</h2>
 
-      <div class="feature">
-        <b>💰 Deine Preise</b>
-        <span>EasyOffer verwendet deinen eigenen Preiskatalog.</span>
-      </div>
+        ${
+          offers
+          .slice()
+          .reverse()
+          .slice(0,5)
+          .map(o=>`
 
-      <div class="feature">
-        <b>📄 Professionelles PDF</b>
-        <span>Fertiges Angebot direkt drucken oder als PDF speichern.</span>
+            <div style="
+              display:flex;
+              justify-content:space-between;
+              gap:10px;
+              padding:10px 0;
+              border-bottom:1px solid var(--line)
+            ">
+
+              <span>
+                <b>${esc(o.no)}</b>
+                ·
+                ${esc(o.customer.company||"Kunde")}
+              </span>
+
+              <span>
+                ${money(totals(o).gross)}
+              </span>
+
+            </div>
+
+          `)
+          .join("")
+          ||
+          `<div class="muted">
+            Noch keine Angebote.
+          </div>`
+        }
+
       </div>
 
     </div>
 
     <div class="panel">
-      <h2>Letzte Angebote</h2>
 
-      ${
-        offers.length
-        ? offerTable(offers.slice(-6).reverse())
-        : `<div class="empty">Noch keine Angebote. Erstelle dein erstes Angebot.</div>`
-      }
+      <h2>Schnellstart</h2>
+
+      <button
+        class="btn dark"
+        onclick="newOffer()"
+      >
+        + Neues Angebot
+      </button>
+
+      <button
+        class="btn"
+        onclick="go('calendar')"
+      >
+        Kalender
+      </button>
+
+      <button
+        class="btn"
+        onclick="go('analytics')"
+      >
+        Analyse
+      </button>
 
     </div>
-    `;
+    `
+  );
 }
 
-function quickAnalyze(){
+function offers(){
 
-  const text=document.getElementById("quickRequest").value.trim();
+  const rows=state.offers
+    .slice()
+    .reverse();
 
-  if(!text){
-    toast("Bitte zuerst eine Kundenanfrage eingeben.");
-    return;
-  }
+  layout(
+    "Angebote",
+    "Angebote verwalten und Status verfolgen",
 
-  const result=analyzeText(text);
+    `
+    <div class="panel">
 
-  const box=document.getElementById("quickResult");
+      <div style="
+        display:flex;
+        gap:8px;
+        flex-wrap:wrap;
+        margin-bottom:14px
+      ">
 
-  if(!result.length){
-
-    box.innerHTML=`
-      <div class="ai-result">
-        <strong>Keine eindeutigen Positionen gefunden.</strong>
-        Füge passende Artikel in deinem Preiskatalog hinzu oder erstelle
-        das Angebot manuell.
-      </div>
-    `;
-
-    return;
-  }
-
-  box.innerHTML=`
-    <div class="ai-result">
-
-      <strong>✓ ${result.length} passende Positionen erkannt</strong>
-
-      ${result.map(item=>`
-        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #ddd">
-          <span>${esc(item.qty)} × ${esc(item.name)}</span>
-          <b>${money(item.qty*item.price)}</b>
-        </div>
-      `).join("")}
-
-      <div style="margin-top:12px">
         <button
           class="btn dark"
-          onclick='useAnalysis(${JSON.stringify(result).replace(/'/g,"&#39;")},${JSON.stringify(text).replace(/'/g,"&#39;")})'
+          onclick="newOffer()"
         >
-          Angebot daraus erstellen →
+          + Neues Angebot
         </button>
+
+        <select
+          class="btn"
+          onchange="filterOffers(this.value)"
+        >
+          <option value="Alle">
+            Alle Status
+          </option>
+
+          <option>
+            Offen
+          </option>
+
+          <option>
+            Angenommen
+          </option>
+
+          <option>
+            Abgelehnt
+          </option>
+        </select>
+
+      </div>
+
+      <div id="offerTable">
+        ${offerRows(rows)}
       </div>
 
     </div>
-  `;
+    `
+  );
 }
 
-function analyzeText(text){
+function offerRows(rows){
 
-  const t=text.toLowerCase();
-
-  const aliases=[
-    ["wärmepumpe",["wärmepumpe","waermepumpe","wp"]],
-    ["gas-brennwerttherme",["gastherme","brennwerttherme","gas brennwert","gasheizung"]],
-    ["heizkörper",["heizkörper","heizkoerper","radiator"]],
-    ["waschtisch",["waschtisch","waschbecken","waschbecken"]],
-    ["toilette",["toilette","wc","klo"]],
-    ["montage / arbeitszeit",["montage","montieren","installation","arbeitszeit","einbau"]],
-    ["demontage",["demontage","ausbauen","alte heizung raus","abbau"]],
-    ["anfahrt",["anfahrt","anreise","fahrt"]]
-  ];
-
-  const results=[];
-
-  for(const catalogItem of state.catalog){
-
-    let found=t.includes(catalogItem.name.toLowerCase());
-
-    if(!found){
-
-      const alias=aliases.find(
-        x=>x[0]===catalogItem.name.toLowerCase()
-      );
-
-      if(alias){
-        found=alias[1].some(word=>t.includes(word));
-      }
-    }
-
-    if(found){
-
-      let qty=1;
-
-      const pattern=new RegExp(
-        `(\\d+)\\s*(?:x|×|stk|stück|stunden|std)?\\s*${catalogItem.name.split(" ")[0].replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}`,
-        "i"
-      );
-
-      const match=t.match(pattern);
-
-      if(match){
-        qty=Math.max(1,Number(match[1]));
-      }
-
-      results.push({
-        id:catalogItem.id,
-        name:catalogItem.name,
-        unit:catalogItem.unit,
-        price:Number(catalogItem.price)||0,
-        cost:Number(catalogItem.cost)||0,
-        qty:qty
-      });
-    }
+  if(!rows.length){
+    return `
+      <div class="muted">
+        Noch keine Angebote vorhanden.
+      </div>
+    `;
   }
-
-  return results;
-}
-
-function useAnalysis(items,text){
-
-  draft={
-    step:1,
-    customer:{
-      company:"",
-      email:"",
-      phone:"",
-      address:""
-    },
-    request:text,
-    items:items,
-    notes:""
-  };
-
-  page="create";
-  render();
-}
-
-function offerTable(arr){
 
   return `
     <table class="table">
@@ -994,7 +1169,8 @@ function offerTable(arr){
           <th>Nr.</th>
           <th>Kunde</th>
           <th>Datum</th>
-          <th>Betrag</th>
+          <th>Follow-up</th>
+          <th>Summe</th>
           <th>Status</th>
           <th></th>
         </tr>
@@ -1002,36 +1178,55 @@ function offerTable(arr){
 
       <tbody>
 
-      ${arr.map(o=>`
+        ${rows.map(o=>`
 
-        <tr>
+          <tr>
 
-          <td>${esc(o.number)}</td>
+            <td>
+              <b>${esc(o.no)}</b>
+            </td>
 
-          <td>${esc(o.customer.company)}</td>
+            <td>
+              ${esc(o.customer.company||"-")}
+            </td>
 
-          <td>${esc(o.date)}</td>
+            <td>
+              ${esc(o.date||"-")}
+            </td>
 
-          <td>${money(o.total)}</td>
+            <td>
+              ${esc(o.followDate||"-")}
+            </td>
 
-          <td>
-            <span class="badge ${o.status==="Angenommen"?"green":"orange"}">
-              ${esc(o.status)}
-            </span>
-          </td>
+            <td>
+              ${money(totals(o).gross)}
+            </td>
 
-          <td>
-            <button
-              class="btn small"
-              onclick="viewOffer('${o.id}')"
-            >
-              Öffnen
-            </button>
-          </td>
+            <td>
+              ${badge(status(o))}
+            </td>
 
-        </tr>
+            <td>
 
-      `).join("")}
+              <button
+                class="btn small"
+                onclick="changeStatus('${o.id}')"
+              >
+                Status
+              </button>
+
+              <button
+                class="btn small"
+                onclick="preview('${o.id}')"
+              >
+                Öffnen
+              </button>
+
+            </td>
+
+          </tr>
+
+        `).join("")}
 
       </tbody>
 
@@ -1039,253 +1234,701 @@ function offerTable(arr){
   `;
 }
 
-function renderOffers(){
+function filterOffers(value){
 
-  document.getElementById("main").innerHTML=
+  let rows=state.offers
+    .slice()
+    .reverse();
 
-    layout(
-      "Angebote",
-      "Alle gespeicherten Angebote",
-      `<button class="btn dark" onclick="startOffer()">+ Angebot erstellen</button>`
-    )
+  if(value!=="Alle"){
+    rows=rows.filter(
+      o=>status(o)===value
+    );
+  }
 
-    +
+  document.getElementById("offerTable")
+    .innerHTML=offerRows(rows);
+}
+
+function changeStatus(id){
+
+  const offer=state.offers.find(
+    x=>x.id===id
+  );
+
+  if(!offer)return;
+
+  const next={
+    Offen:"Angenommen",
+    Angenommen:"Abgelehnt",
+    Abgelehnt:"Offen"
+  };
+
+  offer.status=
+    next[status(offer)]||"Offen";
+
+  save();
+
+  toast("Status geändert");
+
+  offers();
+}
+
+function calendar(){
+
+  const year=monthCursor.getFullYear();
+  const month=monthCursor.getMonth();
+
+  const first=new Date(
+    year,
+    month,
+    1
+  );
+
+  const days=new Date(
+    year,
+    month+1,
+    0
+  ).getDate();
+
+  const start=
+    (first.getDay()+6)%7;
+
+  const names=[
+    "Mo",
+    "Di",
+    "Mi",
+    "Do",
+    "Fr",
+    "Sa",
+    "So"
+  ];
+
+  let cells=names.map(
+    name=>`
+      <div class="cal-dayname">
+        ${name}
+      </div>
+    `
+  ).join("");
+
+  for(let i=0;i<start;i++){
+    cells+=`<div class="day"></div>`;
+  }
+
+  const today=new Date();
+
+  for(let day=1;day<=days;day++){
+
+    const date=
+      `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+
+    const events=
+      state.offers.filter(
+        o=>o.followDate===date
+      );
+
+    const isToday=
+      today.getFullYear()===year &&
+      today.getMonth()===month &&
+      today.getDate()===day;
+
+    cells+=`
+
+      <div class="day ${isToday?"today":""}">
+
+        <div class="daynum">
+          ${day}
+        </div>
+
+        ${events.map(o=>`
+
+          <div
+            class="event ${
+              status(o)==="Angenommen"
+              ?"accepted"
+              :status(o)==="Abgelehnt"
+              ?"rejected"
+              :""
+            }"
+            onclick="preview('${o.id}')"
+          >
+            ${esc(o.no)}
+            ·
+            ${esc(o.customer.company||"Kunde")}
+          </div>
+
+        `).join("")}
+
+      </div>
+    `;
+  }
+
+  layout(
+    "Kalender",
+    "Follow-ups und Angebote verfolgen",
 
     `
     <div class="panel">
 
+      <div class="calendar-head">
+
+        <button
+          class="btn"
+          onclick="
+            monthCursor.setMonth(
+              monthCursor.getMonth()-1
+            );
+            calendar();
+          "
+        >
+          ‹
+        </button>
+
+        <h2 style="margin:0">
+          ${new Intl.DateTimeFormat(
+            "de-DE",
+            {
+              month:"long",
+              year:"numeric"
+            }
+          ).format(monthCursor)}
+        </h2>
+
+        <button
+          class="btn"
+          onclick="
+            monthCursor.setMonth(
+              monthCursor.getMonth()+1
+            );
+            calendar();
+          "
+        >
+          ›
+        </button>
+
+      </div>
+
+      <div class="calendar">
+        ${cells}
+      </div>
+
+    </div>
+
+    <div class="panel">
+
+      <h2>
+        Anstehende Follow-ups
+      </h2>
+
       ${
-        state.offers.length
-        ? offerTable([...state.offers].reverse())
-        : `<div class="empty">Noch keine Angebote gespeichert.</div>`
+        state.offers
+        .filter(o=>
+          o.followDate &&
+          o.followDate>=
+            new Date()
+            .toISOString()
+            .slice(0,10) &&
+          status(o)==="Offen"
+        )
+        .sort(
+          (a,b)=>
+            a.followDate.localeCompare(
+              b.followDate
+            )
+        )
+        .slice(0,10)
+        .map(o=>`
+
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            gap:10px;
+            padding:11px 0;
+            border-bottom:1px solid var(--line)
+          ">
+
+            <span>
+              <b>${esc(o.followDate)}</b>
+              ·
+              ${esc(o.customer.company||"Kunde")}
+            </span>
+
+            ${badge(status(o))}
+
+          </div>
+
+        `)
+        .join("")
+        ||
+        `
+        <div class="muted">
+          Keine offenen Follow-ups geplant.
+        </div>
+        `
       }
 
     </div>
-    `;
+    `
+  );
 }
 
-function renderCustomers(){
+function analytics(){
 
-  const map={};
+  const offers=state.offers;
 
-  state.offers.forEach(o=>{
+  const total=offers.length;
 
-    const key=o.customer.company || "Unbekannter Kunde";
+  const accepted=offers.filter(
+    o=>status(o)==="Angenommen"
+  );
 
-    if(!map[key]){
-      map[key]={
-        company:key,
-        email:o.customer.email,
-        phone:o.customer.phone,
-        address:o.customer.address,
-        offers:0,
-        volume:0
-      };
-    }
+  const open=offers.filter(
+    o=>status(o)==="Offen"
+  );
 
-    map[key].offers++;
-    map[key].volume+=Number(o.total)||0;
-  });
+  const rejected=offers.filter(
+    o=>status(o)==="Abgelehnt"
+  );
 
-  const customers=Object.values(map);
+  const volume=offers.reduce(
+    (sum,o)=>sum+totals(o).gross,
+    0
+  );
 
-  document.getElementById("main").innerHTML=
+  const won=accepted.reduce(
+    (sum,o)=>sum+totals(o).gross,
+    0
+  );
 
-    layout(
-      "Kunden",
-      "Kunden aus deinen Angeboten",
-      `<button class="btn dark" onclick="startOffer()">+ Neuer Kunde</button>`
+  const openVolume=open.reduce(
+    (sum,o)=>sum+totals(o).gross,
+    0
+  );
+
+  const average=
+    total
+    ?volume/total
+    :0;
+
+  const closeRate=
+    total
+    ?Math.round(
+      accepted.length/total*100
     )
+    :0;
 
-    +
+  const now=new Date();
+
+  const labels=[];
+  const values=[];
+
+  for(let i=5;i>=0;i--){
+
+    const date=new Date(
+      now.getFullYear(),
+      now.getMonth()-i,
+      1
+    );
+
+    const key=
+      `${date.getFullYear()}-${String(
+        date.getMonth()+1
+      ).padStart(2,"0")}`;
+
+    labels.push(
+      new Intl.DateTimeFormat(
+        "de-DE",
+        {month:"short"}
+      ).format(date)
+    );
+
+    values.push(
+      offers
+      .filter(o=>
+        (o.date||"").startsWith(key)
+      )
+      .reduce(
+        (sum,o)=>
+          sum+totals(o).gross,
+        0
+      )
+    );
+  }
+
+  const max=
+    Math.max(...values,1);
+
+  layout(
+    "Analyse",
+    "Kennzahlen deiner Angebots-Pipeline",
 
     `
-    <div class="panel">
+    <div class="cards">
 
-      ${
-        customers.length
-        ? `<div class="customer-grid">
+      <div class="card">
+        <div class="label">
+          Abschlussquote
+        </div>
+        <div class="value">
+          ${closeRate}%
+        </div>
+      </div>
 
-          ${customers.map(c=>`
+      <div class="card">
+        <div class="label">
+          Gewonnener Umsatz
+        </div>
+        <div class="value">
+          ${money(won)}
+        </div>
+      </div>
 
-            <div class="customer-card">
+      <div class="card">
+        <div class="label">
+          Ø Angebotswert
+        </div>
+        <div class="value">
+          ${money(average)}
+        </div>
+      </div>
 
-              <h3>${esc(c.company)}</h3>
-
-              <p>${esc(c.email || "Keine E-Mail")}</p>
-
-              <p>${esc(c.phone || "Keine Telefonnummer")}</p>
-
-              <p>${esc(c.address || "Keine Adresse")}</p>
-
-              <hr>
-
-              <p><b>${c.offers}</b> Angebot(e)</p>
-
-              <p><b>${money(c.volume)}</b> Volumen</p>
-
-            </div>
-
-          `).join("")}
-
-        </div>`
-        : `<div class="empty">Noch keine Kunden vorhanden.</div>`
-      }
+      <div class="card">
+        <div class="label">
+          Offene Pipeline
+        </div>
+        <div class="value">
+          ${money(openVolume)}
+        </div>
+      </div>
 
     </div>
-    `;
-}
 
-function renderCatalog(){
+    <div class="grid2">
 
-  document.getElementById("main").innerHTML=
+      <div class="panel">
 
-    layout(
-      "Preiskatalog",
-      "Deine Preise – EasyOffer verwendet diese Werte.",
-      `<button class="btn dark" onclick="addCatalog()">+ Artikel hinzufügen</button>`
-    )
+        <h2>
+          Angebotsvolumen · letzte 6 Monate
+        </h2>
 
-    +
+        <div class="chart">
 
-    `
-    <div class="panel">
+          ${values.map(
+            (value,index)=>`
 
-      <div style="overflow:auto">
+              <div class="chartcol">
 
-        <table class="table">
+                <b>
+                  ${
+                    value
+                    ?money(value)
+                    :""
+                  }
+                </b>
 
-          <thead>
-            <tr>
-              <th>Artikel / Leistung</th>
-              <th>Einheit</th>
-              <th>Verkauf netto</th>
-              <th>Interner EK</th>
-              <th>Marge</th>
-              <th></th>
-            </tr>
-          </thead>
+                <i
+                  style="
+                    height:${Math.max(
+                      3,
+                      value/max*160
+                    )}px
+                  "
+                ></i>
 
-          <tbody>
+                <span>
+                  ${labels[index]}
+                </span>
 
-          ${state.catalog.map((a,i)=>{
+              </div>
 
-            const margin=Number(a.price)-Number(a.cost);
+            `
+          ).join("")}
 
-            return `
-              <tr>
+        </div>
 
-                <td>
-                  <input
-                    value="${esc(a.name)}"
-                    oninput="catChange(${i},'name',this.value)"
-                    style="width:100%;padding:8px;border:1px solid #ddd;border-radius:7px"
-                  >
-                </td>
+      </div>
 
-                <td>
-                  <input
-                    value="${esc(a.unit)}"
-                    oninput="catChange(${i},'unit',this.value)"
-                    style="width:90px;padding:8px;border:1px solid #ddd;border-radius:7px"
-                  >
-                </td>
+      <div class="panel">
 
-                <td>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value="${a.price}"
-                    oninput="catChange(${i},'price',this.value)"
-                    style="width:120px;padding:8px;border:1px solid #ddd;border-radius:7px"
-                  >
-                </td>
+        <h2>
+          Angebotsstatus
+        </h2>
 
-                <td>
-                  <input
-                    type="number"
-                    step="0.01"
-                    value="${a.cost}"
-                    oninput="catChange(${i},'cost',this.value)"
-                    style="width:120px;padding:8px;border:1px solid #ddd;border-radius:7px"
-                  >
-                </td>
+        <div class="kpi">
 
-                <td>
-                  ${money(margin)}
-                </td>
+          <div class="mini">
+            Offen
+            <b>${open.length}</b>
+          </div>
 
-                <td>
-                  <button
-                    class="btn small"
-                    onclick="delCatalog(${i})"
-                  >
-                    Löschen
-                  </button>
-                </td>
+          <div class="mini">
+            Gewonnen
+            <b>${accepted.length}</b>
+          </div>
 
-              </tr>
-            `;
+          <div class="mini">
+            Abgelehnt
+            <b>${rejected.length}</b>
+          </div>
 
-          }).join("")}
+        </div>
 
-          </tbody>
+        <div style="margin-top:18px">
 
-        </table>
+          <div class="muted">
+            Gewonnen
+          </div>
+
+          <div class="bar">
+            <i style="
+              width:${
+                total
+                ?accepted.length/total*100
+                :0
+              }%
+            "></i>
+          </div>
+
+          <div
+            class="muted"
+            style="margin-top:12px"
+          >
+            Offen
+          </div>
+
+          <div class="bar">
+            <i style="
+              width:${
+                total
+                ?open.length/total*100
+                :0
+              }%
+            "></i>
+          </div>
+
+        </div>
 
       </div>
 
     </div>
-    `;
+
+    <div class="panel">
+
+      <h2>
+        Deine wichtigsten Kennzahlen
+      </h2>
+
+      <table class="table">
+
+        <tbody>
+
+          <tr>
+            <td>Gesamtzahl Angebote</td>
+            <td>
+              <b>${total}</b>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Gesamtes Angebotsvolumen</td>
+            <td>
+              <b>${money(volume)}</b>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Gewonnener Umsatz</td>
+            <td>
+              <b>${money(won)}</b>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Offene Pipeline</td>
+            <td>
+              <b>${money(openVolume)}</b>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Durchschnittlicher Angebotswert</td>
+            <td>
+              <b>${money(average)}</b>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Abschlussquote</td>
+            <td>
+              <b>${closeRate}%</b>
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+    `
+  );
 }
 
-function catChange(i,key,value){
+function customers(){
 
-  if(key==="price" || key==="cost"){
-    state.catalog[i][key]=Number(value)||0;
-  }else{
-    state.catalog[i][key]=value;
-  }
+  const map={};
 
-  save();
-}
+  state.offers.forEach(offer=>{
 
-function addCatalog(){
+    const key=
+      offer.customer.company||
+      "Unbekannt";
 
-  state.catalog.push({
-    id:Date.now().toString(),
-    name:"Neuer Artikel",
-    unit:"Stk.",
-    price:0,
-    cost:0
+    if(!map[key]){
+      map[key]={
+        customer:offer.customer,
+        count:0,
+        value:0
+      };
+    }
+
+    map[key].count++;
+    map[key].value+=totals(offer).gross;
   });
 
-  save();
-  renderCatalog();
+  layout(
+    "Kunden",
+    "Kunden aus deinen Angeboten",
+
+    `
+    <div class="customer-grid">
+
+      ${
+        Object.values(map)
+        .map(x=>`
+
+          <div class="customer-card">
+
+            <h3>
+              ${esc(x.customer.company)}
+            </h3>
+
+            <p>
+              ${esc(x.customer.email||"")}
+            </p>
+
+            <p>
+              ${esc(x.customer.phone||"")}
+            </p>
+
+            <p>
+              <b>${x.count}</b>
+              Angebote
+              ·
+              <b>${money(x.value)}</b>
+            </p>
+
+          </div>
+
+        `)
+        .join("")
+        ||
+        `
+        <div class="panel">
+          Noch keine Kunden vorhanden.
+        </div>
+        `
+      }
+
+    </div>
+    `
+  );
 }
 
-function delCatalog(i){
+function catalog(){
 
-  if(!confirm("Artikel wirklich löschen?")) return;
+  layout(
+    "Preiskatalog",
+    "Deine Preise und internen Kosten",
 
-  state.catalog.splice(i,1);
+    `
+    <div class="panel">
 
-  save();
-  renderCatalog();
+      <table class="table">
+
+        <thead>
+
+          <tr>
+            <th>Leistung</th>
+            <th>Einheit</th>
+            <th>Verkauf</th>
+            <th>Kosten</th>
+            <th>Marge</th>
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          ${
+            state.catalog.map(x=>{
+
+              const margin=
+                Number(x.price)-Number(x.cost);
+
+              const percent=
+                x.price
+                ?Math.round(
+                  margin/x.price*100
+                )
+                :0;
+
+              return`
+
+                <tr>
+
+                  <td>
+                    ${esc(x.name)}
+                  </td>
+
+                  <td>
+                    ${esc(x.unit)}
+                  </td>
+
+                  <td>
+                    ${money(x.price)}
+                  </td>
+
+                  <td>
+                    ${money(x.cost)}
+                  </td>
+
+                  <td>
+                    ${money(margin)}
+                    (${percent}%)
+                  </td>
+
+                </tr>
+
+              `;
+
+            }).join("")
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+    `
+  );
 }
 
-function renderSettings(){
+function settings(){
 
-  const s=state.settings;
-
-  document.getElementById("main").innerHTML=
-
-    layout(
-      "Einstellungen",
-      "Firmendaten für deine Angebote"
-    )
-
-    +
+  layout(
+    "Einstellungen",
+    "Firmendaten für deine Angebote",
 
     `
     <div class="panel">
@@ -1293,38 +1936,69 @@ function renderSettings(){
       <div class="formgrid">
 
         <div class="field">
-          <label>Firmenname</label>
-          <input id="setCompany" value="${esc(s.company)}">
+
+          <label>
+            Firma
+          </label>
+
+          <input
+            id="setCompany"
+            value="${esc(state.settings.company)}"
+          >
+
         </div>
 
         <div class="field">
-          <label>Inhaber</label>
-          <input id="setOwner" value="${esc(s.owner)}">
+
+          <label>
+            Inhaber
+          </label>
+
+          <input
+            id="setOwner"
+            value="${esc(state.settings.owner)}"
+          >
+
         </div>
 
         <div class="field full">
-          <label>Adresse</label>
-          <textarea id="setAddress">${esc(s.address)}</textarea>
+
+          <label>
+            Adresse
+          </label>
+
+          <textarea id="setAddress">${esc(
+            state.settings.address
+          )}</textarea>
+
         </div>
 
-        <div class="field">
-          <label>IBAN</label>
-          <input id="setIban" value="${esc(s.iban)}">
+        <div class="field full">
+
+          <label>
+            IBAN
+          </label>
+
+          <input
+            id="setIban"
+            value="${esc(state.settings.iban)}"
+          >
+
         </div>
 
       </div>
 
-      <div style="margin-top:18px">
-        <button
-          class="btn dark"
-          onclick="saveSettings()"
-        >
-          Einstellungen speichern
-        </button>
-      </div>
+      <button
+        class="btn dark"
+        style="margin-top:15px"
+        onclick="saveSettings()"
+      >
+        Speichern
+      </button>
 
     </div>
-    `;
+    `
+  );
 }
 
 function saveSettings(){
@@ -1343,10 +2017,10 @@ function saveSettings(){
 
   save();
 
-  toast("Einstellungen gespeichert");
+  toast("Gespeichert");
 }
 
-function startOffer(){
+function newOffer(){
 
   draft={
     step:1,
@@ -1358,535 +2032,624 @@ function startOffer(){
     },
     request:"",
     items:[],
-    notes:""
+    notes:"",
+    followDate:""
   };
 
   page="create";
+
   render();
 }
 
-function stepNav(){
+function create(){
 
-  const labels=[
-    "Kunde",
-    "Anfrage + KI",
-    "Positionen",
-    "Vorschau"
+  const steps=[
+    "1 Kunde",
+    "2 Anfrage + KI",
+    "3 Positionen",
+    "4 Vorschau"
   ];
 
-  return `
-    <div class="steps">
-
-      ${labels.map((label,i)=>`
-
-        <div class="step ${draft.step===i+1?"active":""}">
-          ${i+1} · ${label}
-        </div>
-
-      `).join("")}
-
-    </div>
-  `;
-}
-
-function renderCreate(){
-
-  let content="";
+  let body="";
 
   if(draft.step===1){
 
-    content=`
+    body=`
 
       <div class="panel">
 
-        <h2>Kundendaten</h2>
+        <h2>
+          Kundendaten
+        </h2>
 
         <div class="formgrid">
 
           <div class="field">
-            <label>Firma / Name *</label>
+            <label>Firma / Name</label>
             <input
-              id="customerCompany"
+              id="cCompany"
               value="${esc(draft.customer.company)}"
-              placeholder="Max Mustermann / Muster GmbH"
             >
           </div>
 
           <div class="field">
             <label>E-Mail</label>
             <input
-              id="customerEmail"
+              id="cEmail"
               value="${esc(draft.customer.email)}"
-              placeholder="kunde@example.de"
             >
           </div>
 
           <div class="field">
             <label>Telefon</label>
             <input
-              id="customerPhone"
+              id="cPhone"
               value="${esc(draft.customer.phone)}"
-              placeholder="+49..."
             >
           </div>
 
           <div class="field">
             <label>Adresse</label>
             <input
-              id="customerAddress"
+              id="cAddress"
               value="${esc(draft.customer.address)}"
-              placeholder="Straße, PLZ Ort"
             >
           </div>
 
         </div>
 
-      </div>
-    `;
-  }
+        <div class="wizard-actions">
 
-  if(draft.step===2){
-
-    content=`
-
-      <div class="panel">
-
-        <h2>Kundenanfrage</h2>
-
-        <div class="notice">
-          Beschreibe kurz, was der Kunde benötigt.
-          EasyOffer gleicht die Anfrage mit deinem Preiskatalog ab.
-        </div>
-
-        <div class="field">
-
-          <textarea
-            id="requestText"
-            placeholder="Beispiel: Kunde möchte eine neue Wärmepumpe. Alte Anlage demontieren. Neue Anlage montieren und Anfahrt berechnen."
-          >${esc(draft.request)}</textarea>
-
-        </div>
-
-        <div style="margin-top:12px">
+          <span></span>
 
           <button
             class="btn dark"
-            onclick="runAI()"
+            onclick="stepNext()"
           >
-            🤖 Anfrage analysieren
+            Weiter →
           </button>
 
         </div>
 
-        <div id="analysisBox"></div>
-
       </div>
+
     `;
+
   }
 
-  if(draft.step===3){
+  else if(draft.step===2){
 
-    content=`
+    body=`
 
-      <div class="panel">
+      <div class="ai-box">
 
-        <h2>Positionen</h2>
+        <h2>
+          ✦ KI-Angebotsassistent
+        </h2>
 
-        <div class="notice">
-          Kontrolliere die von der KI erkannten Positionen.
-          Du kannst Preise und Mengen jederzeit ändern.
-        </div>
+        <p>
+          Beschreibe die Kundenanfrage.
+          EasyOffer erkennt passende Positionen
+          aus deinem Preiskatalog.
+        </p>
 
-        <div class="items">
+        <textarea
+          id="request"
+          placeholder="Beispiel: Kunde benötigt eine Wärmepumpe inklusive Montage und Anfahrt."
+        >${esc(draft.request)}</textarea>
 
-          ${
-            draft.items.length
-            ? draft.items.map((item,i)=>`
+        <div style="margin-top:12px">
 
-              <div class="itemrow">
-
-                <div class="field itemname">
-
-                  <label>Artikel / Leistung</label>
-
-                  <select
-                    onchange="itemCatalogChange(${i},this.value)"
-                  >
-
-                    ${state.catalog.map(a=>`
-
-                      <option
-                        value="${esc(a.id)}"
-                        ${a.id===item.id?"selected":""}
-                      >
-                        ${esc(a.name)}
-                      </option>
-
-                    `).join("")}
-
-                  </select>
-
-                </div>
-
-                <div class="field">
-
-                  <label>Menge</label>
-
-                  <input
-                    type="number"
-                    min="0"
-                    step="1"
-                    value="${item.qty}"
-                    oninput="itemChange(${i},'qty',this.value)"
-                  >
-
-                </div>
-
-                <div class="field">
-
-                  <label>Einheit</label>
-
-                  <input
-                    value="${esc(item.unit)}"
-                    oninput="itemChange(${i},'unit',this.value)"
-                  >
-
-                </div>
-
-                <div class="field">
-
-                  <label>Preis netto</label>
-
-                  <input
-                    type="number"
-                    step="0.01"
-                    value="${item.price}"
-                    oninput="itemChange(${i},'price',this.value)"
-                  >
-
-                </div>
-
-                <button
-                  class="btn small"
-                  onclick="removeItem(${i})"
-                >
-                  ×
-                </button>
-
-              </div>
-
-            `).join("")
-
-            : `<div class="empty">Noch keine Positionen.</div>`
-          }
+          <button
+            class="btn"
+            onclick="analyze()"
+          >
+            Anfrage analysieren
+          </button>
 
         </div>
+
+        ${
+          draft.items.length
+          ?`
+
+            <div class="ai-result">
+
+              <b>
+                Erkannte Positionen
+              </b>
+
+              <ul>
+
+                ${
+                  draft.items.map(i=>`
+
+                    <li>
+                      ${i.qty}×
+                      ${esc(i.name)}
+                      –
+                      ${money(i.price)}
+                    </li>
+
+                  `).join("")
+                }
+
+              </ul>
+
+            </div>
+
+          `
+          :""
+        }
+
+      </div>
+
+      <div class="wizard-actions">
 
         <button
           class="btn"
-          onclick="addItem()"
-        >
-          + Position hinzufügen
-        </button>
-
-        <div class="field" style="margin-top:18px">
-
-          <label>Notiz / Zusatzinfo</label>
-
-          <textarea
-            id="offerNotes"
-            style="min-height:100px"
-            placeholder="z.B. Lieferzeit, Zahlungsziel..."
-          >${esc(draft.notes)}</textarea>
-
-        </div>
-
-        ${totalsHTML()}
-
-      </div>
-    `;
-  }
-
-  if(draft.step===4){
-
-    content=previewHTML(false);
-
-  }
-
-  document.getElementById("main").innerHTML=
-
-    layout(
-      "Angebot erstellen",
-      "In wenigen Schritten zum fertigen Angebot"
-    )
-
-    +
-
-    stepNav()
-
-    +
-
-    content
-
-    +
-
-    `
-      <div class="wizard-actions no-print">
-
-        <button
-          class="btn"
-          onclick="prevStep()"
-          ${draft.step===1?"disabled":""}
+          onclick="stepBack()"
         >
           ← Zurück
         </button>
 
-        <div style="display:flex;gap:8px">
+        <button
+          class="btn dark"
+          onclick="stepNext()"
+        >
+          Weiter →
+        </button>
 
-          ${
-            draft.step<4
-            ? `<button class="btn dark" onclick="nextStep()">Weiter →</button>`
-            : `<button class="btn dark" onclick="saveOffer()">✓ Angebot speichern</button>`
-          }
+      </div>
+
+    `;
+
+  }
+
+  else if(draft.step===3){
+
+    body=`
+
+      <div class="panel">
+
+        <h2>
+          Positionen prüfen
+        </h2>
+
+        ${
+          draft.items.map((item,index)=>`
+
+            <div class="itemrow">
+
+              <input
+                class="itemname"
+                value="${esc(item.name)}"
+                onchange="
+                  draft.items[${index}].name=this.value
+                "
+              >
+
+              <input
+                type="number"
+                min="1"
+                value="${item.qty}"
+                onchange="
+                  draft.items[${index}].qty=this.value
+                "
+              >
+
+              <input
+                type="number"
+                min="0"
+                step="0.01"
+                value="${item.price}"
+                onchange="
+                  draft.items[${index}].price=this.value
+                "
+              >
+
+              <select
+                onchange="
+                  draft.items[${index}].unit=this.value
+                "
+              >
+                <option>
+                  ${esc(item.unit||"Stk.")}
+                </option>
+              </select>
+
+              <button
+                class="btn small"
+                onclick="
+                  draft.items.splice(${index},1);
+                  render();
+                "
+              >
+                ×
+              </button>
+
+            </div>
+
+          `).join("")
+          ||
+          `
+          <div class="muted">
+            Noch keine Positionen.
+          </div>
+          `
+        }
+
+        <button
+          class="btn"
+          onclick="
+            draft.items.push({
+              name:'Neue Position',
+              unit:'Stk.',
+              qty:1,
+              price:0
+            });
+            render();
+          "
+        >
+          + Position
+        </button>
+
+        <div
+          class="field"
+          style="margin-top:16px"
+        >
+
+          <label>
+            Notizen
+          </label>
+
+          <textarea
+            id="notes"
+          >${esc(draft.notes)}</textarea>
+
+        </div>
+
+        <div
+          class="field"
+          style="margin-top:12px"
+        >
+
+          <label>
+            Follow-up / Termin
+          </label>
+
+          <input
+            id="followDate"
+            type="date"
+            value="${esc(draft.followDate)}"
+          >
+
+        </div>
+
+        <div class="wizard-actions">
+
+          <button
+            class="btn"
+            onclick="stepBack()"
+          >
+            ← Zurück
+          </button>
+
+          <button
+            class="btn dark"
+            onclick="stepNext()"
+          >
+            Vorschau →
+          </button>
 
         </div>
 
       </div>
+
     `;
 
-  if(draft.step===2 && draft.items.length){
-    showAnalysis();
-  }
-}
-
-function runAI(){
-
-  const text=document.getElementById("requestText").value.trim();
-
-  if(!text){
-    toast("Bitte Kundenanfrage eingeben.");
-    return;
   }
 
-  draft.request=text;
+  else{
 
-  const items=analyzeText(text);
+    body=previewDraft();
 
-  draft.items=items;
+  }
 
-  showAnalysis();
+  layout(
+    "Neues Angebot",
+    "In wenigen Schritten zum fertigen Angebot",
 
-  toast(
-    items.length
-    ? `${items.length} Position(en) erkannt`
-    : "Keine Positionen erkannt"
+    `
+      <div class="steps">
+
+        ${
+          steps.map((step,index)=>`
+
+            <div class="step ${
+              draft.step===index+1
+              ?"active"
+              :""
+            }">
+              ${step}
+            </div>
+
+          `).join("")
+        }
+
+      </div>
+
+      ${body}
+    `
   );
 }
 
-function showAnalysis(){
+function stepBack(){
 
-  const box=document.getElementById("analysisBox");
+  if(draft.step>1){
 
-  if(!box) return;
+    draft.step--;
 
-  if(!draft.items.length){
+    render();
 
-    box.innerHTML=`
-      <div class="ai-result">
-        <strong>Keine eindeutigen Positionen gefunden.</strong>
-        Du kannst im nächsten Schritt manuell Positionen hinzufügen.
-      </div>
-    `;
-
-    return;
   }
-
-  box.innerHTML=`
-
-    <div class="ai-result">
-
-      <strong>✓ Erkannte Positionen</strong>
-
-      ${draft.items.map(i=>`
-
-        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #ddd">
-
-          <span>
-            ${i.qty} × ${esc(i.name)}
-          </span>
-
-          <b>
-            ${money(i.qty*i.price)}
-          </b>
-
-        </div>
-
-      `).join("")}
-
-    </div>
-  `;
 }
 
-function nextStep(){
+function stepNext(){
 
   if(draft.step===1){
 
-    const company=document.getElementById("customerCompany").value.trim();
+    draft.customer={
+      company:document.getElementById("cCompany").value,
+      email:document.getElementById("cEmail").value,
+      phone:document.getElementById("cPhone").value,
+      address:document.getElementById("cAddress").value
+    };
 
-    if(!company){
-      toast("Bitte Kunde / Firma eingeben.");
-      return;
-    }
+    draft.step=2;
 
-    draft.customer.company=company;
-    draft.customer.email=document.getElementById("customerEmail").value.trim();
-    draft.customer.phone=document.getElementById("customerPhone").value.trim();
-    draft.customer.address=document.getElementById("customerAddress").value.trim();
   }
 
-  if(draft.step===2){
+  else if(draft.step===2){
 
-    const text=document.getElementById("requestText").value.trim();
+    draft.request=
+      document.getElementById("request").value;
 
-    if(!text){
-      toast("Bitte Anfrage eingeben.");
-      return;
-    }
+    draft.step=3;
 
-    draft.request=text;
-
-    if(!draft.items.length){
-      draft.items=analyzeText(text);
-    }
   }
 
-  if(draft.step===3){
+  else if(draft.step===3){
 
-    const notes=document.getElementById("offerNotes");
+    draft.notes=
+      document.getElementById("notes").value;
 
-    if(notes){
-      draft.notes=notes.value;
-    }
+    draft.followDate=
+      document.getElementById("followDate").value;
 
-    if(!draft.items.length){
-      toast("Bitte mindestens eine Position hinzufügen.");
-      return;
-    }
+    draft.step=4;
+
   }
 
-  if(draft.step<4){
-    draft.step++;
-    renderCreate();
-  }
+  render();
 }
 
-function prevStep(){
+function analyze(){
 
-  if(draft.step>1){
-    draft.step--;
-    renderCreate();
-  }
-}
+  draft.request=
+    document.getElementById("request").value;
 
-function addItem(){
+  const text=
+    draft.request.toLowerCase();
 
-  const first=state.catalog[0];
+  draft.items=[];
 
-  if(!first){
-    toast("Bitte zuerst einen Artikel anlegen.");
-    return;
-  }
+  state.catalog.forEach(item=>{
 
-  draft.items.push({
-    id:first.id,
-    name:first.name,
-    unit:first.unit,
-    price:Number(first.price)||0,
-    cost:Number(first.cost)||0,
-    qty:1
+    const name=
+      item.name.toLowerCase();
+
+    let found=false;
+
+    if(text.includes(name)){
+      found=true;
+    }
+
+    const aliases={
+      "wärmepumpe":[
+        "wärmepumpe",
+        "wp",
+        "luftwärmepumpe"
+      ],
+
+      "gas-brennwerttherme":[
+        "gastherme",
+        "brennwerttherme",
+        "gasheizung"
+      ],
+
+      "heizkörper":[
+        "heizkörper",
+        "heizung",
+        "radiator"
+      ],
+
+      "waschtisch":[
+        "waschtisch",
+        "waschbecken"
+      ],
+
+      "toilette":[
+        "toilette",
+        "wc",
+        "klo"
+      ],
+
+      "montage / arbeitszeit":[
+        "montage",
+        "arbeitszeit",
+        "einbau"
+      ],
+
+      "demontage":[
+        "demontage",
+        "ausbau"
+      ],
+
+      "anfahrt":[
+        "anfahrt",
+        "fahrt",
+        "anfahrtskosten"
+      ]
+    };
+
+    const list=aliases[item.name.toLowerCase()]||[];
+
+    if(
+      list.some(
+        alias=>text.includes(alias)
+      )
+    ){
+      found=true;
+    }
+
+    if(found){
+
+      let qty=1;
+
+      const numberMatch=text.match(
+        /(\d+)\s*(x|stück|stk)/i
+      );
+
+      if(numberMatch){
+        qty=Number(numberMatch[1]);
+      }
+
+      draft.items.push({
+        name:item.name,
+        unit:item.unit,
+        qty,
+        price:item.price
+      });
+
+    }
+
   });
 
-  renderCreate();
-}
-
-function removeItem(i){
-
-  draft.items.splice(i,1);
-
-  renderCreate();
-}
-
-function itemChange(i,key,value){
-
-  if(key==="qty" || key==="price"){
-    draft.items[i][key]=Number(value)||0;
-  }else{
-    draft.items[i][key]=value;
-  }
-}
-
-function itemCatalogChange(i,id){
-
-  const item=state.catalog.find(x=>x.id===id);
-
-  if(!item) return;
-
-  draft.items[i]={
-    id:item.id,
-    name:item.name,
-    unit:item.unit,
-    price:Number(item.price)||0,
-    cost:Number(item.cost)||0,
-    qty:draft.items[i].qty || 1
-  };
-
-  renderCreate();
-}
-
-function totals(){
-
-  const net=draft.items.reduce(
-    (sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||0),
-    0
+  toast(
+    draft.items.length
+    ?`${draft.items.length} Position(en) erkannt`
+    :"Keine Position erkannt"
   );
 
-  const vat=net*0.19;
-  const gross=net+vat;
-
-  return {net,vat,gross};
+  render();
 }
 
-function totalsHTML(){
+function previewDraft(){
 
-  const t=totals();
+  const fake={
+    customer:draft.customer,
+    items:draft.items,
+    notes:draft.notes,
+    no:"NEU",
+    date:new Date()
+      .toISOString()
+      .slice(0,10)
+  };
 
   return `
 
-    <div class="sum">
+    <div class="panel">
 
-      <div class="sumline">
-        <span>Netto</span>
-        <b>${money(t.net)}</b>
+      <div
+        class="no-print"
+        style="margin-bottom:15px"
+      >
+
+        <button
+          class="btn"
+          onclick="stepBack()"
+        >
+          ← Zurück
+        </button>
+
+        <button
+          class="btn dark"
+          onclick="saveOffer()"
+        >
+          ✓ Angebot speichern
+        </button>
+
       </div>
 
-      <div class="sumline">
-        <span>MwSt. 19%</span>
-        <b>${money(t.vat)}</b>
-      </div>
-
-      <div class="sumline grand">
-        <span>Gesamt</span>
-        <b>${money(t.gross)}</b>
-      </div>
+      ${previewHtml(fake)}
 
     </div>
+
   `;
 }
 
-function previewHTML(printMode){
+function preview(id){
 
-  const t=totals();
-  const s=state.settings;
+  const offer=
+    state.offers.find(
+      x=>x.id===id
+    );
+
+  if(!offer)return;
+
+  page="preview";
+
+  main.innerHTML=`
+
+    <div class="top no-print">
+
+      <div>
+
+        <h1>
+          Angebot ${esc(offer.no)}
+        </h1>
+
+        <div class="sub">
+          ${badge(status(offer))}
+        </div>
+
+      </div>
+
+      <div>
+
+        <button
+          class="btn"
+          onclick="go('offers')"
+        >
+          ← Zurück
+        </button>
+
+        <button
+          class="btn dark"
+          onclick="window.print()"
+        >
+          Drucken / PDF
+        </button>
+
+      </div>
+
+    </div>
+
+    <div class="panel">
+
+      ${previewHtml(offer)}
+
+    </div>
+
+  `;
+
+  nav();
+}
+
+function previewHtml(offer){
+
+  const total=totals(offer);
 
   return `
 
@@ -1896,223 +2659,291 @@ function previewHTML(printMode){
 
         <div>
 
-          <h1>ANGEBOT</h1>
+          <h1>
+            Angebot
+          </h1>
 
-          <div class="muted">
-            Nr. ${draft.number || "NEU"}
-          </div>
+          <div style="margin-top:8px">
 
-          <div class="muted">
-            ${new Date().toLocaleDateString("de-DE")}
+            <b>
+              ${esc(state.settings.company)}
+            </b>
+
+            <br>
+
+            ${esc(
+              state.settings.address
+            ).replace(/\n/g,"<br>")}
+
           </div>
 
         </div>
 
-        <div class="right">
+        <div>
 
-          <b>${esc(s.company)}</b>
+          <b>
+            ${esc(offer.no)}
+          </b>
 
-          <div style="white-space:pre-line">
-            ${esc(s.address)}
-          </div>
+          <br>
 
-          <div>${esc(s.owner)}</div>
+          ${esc(
+            offer.date||
+            new Date()
+              .toISOString()
+              .slice(0,10)
+          )}
+
+          <br><br>
+
+          <b>
+            Kunde
+          </b>
+
+          <br>
+
+          ${esc(
+            offer.customer.company||""
+          )}
+
+          <br>
+
+          ${esc(
+            offer.customer.address||""
+          )}
 
         </div>
 
       </div>
 
-      <div style="margin-top:28px">
+      <h2 style="margin-top:30px">
+        Leistungen
+      </h2>
 
-        <b>Kunde</b>
+      <table>
 
-        <div style="margin-top:7px">
-          ${esc(draft.customer.company)}
-        </div>
+        <thead>
 
-        <div>
-          ${esc(draft.customer.address)}
-        </div>
+          <tr>
 
-        <div>
-          ${esc(draft.customer.email)}
-        </div>
+            <th>
+              Position
+            </th>
 
-        <div>
-          ${esc(draft.customer.phone)}
-        </div>
+            <th>
+              Menge
+            </th>
 
-      </div>
+            <th>
+              Einheit
+            </th>
 
-      <div style="margin-top:30px">
+            <th>
+              Einzelpreis
+            </th>
 
-        <b>Leistungen</b>
+            <th>
+              Gesamt
+            </th>
 
-        <table>
+          </tr>
 
-          <thead>
-            <tr>
-              <th>Pos.</th>
-              <th>Beschreibung</th>
-              <th>Menge</th>
-              <th>Einheit</th>
-              <th>Einzelpreis</th>
-              <th>Gesamt</th>
-            </tr>
-          </thead>
+        </thead>
 
-          <tbody>
+        <tbody>
 
-            ${draft.items.map((item,i)=>`
+          ${
+            (offer.items||[])
+            .map(item=>`
 
               <tr>
 
-                <td>${i+1}</td>
+                <td>
+                  ${esc(item.name)}
+                </td>
 
-                <td>${esc(item.name)}</td>
+                <td>
+                  ${item.qty}
+                </td>
 
-                <td>${item.qty}</td>
+                <td>
+                  ${esc(item.unit||"Stk.")}
+                </td>
 
-                <td>${esc(item.unit)}</td>
+                <td>
+                  ${money(item.price)}
+                </td>
 
-                <td>${money(item.price)}</td>
-
-                <td>${money(item.price*item.qty)}</td>
+                <td>
+                  ${money(
+                    item.qty*item.price
+                  )}
+                </td>
 
               </tr>
 
-            `).join("")}
+            `).join("")
+          }
 
-          </tbody>
+        </tbody>
 
-        </table>
-
-      </div>
-
-      ${draft.notes ? `
-
-        <div style="margin-top:25px">
-
-          <b>Hinweise</b>
-
-          <div style="white-space:pre-line;margin-top:7px">
-            ${esc(draft.notes)}
-          </div>
-
-        </div>
-
-      `:""}
+      </table>
 
       <div class="sum">
 
         <div class="sumline">
           <span>Netto</span>
-          <b>${money(t.net)}</b>
+          <b>${money(total.net)}</b>
         </div>
 
         <div class="sumline">
           <span>MwSt. 19%</span>
-          <b>${money(t.vat)}</b>
+          <b>${money(total.vat)}</b>
         </div>
 
         <div class="sumline grand">
           <span>Gesamt</span>
-          <b>${money(t.gross)}</b>
+          <b>${money(total.gross)}</b>
         </div>
 
       </div>
 
-      <div style="margin-top:55px;padding-top:18px;border-top:1px solid #ddd;font-size:13px">
+      ${
+        offer.notes
+        ?`
 
-        Vielen Dank für Ihre Anfrage.
+          <div style="margin-top:35px">
 
-        <br><br>
+            <b>
+              Hinweise
+            </b>
 
-        ${esc(s.company)} · ${esc(s.iban)}
+            <p>
+              ${esc(
+                offer.notes
+              ).replace(/\n/g,"<br>")}
+            </p>
 
-      </div>
+          </div>
 
-    </div>
-
-    <div class="no-print" style="display:flex;justify-content:center;gap:10px;margin-top:18px">
-
-      <button
-        class="btn"
-        onclick="window.print()"
-      >
-        🖨 PDF / Drucken
-      </button>
+        `
+        :""
+      }
 
     </div>
 
   `;
 }
 
-function renderPreview(){
-
-  document.getElementById("main").innerHTML=
-
-    layout(
-      "Angebot",
-      "Vorschau",
-      `<button class="btn" onclick="setPage('offers')">← Zurück</button>`
-    )
-
-    +
-
-    previewHTML(true);
-}
-
 function saveOffer(){
 
-  const t=totals();
-
   const offer={
-    id:"offer_"+Date.now(),
-    number:"EO-"+state.nextNo++,
-    date:new Date().toLocaleDateString("de-DE"),
-    customer:{...draft.customer},
-    request:draft.request,
-    items:JSON.parse(JSON.stringify(draft.items)),
+
+    id:
+      crypto.randomUUID
+      ?crypto.randomUUID()
+      :String(Date.now()),
+
+    no:
+      `EO-${state.nextNo++}`,
+
+    date:
+      new Date()
+      .toISOString()
+      .slice(0,10),
+
+    followDate:
+      draft.followDate||
+      new Date(
+        Date.now()+7*86400000
+      )
+      .toISOString()
+      .slice(0,10),
+
+    customer:draft.customer,
+
+    items:draft.items,
+
     notes:draft.notes,
-    net:t.net,
-    vat:t.vat,
-    total:t.gross,
+
+    request:draft.request,
+
     status:"Offen"
+
   };
 
   state.offers.push(offer);
 
   save();
 
-  draft.number=offer.number;
-
   toast("Angebot gespeichert");
 
-  setTimeout(()=>{
-    viewOffer(offer.id);
-  },300);
+  preview(offer.id);
 }
 
-function viewOffer(id){
+function go(target){
 
-  const offer=state.offers.find(o=>o.id===id);
+  page=target;
 
-  if(!offer) return;
-
-  draft={
-    step:4,
-    number:offer.number,
-    customer:{...offer.customer},
-    request:offer.request,
-    items:JSON.parse(JSON.stringify(offer.items)),
-    notes:offer.notes || ""
-  };
-
-  page="preview";
-
-  renderPreview();
+  render();
 }
+
+function render(){
+
+  if(page==="dashboard"){
+    dashboard();
+  }
+
+  else if(page==="offers"){
+    offers();
+  }
+
+  else if(page==="calendar"){
+    calendar();
+  }
+
+  else if(page==="analytics"){
+    analytics();
+  }
+
+  else if(page==="customers"){
+    customers();
+  }
+
+  else if(page==="catalog"){
+    catalog();
+  }
+
+  else if(page==="settings"){
+    settings();
+  }
+
+  else if(page==="create"){
+    create();
+  }
+
+}
+
+document.addEventListener(
+  "click",
+  event=>{
+
+    const button=
+      event.target.closest(
+        "[data-page]"
+      );
+
+    if(button){
+
+      page=
+        button.dataset.page;
+
+      render();
+
+    }
+
+  }
+);
 
 render();
 </script>
