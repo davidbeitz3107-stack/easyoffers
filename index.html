@@ -3,136 +3,2119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111111">
-<title>EasyOffer v1.0</title>
+<meta name="theme-color" content="#111">
+<title>EasyOffer v2</title>
+
 <style>
-:root{--bg:#f3f3f3;--panel:#fff;--text:#111;--muted:#707070;--line:#dedede;--soft:#f7f7f7;--dark:#111;--dark2:#292929;--shadow:0 8px 28px #0000000d}
-*{box-sizing:border-box}html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}
-.app{min-height:100vh;display:flex}.sidebar{width:240px;background:#111;color:#fff;padding:22px 14px;position:fixed;inset:0 auto 0 0;z-index:10}.brand{font-weight:800;font-size:22px;padding:5px 10px 25px}.brand span{color:#aaa}.nav button{width:100%;background:none;border:0;color:#aaa;text-align:left;padding:13px 12px;border-radius:9px;margin:2px 0}.nav button.active,.nav button:hover{background:#292929;color:#fff}.main{margin-left:240px;width:calc(100% - 240px);padding:28px;max-width:1600px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.top h1{margin:0;font-size:28px}.sub{color:var(--muted);margin-top:5px}.btn{border:1px solid var(--line);background:#fff;padding:11px 16px;border-radius:9px;font-weight:650}.btn.dark{background:#111;color:#fff;border-color:#111}.btn.small{padding:8px 11px;font-size:13px}.btn.danger{color:#222}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card,.panel{background:#fff;border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow)}.card{padding:19px}.card .label{color:var(--muted);font-size:13px}.card .value{font-size:28px;font-weight:750;margin-top:8px}.panel{padding:20px;margin-top:18px}.panel h2{font-size:17px;margin:0 0 16px}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px 8px;border-bottom:1px solid var(--line);font-size:14px}.table th{color:var(--muted);font-size:12px}.empty{padding:35px;text-align:center;color:var(--muted)}
-.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field label{display:block;font-size:12px;font-weight:650;color:#555;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:8px;padding:11px;background:#fff;outline:none}.field textarea{min-height:150px;resize:vertical}.full{grid-column:1/-1}.steps{display:flex;gap:7px;margin-bottom:18px;overflow:auto}.step{padding:8px 12px;border:1px solid var(--line);border-radius:20px;color:#777;white-space:nowrap}.step.active{background:#111;color:#fff;border-color:#111}.wizard-actions{display:flex;justify-content:space-between;margin-top:18px}.items{overflow:auto}.itemrow{display:grid;grid-template-columns:2.2fr .7fr .8fr 1fr auto;gap:8px;align-items:end;margin-bottom:9px}.itemrow input,.itemrow select{width:100%;padding:9px;border:1px solid var(--line);border-radius:7px;background:#fff}.totals{margin-left:auto;max-width:330px;margin-top:18px}.totalline{display:flex;justify-content:space-between;padding:7px 0}.grand{font-size:19px;font-weight:800;border-top:1px solid #111;margin-top:5px;padding-top:12px}.preview{max-width:850px;margin:auto;background:#fff;padding:42px;box-shadow:var(--shadow);border:1px solid var(--line)}.preview-head{display:flex;justify-content:space-between;gap:20px;border-bottom:2px solid #111;padding-bottom:22px}.preview h1{font-size:32px;margin:0}.muted{color:var(--muted)}.right{text-align:right}.preview table{width:100%;border-collapse:collapse;margin-top:30px}.preview th,.preview td{padding:10px 5px;border-bottom:1px solid var(--line);text-align:left}.preview .sum{margin-left:auto;width:280px;margin-top:25px}.notice{background:#f0f0f0;border:1px solid var(--line);padding:12px;border-radius:8px;color:#444;margin-bottom:14px}.hidden{display:none!important}.toast{position:fixed;bottom:20px;right:20px;background:#111;color:#fff;padding:12px 16px;border-radius:9px;z-index:30;box-shadow:var(--shadow)}.mobilebar{display:none}
-@media(max-width:900px){.sidebar{width:190px}.main{margin-left:190px;width:calc(100% - 190px);padding:20px}.cards{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:650px){.sidebar{display:none}.main{margin-left:0;width:100%;padding:16px;padding-bottom:85px}.mobilebar{display:flex;position:fixed;bottom:0;left:0;right:0;background:#111;z-index:20;justify-content:space-around;padding:8px}.mobilebar button{background:none;border:0;color:#aaa;font-size:11px}.mobilebar button.active{color:#fff}.formgrid{grid-template-columns:1fr}.itemrow{grid-template-columns:1fr 1fr 1fr}.itemrow .itemname{grid-column:1/-1}.preview{padding:22px}.preview-head{flex-direction:column}.right{text-align:left}}
-@media print{body{background:#fff}.sidebar,.mobilebar,.top,.no-print{display:none!important}.main{margin:0;width:100%;padding:0}.panel{border:0;box-shadow:none;padding:0}.preview{box-shadow:none;border:0;max-width:none}}
+:root{
+  --bg:#f4f4f5;
+  --panel:#fff;
+  --text:#111;
+  --muted:#737373;
+  --line:#e4e4e7;
+  --dark:#111;
+  --dark2:#252525;
+  --soft:#f8f8f8;
+  --success:#16803c;
+  --warning:#a15c00;
+  --shadow:0 8px 30px rgba(0,0,0,.06);
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
+
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+
+.app{min-height:100vh}
+
+.sidebar{
+  width:240px;
+  background:#111;
+  color:#fff;
+  padding:22px 14px;
+  position:fixed;
+  inset:0 auto 0 0;
+  z-index:10;
+}
+
+.brand{
+  font-size:23px;
+  font-weight:800;
+  padding:5px 10px 28px;
+}
+
+.brand span{color:#999}
+
+.nav button{
+  width:100%;
+  background:none;
+  border:0;
+  color:#aaa;
+  text-align:left;
+  padding:13px 12px;
+  border-radius:9px;
+  margin:2px 0;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:#292929;
+  color:#fff;
+}
+
+.main{
+  margin-left:240px;
+  padding:28px;
+  max-width:1600px;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:24px;
+}
+
+.top h1{
+  margin:0;
+  font-size:28px;
+}
+
+.sub{
+  color:var(--muted);
+  margin-top:5px;
+}
+
+.btn{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:11px 16px;
+  border-radius:9px;
+  font-weight:650;
+}
+
+.btn.dark{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+
+.btn.small{
+  padding:8px 11px;
+  font-size:13px;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+}
+
+.card,.panel{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:var(--shadow);
+}
+
+.card{padding:19px}
+
+.card .label{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.card .value{
+  font-size:28px;
+  font-weight:800;
+  margin-top:8px;
+}
+
+.panel{
+  padding:20px;
+  margin-top:18px;
+}
+
+.panel h2{
+  font-size:17px;
+  margin:0 0 16px;
+}
+
+.formgrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.full{grid-column:1/-1}
+
+.field label{
+  display:block;
+  font-size:12px;
+  font-weight:700;
+  color:#555;
+  margin-bottom:6px;
+}
+
+.field input,
+.field textarea,
+.field select{
+  width:100%;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:11px;
+  background:#fff;
+  outline:none;
+}
+
+.field textarea{
+  min-height:140px;
+  resize:vertical;
+}
+
+.ai-box{
+  background:#111;
+  color:#fff;
+  border-radius:14px;
+  padding:22px;
+}
+
+.ai-box h2{
+  margin:0 0 6px;
+}
+
+.ai-box p{
+  color:#aaa;
+  margin-top:0;
+}
+
+.ai-box textarea{
+  width:100%;
+  min-height:150px;
+  border:0;
+  border-radius:10px;
+  padding:14px;
+  resize:vertical;
+  outline:none;
+}
+
+.ai-actions{
+  display:flex;
+  gap:10px;
+  margin-top:12px;
+  flex-wrap:wrap;
+}
+
+.btn.light{
+  background:#fff;
+  color:#111;
+  border-color:#fff;
+}
+
+.btn.outline-dark{
+  background:transparent;
+  color:#fff;
+  border-color:#555;
+}
+
+.steps{
+  display:flex;
+  gap:7px;
+  margin-bottom:18px;
+  overflow:auto;
+}
+
+.step{
+  padding:8px 12px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  color:#777;
+  white-space:nowrap;
+}
+
+.step.active{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+
+.wizard-actions{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:18px;
+}
+
+.itemrow{
+  display:grid;
+  grid-template-columns:2fr .7fr .9fr 1fr auto;
+  gap:8px;
+  align-items:end;
+  margin-bottom:10px;
+}
+
+.itemrow input,
+.itemrow select{
+  width:100%;
+  padding:9px;
+  border:1px solid var(--line);
+  border-radius:7px;
+  background:#fff;
+}
+
+.notice{
+  background:#f2f2f2;
+  border:1px solid var(--line);
+  padding:13px;
+  border-radius:9px;
+  margin-bottom:14px;
+}
+
+.ai-result{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px;
+  margin-top:14px;
+  background:var(--soft);
+}
+
+.ai-result strong{
+  display:block;
+  margin-bottom:8px;
+}
+
+.table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.table th,
+.table td{
+  text-align:left;
+  padding:12px 8px;
+  border-bottom:1px solid var(--line);
+  font-size:14px;
+}
+
+.table th{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.empty{
+  padding:35px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.badge{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  font-size:12px;
+  background:#eee;
+}
+
+.badge.green{
+  background:#e8f6ed;
+  color:var(--success);
+}
+
+.badge.orange{
+  background:#fff2df;
+  color:var(--warning);
+}
+
+.preview{
+  max-width:850px;
+  margin:auto;
+  background:#fff;
+  padding:42px;
+  box-shadow:var(--shadow);
+  border:1px solid var(--line);
+}
+
+.preview-head{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  border-bottom:2px solid #111;
+  padding-bottom:22px;
+}
+
+.preview h1{
+  font-size:32px;
+  margin:0;
+}
+
+.preview table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:30px;
+}
+
+.preview th,
+.preview td{
+  padding:10px 5px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
+}
+
+.sum{
+  margin-left:auto;
+  width:280px;
+  margin-top:25px;
+}
+
+.sumline{
+  display:flex;
+  justify-content:space-between;
+  padding:7px 0;
+}
+
+.grand{
+  border-top:1px solid #111;
+  padding-top:12px;
+  margin-top:5px;
+  font-size:19px;
+  font-weight:800;
+}
+
+.muted{color:var(--muted)}
+
+.right{text-align:right}
+
+.customer-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+
+.customer-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:18px;
+}
+
+.customer-card h3{
+  margin:0 0 7px;
+}
+
+.customer-card p{
+  margin:4px 0;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.feature-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-top:18px;
+}
+
+.feature{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:18px;
+}
+
+.feature b{
+  display:block;
+  margin-bottom:7px;
+}
+
+.feature span{
+  color:var(--muted);
+  font-size:14px;
+}
+
+.mobilebar{
+  display:none;
+}
+
+.toast{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#111;
+  color:#fff;
+  padding:12px 16px;
+  border-radius:9px;
+  z-index:30;
+}
+
+.hidden{display:none!important}
+
+@media(max-width:950px){
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .feature-grid{
+    grid-template-columns:1fr;
+  }
+
+  .customer-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:650px){
+  .sidebar{display:none}
+
+  .main{
+    margin-left:0;
+    padding:16px;
+    padding-bottom:90px;
+  }
+
+  .top{
+    align-items:flex-start;
+  }
+
+  .top h1{
+    font-size:24px;
+  }
+
+  .cards{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .formgrid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .customer-grid{
+    grid-template-columns:1fr;
+  }
+
+  .itemrow{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+
+  .itemrow .itemname{
+    grid-column:1/-1;
+  }
+
+  .preview{
+    padding:22px;
+  }
+
+  .preview-head{
+    flex-direction:column;
+  }
+
+  .right{
+    text-align:left;
+  }
+
+  .mobilebar{
+    display:flex;
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:#111;
+    z-index:20;
+    justify-content:space-around;
+    padding:9px 4px;
+  }
+
+  .mobilebar button{
+    background:none;
+    border:0;
+    color:#aaa;
+    font-size:11px;
+  }
+
+  .mobilebar button.active{
+    color:#fff;
+  }
+}
+
+@media print{
+  body{background:#fff}
+
+  .sidebar,
+  .mobilebar,
+  .top,
+  .no-print{
+    display:none!important;
+  }
+
+  .main{
+    margin:0;
+    width:100%;
+    padding:0;
+  }
+
+  .panel{
+    border:0;
+    box-shadow:none;
+    padding:0;
+  }
+
+  .preview{
+    box-shadow:none;
+    border:0;
+    max-width:none;
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="app">
+
 <aside class="sidebar">
   <div class="brand">Easy<span>Offer</span></div>
+
   <div class="nav">
     <button data-page="dashboard" class="active">▦ &nbsp; Dashboard</button>
     <button data-page="offers">▤ &nbsp; Angebote</button>
+    <button data-page="customers">♙ &nbsp; Kunden</button>
     <button data-page="catalog">▧ &nbsp; Preiskatalog</button>
     <button data-page="settings">⚙ &nbsp; Einstellungen</button>
   </div>
 </aside>
-<main class="main" id="main">
-  <div class="top"><div><h1>Dashboard</h1><div class="sub">Übersicht über deine Angebote</div></div><button class="btn dark" type="button">+ Angebot erstellen</button></div>
-  <div class="cards">
-    <div class="card"><div class="label">Angebote</div><div class="value">0</div></div>
-    <div class="card"><div class="label">Offene Angebote</div><div class="value">0</div></div>
-    <div class="card"><div class="label">Angenommen</div><div class="value">0</div></div>
-    <div class="card"><div class="label">Angebotsvolumen</div><div class="value">0,00 €</div></div>
-  </div>
-  <div class="panel"><h2>Letzte Angebote</h2><div class="empty">Noch keine Angebote. Erstelle dein erstes Angebot.</div></div>
-</main>
+
+<main class="main" id="main"></main>
+
 </div>
+
 <div class="mobilebar">
- <button data-page="dashboard" class="active">Dashboard</button><button data-page="offers">Angebote</button><button data-page="catalog">Katalog</button><button data-page="settings">Einstellungen</button>
+  <button data-page="dashboard" class="active">Dashboard</button>
+  <button data-page="offers">Angebote</button>
+  <button data-page="customers">Kunden</button>
+  <button data-page="catalog">Katalog</button>
+  <button data-page="settings">Mehr</button>
 </div>
+
 <div id="toast" class="toast hidden"></div>
+
 <script>
 "use strict";
-const KEY="easyoffer_v1";
-const demoCatalog=[
- {id:"1",name:"Gas-Brennwerttherme",unit:"Stk.",price:3200},
- {id:"2",name:"Wärmepumpe",unit:"Stk.",price:8500},
- {id:"3",name:"Heizkörper",unit:"Stk.",price:420},
- {id:"4",name:"Waschtisch",unit:"Stk.",price:280},
- {id:"5",name:"Toilette",unit:"Stk.",price:390},
- {id:"6",name:"Montage / Arbeitszeit",unit:"Std.",price:65},
- {id:"7",name:"Demontage",unit:"Std.",price:55},
- {id:"8",name:"Anfahrt",unit:"Pausch.",price:45}
+
+const KEY = "easyoffer_v2";
+
+const demoCatalog = [
+  {id:"1",name:"Gas-Brennwerttherme",unit:"Stk.",price:3200,cost:2200},
+  {id:"2",name:"Wärmepumpe",unit:"Stk.",price:8500,cost:6100},
+  {id:"3",name:"Heizkörper",unit:"Stk.",price:420,cost:260},
+  {id:"4",name:"Waschtisch",unit:"Stk.",price:280,cost:150},
+  {id:"5",name:"Toilette",unit:"Stk.",price:390,cost:210},
+  {id:"6",name:"Montage / Arbeitszeit",unit:"Std.",price:65,cost:32},
+  {id:"7",name:"Demontage",unit:"Std.",price:55,cost:28},
+  {id:"8",name:"Anfahrt",unit:"Pausch.",price:45,cost:15}
 ];
-let state=JSON.parse(localStorage.getItem(KEY)||"null")||{
- settings:{company:"Muster SHK GmbH",owner:"Max Mustermann",address:"Musterstraße 1\n34117 Kassel",iban:"DE00 0000 0000 0000 0000 00"},
- catalog:demoCatalog,offers:[],nextNo:1001
+
+const defaultState = {
+  settings:{
+    company:"Muster SHK GmbH",
+    owner:"Max Mustermann",
+    address:"Musterstraße 1\n34117 Kassel",
+    iban:"DE00 0000 0000 0000 0000 00"
+  },
+  catalog:demoCatalog,
+  offers:[],
+  nextNo:1001
 };
-let page="dashboard", draft={step:1,customer:{company:"",email:"",phone:"",address:""},request:"",photo:null,items:[],notes:""};
-function save(){localStorage.setItem(KEY,JSON.stringify(state))}
-function money(n){return new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR"}).format(Number(n)||0)}
-function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function toast(t){let x=document.getElementById("toast");x.textContent=t;x.classList.remove("hidden");setTimeout(()=>x.classList.add("hidden"),2200)}
-function setPage(p){page=p;document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("active",b.dataset.page===p));render()}
-document.querySelectorAll("[data-page]").forEach(b=>b.onclick=()=>setPage(b.dataset.page));
-function layout(title,sub,actions=""){return `<div class="top"><div><h1>${title}</h1><div class="sub">${sub}</div></div><div>${actions}</div></div>`}
-function render(){if(page==="dashboard")renderDashboard();else if(page==="offers")renderOffers();else if(page==="catalog")renderCatalog();else if(page==="settings")renderSettings();else if(page==="create")renderCreate();else if(page==="preview")renderPreview()}
+
+let state;
+
+try{
+  state = JSON.parse(localStorage.getItem(KEY)||"null") || defaultState;
+}catch(e){
+  state = defaultState;
+}
+
+if(!state.catalog) state.catalog = demoCatalog;
+if(!state.offers) state.offers = [];
+if(!state.settings) state.settings = defaultState.settings;
+if(!state.nextNo) state.nextNo = 1001;
+
+let page = "dashboard";
+
+let draft = {
+  step:1,
+  customer:{
+    company:"",
+    email:"",
+    phone:"",
+    address:""
+  },
+  request:"",
+  items:[],
+  notes:""
+};
+
+function save(){
+  localStorage.setItem(KEY,JSON.stringify(state));
+}
+
+function money(n){
+  return new Intl.NumberFormat("de-DE",{
+    style:"currency",
+    currency:"EUR"
+  }).format(Number(n)||0);
+}
+
+function esc(s){
+  return String(s??"").replace(/[&<>"']/g,m=>({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[m]));
+}
+
+function toast(text){
+  const el=document.getElementById("toast");
+  el.textContent=text;
+  el.classList.remove("hidden");
+
+  setTimeout(()=>{
+    el.classList.add("hidden");
+  },2200);
+}
+
+function setPage(p){
+  page=p;
+
+  document.querySelectorAll("[data-page]").forEach(btn=>{
+    btn.classList.toggle("active",btn.dataset.page===p);
+  });
+
+  render();
+}
+
+document.querySelectorAll("[data-page]").forEach(btn=>{
+  btn.onclick=()=>setPage(btn.dataset.page);
+});
+
+function layout(title,sub,actions=""){
+  return `
+    <div class="top">
+      <div>
+        <h1>${title}</h1>
+        <div class="sub">${sub}</div>
+      </div>
+      <div>${actions}</div>
+    </div>
+  `;
+}
+
+function render(){
+
+  if(page==="dashboard") renderDashboard();
+  else if(page==="offers") renderOffers();
+  else if(page==="customers") renderCustomers();
+  else if(page==="catalog") renderCatalog();
+  else if(page==="settings") renderSettings();
+  else if(page==="create") renderCreate();
+  else if(page==="preview") renderPreview();
+}
+
 function renderDashboard(){
-let offers=state.offers,open=offers.filter(x=>x.status==="Offen").length,accepted=offers.filter(x=>x.status==="Angenommen").length,vol=offers.reduce((a,x)=>a+x.total,0);
-document.getElementById("main").innerHTML=layout("Dashboard","Übersicht über deine Angebote",`<button class="btn dark" onclick="startOffer()">+ Angebot erstellen</button>`)+
-`<div class="cards"><div class="card"><div class="label">Angebote</div><div class="value">${offers.length}</div></div><div class="card"><div class="label">Offene Angebote</div><div class="value">${open}</div></div><div class="card"><div class="label">Angenommen</div><div class="value">${accepted}</div></div><div class="card"><div class="label">Angebotsvolumen</div><div class="value">${money(vol)}</div></div></div>
-<div class="panel"><h2>Letzte Angebote</h2>${offers.length?offerTable(offers.slice(-8).reverse()):`<div class="empty">Noch keine Angebote. Erstelle dein erstes Angebot.</div>`}</div>`;
+
+  const offers=state.offers;
+
+  const open=offers.filter(o=>o.status==="Offen").length;
+
+  const accepted=offers.filter(
+    o=>o.status==="Angenommen"
+  ).length;
+
+  const volume=offers.reduce(
+    (sum,o)=>sum+(Number(o.total)||0),
+    0
+  );
+
+  document.getElementById("main").innerHTML=
+
+    layout(
+      "Dashboard",
+      "Dein digitaler Angebotsassistent",
+      `<button class="btn dark" onclick="startOffer()">+ Angebot erstellen</button>`
+    )
+
+    +
+
+    `
+    <div class="cards">
+
+      <div class="card">
+        <div class="label">Angebote</div>
+        <div class="value">${offers.length}</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Offene Angebote</div>
+        <div class="value">${open}</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Angenommen</div>
+        <div class="value">${accepted}</div>
+      </div>
+
+      <div class="card">
+        <div class="label">Angebotsvolumen</div>
+        <div class="value">${money(volume)}</div>
+      </div>
+
+    </div>
+
+    <div class="panel">
+      <div class="ai-box">
+
+        <h2>🤖 KI-Angebotsassistent</h2>
+
+        <p>
+          Kundenanfrage einfügen – EasyOffer erkennt passende Leistungen
+          aus deinem Preiskatalog.
+        </p>
+
+        <textarea
+          id="quickRequest"
+          placeholder="Beispiel: Kunde möchte eine neue Wärmepumpe. Alte Heizung muss demontiert werden. Zusätzlich Montage und Anfahrt..."
+        ></textarea>
+
+        <div class="ai-actions">
+
+          <button
+            class="btn light"
+            onclick="quickAnalyze()"
+          >
+            Anfrage analysieren
+          </button>
+
+          <button
+            class="btn outline-dark"
+            onclick="startOffer()"
+          >
+            Manuell erstellen
+          </button>
+
+        </div>
+
+        <div id="quickResult"></div>
+
+      </div>
+    </div>
+
+    <div class="feature-grid">
+
+      <div class="feature">
+        <b>⚡ Anfrage → Angebot</b>
+        <span>Kundenanfrage analysieren und passende Positionen übernehmen.</span>
+      </div>
+
+      <div class="feature">
+        <b>💰 Deine Preise</b>
+        <span>EasyOffer verwendet deinen eigenen Preiskatalog.</span>
+      </div>
+
+      <div class="feature">
+        <b>📄 Professionelles PDF</b>
+        <span>Fertiges Angebot direkt drucken oder als PDF speichern.</span>
+      </div>
+
+    </div>
+
+    <div class="panel">
+      <h2>Letzte Angebote</h2>
+
+      ${
+        offers.length
+        ? offerTable(offers.slice(-6).reverse())
+        : `<div class="empty">Noch keine Angebote. Erstelle dein erstes Angebot.</div>`
+      }
+
+    </div>
+    `;
 }
-function offerTable(arr){return `<table class="table"><thead><tr><th>Nr.</th><th>Kunde</th><th>Datum</th><th>Betrag</th><th>Status</th><th></th></tr></thead><tbody>${arr.map(o=>`<tr><td>${o.number}</td><td>${esc(o.customer.company)}</td><td>${o.date}</td><td>${money(o.total)}</td><td>${o.status}</td><td><button class="btn small" onclick="viewOffer('${o.id}')">Öffnen</button></td></tr>`).join("")}</tbody></table>`}
-function renderOffers(){document.getElementById("main").innerHTML=layout("Angebote","Alle gespeicherten Angebote",`<button class="btn dark" onclick="startOffer()">+ Angebot erstellen</button>`)+`<div class="panel">${state.offers.length?offerTable([...state.offers].reverse()):`<div class="empty">Noch keine Angebote gespeichert.</div>`}</div>`}
+
+function quickAnalyze(){
+
+  const text=document.getElementById("quickRequest").value.trim();
+
+  if(!text){
+    toast("Bitte zuerst eine Kundenanfrage eingeben.");
+    return;
+  }
+
+  const result=analyzeText(text);
+
+  const box=document.getElementById("quickResult");
+
+  if(!result.length){
+
+    box.innerHTML=`
+      <div class="ai-result">
+        <strong>Keine eindeutigen Positionen gefunden.</strong>
+        Füge passende Artikel in deinem Preiskatalog hinzu oder erstelle
+        das Angebot manuell.
+      </div>
+    `;
+
+    return;
+  }
+
+  box.innerHTML=`
+    <div class="ai-result">
+
+      <strong>✓ ${result.length} passende Positionen erkannt</strong>
+
+      ${result.map(item=>`
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #ddd">
+          <span>${esc(item.qty)} × ${esc(item.name)}</span>
+          <b>${money(item.qty*item.price)}</b>
+        </div>
+      `).join("")}
+
+      <div style="margin-top:12px">
+        <button
+          class="btn dark"
+          onclick='useAnalysis(${JSON.stringify(result).replace(/'/g,"&#39;")},${JSON.stringify(text).replace(/'/g,"&#39;")})'
+        >
+          Angebot daraus erstellen →
+        </button>
+      </div>
+
+    </div>
+  `;
+}
+
+function analyzeText(text){
+
+  const t=text.toLowerCase();
+
+  const aliases=[
+    ["wärmepumpe",["wärmepumpe","waermepumpe","wp"]],
+    ["gas-brennwerttherme",["gastherme","brennwerttherme","gas brennwert","gasheizung"]],
+    ["heizkörper",["heizkörper","heizkoerper","radiator"]],
+    ["waschtisch",["waschtisch","waschbecken","waschbecken"]],
+    ["toilette",["toilette","wc","klo"]],
+    ["montage / arbeitszeit",["montage","montieren","installation","arbeitszeit","einbau"]],
+    ["demontage",["demontage","ausbauen","alte heizung raus","abbau"]],
+    ["anfahrt",["anfahrt","anreise","fahrt"]]
+  ];
+
+  const results=[];
+
+  for(const catalogItem of state.catalog){
+
+    let found=t.includes(catalogItem.name.toLowerCase());
+
+    if(!found){
+
+      const alias=aliases.find(
+        x=>x[0]===catalogItem.name.toLowerCase()
+      );
+
+      if(alias){
+        found=alias[1].some(word=>t.includes(word));
+      }
+    }
+
+    if(found){
+
+      let qty=1;
+
+      const pattern=new RegExp(
+        `(\\d+)\\s*(?:x|×|stk|stück|stunden|std)?\\s*${catalogItem.name.split(" ")[0].replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}`,
+        "i"
+      );
+
+      const match=t.match(pattern);
+
+      if(match){
+        qty=Math.max(1,Number(match[1]));
+      }
+
+      results.push({
+        id:catalogItem.id,
+        name:catalogItem.name,
+        unit:catalogItem.unit,
+        price:Number(catalogItem.price)||0,
+        cost:Number(catalogItem.cost)||0,
+        qty:qty
+      });
+    }
+  }
+
+  return results;
+}
+
+function useAnalysis(items,text){
+
+  draft={
+    step:1,
+    customer:{
+      company:"",
+      email:"",
+      phone:"",
+      address:""
+    },
+    request:text,
+    items:items,
+    notes:""
+  };
+
+  page="create";
+  render();
+}
+
+function offerTable(arr){
+
+  return `
+    <table class="table">
+
+      <thead>
+        <tr>
+          <th>Nr.</th>
+          <th>Kunde</th>
+          <th>Datum</th>
+          <th>Betrag</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+      ${arr.map(o=>`
+
+        <tr>
+
+          <td>${esc(o.number)}</td>
+
+          <td>${esc(o.customer.company)}</td>
+
+          <td>${esc(o.date)}</td>
+
+          <td>${money(o.total)}</td>
+
+          <td>
+            <span class="badge ${o.status==="Angenommen"?"green":"orange"}">
+              ${esc(o.status)}
+            </span>
+          </td>
+
+          <td>
+            <button
+              class="btn small"
+              onclick="viewOffer('${o.id}')"
+            >
+              Öffnen
+            </button>
+          </td>
+
+        </tr>
+
+      `).join("")}
+
+      </tbody>
+
+    </table>
+  `;
+}
+
+function renderOffers(){
+
+  document.getElementById("main").innerHTML=
+
+    layout(
+      "Angebote",
+      "Alle gespeicherten Angebote",
+      `<button class="btn dark" onclick="startOffer()">+ Angebot erstellen</button>`
+    )
+
+    +
+
+    `
+    <div class="panel">
+
+      ${
+        state.offers.length
+        ? offerTable([...state.offers].reverse())
+        : `<div class="empty">Noch keine Angebote gespeichert.</div>`
+      }
+
+    </div>
+    `;
+}
+
+function renderCustomers(){
+
+  const map={};
+
+  state.offers.forEach(o=>{
+
+    const key=o.customer.company || "Unbekannter Kunde";
+
+    if(!map[key]){
+      map[key]={
+        company:key,
+        email:o.customer.email,
+        phone:o.customer.phone,
+        address:o.customer.address,
+        offers:0,
+        volume:0
+      };
+    }
+
+    map[key].offers++;
+    map[key].volume+=Number(o.total)||0;
+  });
+
+  const customers=Object.values(map);
+
+  document.getElementById("main").innerHTML=
+
+    layout(
+      "Kunden",
+      "Kunden aus deinen Angeboten",
+      `<button class="btn dark" onclick="startOffer()">+ Neuer Kunde</button>`
+    )
+
+    +
+
+    `
+    <div class="panel">
+
+      ${
+        customers.length
+        ? `<div class="customer-grid">
+
+          ${customers.map(c=>`
+
+            <div class="customer-card">
+
+              <h3>${esc(c.company)}</h3>
+
+              <p>${esc(c.email || "Keine E-Mail")}</p>
+
+              <p>${esc(c.phone || "Keine Telefonnummer")}</p>
+
+              <p>${esc(c.address || "Keine Adresse")}</p>
+
+              <hr>
+
+              <p><b>${c.offers}</b> Angebot(e)</p>
+
+              <p><b>${money(c.volume)}</b> Volumen</p>
+
+            </div>
+
+          `).join("")}
+
+        </div>`
+        : `<div class="empty">Noch keine Kunden vorhanden.</div>`
+      }
+
+    </div>
+    `;
+}
+
 function renderCatalog(){
-document.getElementById("main").innerHTML=layout("Preiskatalog","Deine Preise – EasyOffer verwendet hier nur diese Werte.",`<button class="btn dark" onclick="addCatalog()">+ Artikel hinzufügen</button>`)+`<div class="panel"><div class="items">${state.catalog.map((a,i)=>`<div class="itemrow" data-i="${i}"><div class="field itemname"><label>Artikel / Leistung</label><input value="${esc(a.name)}" oninput="catChange(${i},'name',this.value)"></div><div class="field"><label>Mengeinheit</label><input value="${esc(a.unit)}" oninput="catChange(${i},'unit',this.value)"></div><div class="field"><label>Preis netto</label><input type="number" step="0.01" value="${a.price}" oninput="catChange(${i},'price',this.value)"></div><div></div><button class="btn small" onclick="delCatalog(${i})">Löschen</button></div>`).join("")}</div></div>`;
+
+  document.getElementById("main").innerHTML=
+
+    layout(
+      "Preiskatalog",
+      "Deine Preise – EasyOffer verwendet diese Werte.",
+      `<button class="btn dark" onclick="addCatalog()">+ Artikel hinzufügen</button>`
+    )
+
+    +
+
+    `
+    <div class="panel">
+
+      <div style="overflow:auto">
+
+        <table class="table">
+
+          <thead>
+            <tr>
+              <th>Artikel / Leistung</th>
+              <th>Einheit</th>
+              <th>Verkauf netto</th>
+              <th>Interner EK</th>
+              <th>Marge</th>
+              <th></th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+          ${state.catalog.map((a,i)=>{
+
+            const margin=Number(a.price)-Number(a.cost);
+
+            return `
+              <tr>
+
+                <td>
+                  <input
+                    value="${esc(a.name)}"
+                    oninput="catChange(${i},'name',this.value)"
+                    style="width:100%;padding:8px;border:1px solid #ddd;border-radius:7px"
+                  >
+                </td>
+
+                <td>
+                  <input
+                    value="${esc(a.unit)}"
+                    oninput="catChange(${i},'unit',this.value)"
+                    style="width:90px;padding:8px;border:1px solid #ddd;border-radius:7px"
+                  >
+                </td>
+
+                <td>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value="${a.price}"
+                    oninput="catChange(${i},'price',this.value)"
+                    style="width:120px;padding:8px;border:1px solid #ddd;border-radius:7px"
+                  >
+                </td>
+
+                <td>
+                  <input
+                    type="number"
+                    step="0.01"
+                    value="${a.cost}"
+                    oninput="catChange(${i},'cost',this.value)"
+                    style="width:120px;padding:8px;border:1px solid #ddd;border-radius:7px"
+                  >
+                </td>
+
+                <td>
+                  ${money(margin)}
+                </td>
+
+                <td>
+                  <button
+                    class="btn small"
+                    onclick="delCatalog(${i})"
+                  >
+                    Löschen
+                  </button>
+                </td>
+
+              </tr>
+            `;
+
+          }).join("")}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+    `;
 }
-function catChange(i,k,v){state.catalog[i][k]=k==="price"?Number(v):v;save()}
-function addCatalog(){state.catalog.push({id:Date.now().toString(),name:"Neuer Artikel",unit:"Stk.",price:0});save();renderCatalog()}
-function delCatalog(i){state.catalog.splice(i,1);save();renderCatalog()}
+
+function catChange(i,key,value){
+
+  if(key==="price" || key==="cost"){
+    state.catalog[i][key]=Number(value)||0;
+  }else{
+    state.catalog[i][key]=value;
+  }
+
+  save();
+}
+
+function addCatalog(){
+
+  state.catalog.push({
+    id:Date.now().toString(),
+    name:"Neuer Artikel",
+    unit:"Stk.",
+    price:0,
+    cost:0
+  });
+
+  save();
+  renderCatalog();
+}
+
+function delCatalog(i){
+
+  if(!confirm("Artikel wirklich löschen?")) return;
+
+  state.catalog.splice(i,1);
+
+  save();
+  renderCatalog();
+}
+
 function renderSettings(){
-let s=state.settings;
-document.getElementById("main").innerHTML=layout("Einstellungen","Firmendaten für deine Angebote")+`<div class="panel"><div class="formgrid">
-<div class="field"><label>Firmenname</label><input id="setCompany" value="${esc(s.company)}"></div><div class="field"><label>Inhaber</label><input id="setOwner" value="${esc(s.owner)}"></div>
-<div class="field full"><label>Adresse</label><textarea id="setAddress">${esc(s.address)}</textarea></div><div class="field"><label>IBAN</label><input id="setIban" value="${esc(s.iban)}"></div>
-</div><div style="margin-top:18px"><button class="btn dark" onclick="saveSettings()">Einstellungen speichern</button></div></div>`;
+
+  const s=state.settings;
+
+  document.getElementById("main").innerHTML=
+
+    layout(
+      "Einstellungen",
+      "Firmendaten für deine Angebote"
+    )
+
+    +
+
+    `
+    <div class="panel">
+
+      <div class="formgrid">
+
+        <div class="field">
+          <label>Firmenname</label>
+          <input id="setCompany" value="${esc(s.company)}">
+        </div>
+
+        <div class="field">
+          <label>Inhaber</label>
+          <input id="setOwner" value="${esc(s.owner)}">
+        </div>
+
+        <div class="field full">
+          <label>Adresse</label>
+          <textarea id="setAddress">${esc(s.address)}</textarea>
+        </div>
+
+        <div class="field">
+          <label>IBAN</label>
+          <input id="setIban" value="${esc(s.iban)}">
+        </div>
+
+      </div>
+
+      <div style="margin-top:18px">
+        <button
+          class="btn dark"
+          onclick="saveSettings()"
+        >
+          Einstellungen speichern
+        </button>
+      </div>
+
+    </div>
+    `;
 }
-function saveSettings(){state.settings.company=document.getElementById("setCompany").value;state.settings.owner=document.getElementById("setOwner").value;state.settings.address=document.getElementById("setAddress").value;state.settings.iban=document.getElementById("setIban").value;save();toast("Einstellungen gespeichert")}
-function startOffer(){draft={step:1,customer:{company:"",email:"",phone:"",address:""},request:"",photo:null,items:[],notes:""};page="create";renderCreate()}
-function stepNav(){return `<div class="steps">${[1,2,3,4].map((n,i)=>`<div class="step ${draft.step===n?"active":""}">Schritt ${n} · ${["Kunde","Anfrage","Positionen","Vorschau"][i]}</div>`).join("")}</div>`}
+
+function saveSettings(){
+
+  state.settings.company=
+    document.getElementById("setCompany").value;
+
+  state.settings.owner=
+    document.getElementById("setOwner").value;
+
+  state.settings.address=
+    document.getElementById("setAddress").value;
+
+  state.settings.iban=
+    document.getElementById("setIban").value;
+
+  save();
+
+  toast("Einstellungen gespeichert");
+}
+
+function startOffer(){
+
+  draft={
+    step:1,
+    customer:{
+      company:"",
+      email:"",
+      phone:"",
+      address:""
+    },
+    request:"",
+    items:[],
+    notes:""
+  };
+
+  page="create";
+  render();
+}
+
+function stepNav(){
+
+  const labels=[
+    "Kunde",
+    "Anfrage + KI",
+    "Positionen",
+    "Vorschau"
+  ];
+
+  return `
+    <div class="steps">
+
+      ${labels.map((label,i)=>`
+
+        <div class="step ${draft.step===i+1?"active":""}">
+          ${i+1} · ${label}
+        </div>
+
+      `).join("")}
+
+    </div>
+  `;
+}
+
 function renderCreate(){
-let content="";
-if(draft.step===1)content=`<div class="panel"><h2>Kundendaten</h2><div class="formgrid">
-<div class="field"><label>Kunde / Firma</label><input id="cCompany" value="${esc(draft.customer.company)}"></div><div class="field"><label>E-Mail</label><input id="cEmail" type="email" value="${esc(draft.customer.email)}"></div>
-<div class="field"><label>Telefon</label><input id="cPhone" value="${esc(draft.customer.phone)}"></div><div class="field"><label>Adresse</label><input id="cAddress" value="${esc(draft.customer.address)}"></div></div></div>`;
-if(draft.step===2)content=`<div class="panel"><h2>Kundenanfrage</h2><div class="notice">Demo-Analyse: Es werden keine Preise oder technischen Daten erfunden. Erkannte Positionen werden ausschließlich aus deinem Preiskatalog übernommen. Unklare Angaben werden markiert.</div><div class="field"><label>Anfrage als Freitext</label><textarea id="request" placeholder="z. B. Kunde benötigt einen neuen Heizkörper und 3 Stunden Montage.">${esc(draft.request)}</textarea></div><div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn dark" onclick="analyze()">Anfrage analysieren</button><label class="btn">Foto hochladen<input id="photo" type="file" accept="image/*" capture="environment" hidden onchange="photoAdded(this)"></label>${speechButton()}</div><div id="analysisHint" class="sub" style="margin-top:12px"></div></div>`;
-if(draft.step===3)content=`<div class="panel"><h2>Positionen prüfen</h2><div class="notice">Bitte jede Position prüfen. Preise stammen ausschließlich aus dem lokalen Preiskatalog.</div><div class="items">${draft.items.map((it,i)=>itemEditor(it,i)).join("")}</div><button class="btn" onclick="addItem()">+ Position hinzufügen</button>${totals()}</div>`;
-if(draft.step===4)content=`<div class="panel no-print"><h2>Angebotsvorschau</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn dark" onclick="printOffer()">Drucken / PDF</button><button class="btn" onclick="saveOffer()">Angebot speichern</button></div></div>${previewHtml({number:"Vorschau",date:new Date().toLocaleDateString("de-DE"),customer:draft.customer,items:draft.items,total:calc().gross,subtotal:calc().net})}`;
-document.getElementById("main").innerHTML=layout("Angebot erstellen","Schritt für Schritt zum fertigen Angebot")+stepNav()+content+`<div class="wizard-actions">${draft.step>1?`<button class="btn" onclick="prevStep()">← Zurück</button>`:`<span></span>`}${draft.step<4?`<button class="btn dark" onclick="nextStep()">Weiter →</button>`:""}</div>`;
+
+  let content="";
+
+  if(draft.step===1){
+
+    content=`
+
+      <div class="panel">
+
+        <h2>Kundendaten</h2>
+
+        <div class="formgrid">
+
+          <div class="field">
+            <label>Firma / Name *</label>
+            <input
+              id="customerCompany"
+              value="${esc(draft.customer.company)}"
+              placeholder="Max Mustermann / Muster GmbH"
+            >
+          </div>
+
+          <div class="field">
+            <label>E-Mail</label>
+            <input
+              id="customerEmail"
+              value="${esc(draft.customer.email)}"
+              placeholder="kunde@example.de"
+            >
+          </div>
+
+          <div class="field">
+            <label>Telefon</label>
+            <input
+              id="customerPhone"
+              value="${esc(draft.customer.phone)}"
+              placeholder="+49..."
+            >
+          </div>
+
+          <div class="field">
+            <label>Adresse</label>
+            <input
+              id="customerAddress"
+              value="${esc(draft.customer.address)}"
+              placeholder="Straße, PLZ Ort"
+            >
+          </div>
+
+        </div>
+
+      </div>
+    `;
+  }
+
+  if(draft.step===2){
+
+    content=`
+
+      <div class="panel">
+
+        <h2>Kundenanfrage</h2>
+
+        <div class="notice">
+          Beschreibe kurz, was der Kunde benötigt.
+          EasyOffer gleicht die Anfrage mit deinem Preiskatalog ab.
+        </div>
+
+        <div class="field">
+
+          <textarea
+            id="requestText"
+            placeholder="Beispiel: Kunde möchte eine neue Wärmepumpe. Alte Anlage demontieren. Neue Anlage montieren und Anfahrt berechnen."
+          >${esc(draft.request)}</textarea>
+
+        </div>
+
+        <div style="margin-top:12px">
+
+          <button
+            class="btn dark"
+            onclick="runAI()"
+          >
+            🤖 Anfrage analysieren
+          </button>
+
+        </div>
+
+        <div id="analysisBox"></div>
+
+      </div>
+    `;
+  }
+
+  if(draft.step===3){
+
+    content=`
+
+      <div class="panel">
+
+        <h2>Positionen</h2>
+
+        <div class="notice">
+          Kontrolliere die von der KI erkannten Positionen.
+          Du kannst Preise und Mengen jederzeit ändern.
+        </div>
+
+        <div class="items">
+
+          ${
+            draft.items.length
+            ? draft.items.map((item,i)=>`
+
+              <div class="itemrow">
+
+                <div class="field itemname">
+
+                  <label>Artikel / Leistung</label>
+
+                  <select
+                    onchange="itemCatalogChange(${i},this.value)"
+                  >
+
+                    ${state.catalog.map(a=>`
+
+                      <option
+                        value="${esc(a.id)}"
+                        ${a.id===item.id?"selected":""}
+                      >
+                        ${esc(a.name)}
+                      </option>
+
+                    `).join("")}
+
+                  </select>
+
+                </div>
+
+                <div class="field">
+
+                  <label>Menge</label>
+
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    value="${item.qty}"
+                    oninput="itemChange(${i},'qty',this.value)"
+                  >
+
+                </div>
+
+                <div class="field">
+
+                  <label>Einheit</label>
+
+                  <input
+                    value="${esc(item.unit)}"
+                    oninput="itemChange(${i},'unit',this.value)"
+                  >
+
+                </div>
+
+                <div class="field">
+
+                  <label>Preis netto</label>
+
+                  <input
+                    type="number"
+                    step="0.01"
+                    value="${item.price}"
+                    oninput="itemChange(${i},'price',this.value)"
+                  >
+
+                </div>
+
+                <button
+                  class="btn small"
+                  onclick="removeItem(${i})"
+                >
+                  ×
+                </button>
+
+              </div>
+
+            `).join("")
+
+            : `<div class="empty">Noch keine Positionen.</div>`
+          }
+
+        </div>
+
+        <button
+          class="btn"
+          onclick="addItem()"
+        >
+          + Position hinzufügen
+        </button>
+
+        <div class="field" style="margin-top:18px">
+
+          <label>Notiz / Zusatzinfo</label>
+
+          <textarea
+            id="offerNotes"
+            style="min-height:100px"
+            placeholder="z.B. Lieferzeit, Zahlungsziel..."
+          >${esc(draft.notes)}</textarea>
+
+        </div>
+
+        ${totalsHTML()}
+
+      </div>
+    `;
+  }
+
+  if(draft.step===4){
+
+    content=previewHTML(false);
+
+  }
+
+  document.getElementById("main").innerHTML=
+
+    layout(
+      "Angebot erstellen",
+      "In wenigen Schritten zum fertigen Angebot"
+    )
+
+    +
+
+    stepNav()
+
+    +
+
+    content
+
+    +
+
+    `
+      <div class="wizard-actions no-print">
+
+        <button
+          class="btn"
+          onclick="prevStep()"
+          ${draft.step===1?"disabled":""}
+        >
+          ← Zurück
+        </button>
+
+        <div style="display:flex;gap:8px">
+
+          ${
+            draft.step<4
+            ? `<button class="btn dark" onclick="nextStep()">Weiter →</button>`
+            : `<button class="btn dark" onclick="saveOffer()">✓ Angebot speichern</button>`
+          }
+
+        </div>
+
+      </div>
+    `;
+
+  if(draft.step===2 && draft.items.length){
+    showAnalysis();
+  }
 }
-function speechButton(){return ("SpeechRecognition" in window||"webkitSpeechRecognition" in window)?`<button class="btn" onclick="speech()">🎙 Spracheingabe</button>`:""}
-function photoAdded(input){if(input.files[0]){draft.photo=input.files[0].name;document.getElementById("analysisHint").textContent="Foto ausgewählt: "+draft.photo+" (wird in v1.0 lokal nicht automatisch technisch ausgewertet)."}}
-function speech(){let R=window.SpeechRecognition||window.webkitSpeechRecognition,r=new R();r.lang="de-DE";r.onresult=e=>{document.getElementById("request").value+=(document.getElementById("request").value?" ":"")+e.results[0][0].transcript};r.start()}
+
+function runAI(){
+
+  const text=document.getElementById("requestText").value.trim();
+
+  if(!text){
+    toast("Bitte Kundenanfrage eingeben.");
+    return;
+  }
+
+  draft.request=text;
+
+  const items=analyzeText(text);
+
+  draft.items=items;
+
+  showAnalysis();
+
+  toast(
+    items.length
+    ? `${items.length} Position(en) erkannt`
+    : "Keine Positionen erkannt"
+  );
+}
+
+function showAnalysis(){
+
+  const box=document.getElementById("analysisBox");
+
+  if(!box) return;
+
+  if(!draft.items.length){
+
+    box.innerHTML=`
+      <div class="ai-result">
+        <strong>Keine eindeutigen Positionen gefunden.</strong>
+        Du kannst im nächsten Schritt manuell Positionen hinzufügen.
+      </div>
+    `;
+
+    return;
+  }
+
+  box.innerHTML=`
+
+    <div class="ai-result">
+
+      <strong>✓ Erkannte Positionen</strong>
+
+      ${draft.items.map(i=>`
+
+        <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #ddd">
+
+          <span>
+            ${i.qty} × ${esc(i.name)}
+          </span>
+
+          <b>
+            ${money(i.qty*i.price)}
+          </b>
+
+        </div>
+
+      `).join("")}
+
+    </div>
+  `;
+}
+
 function nextStep(){
-if(draft.step===1){draft.customer.company=document.getElementById("cCompany").value;draft.customer.email=document.getElementById("cEmail").value;draft.customer.phone=document.getElementById("cPhone").value;draft.customer.address=document.getElementById("cAddress").value;if(!draft.customer.company){toast("Bitte Kunde / Firma eintragen");return}}
-if(draft.step===2)draft.request=document.getElementById("request").value;
-if(draft.step===3){draft.items.forEach((it,i)=>{let q=document.getElementById("q"+i),p=document.getElementById("p"+i),u=document.getElementById("u"+i);if(q)it.qty=Number(q.value)||0;if(p)it.price=Number(p.value)||0;if(u)it.unit=u.value})}
-draft.step++;if(draft.step===3&&!draft.items.length)analyze(true);renderCreate()
+
+  if(draft.step===1){
+
+    const company=document.getElementById("customerCompany").value.trim();
+
+    if(!company){
+      toast("Bitte Kunde / Firma eingeben.");
+      return;
+    }
+
+    draft.customer.company=company;
+    draft.customer.email=document.getElementById("customerEmail").value.trim();
+    draft.customer.phone=document.getElementById("customerPhone").value.trim();
+    draft.customer.address=document.getElementById("customerAddress").value.trim();
+  }
+
+  if(draft.step===2){
+
+    const text=document.getElementById("requestText").value.trim();
+
+    if(!text){
+      toast("Bitte Anfrage eingeben.");
+      return;
+    }
+
+    draft.request=text;
+
+    if(!draft.items.length){
+      draft.items=analyzeText(text);
+    }
+  }
+
+  if(draft.step===3){
+
+    const notes=document.getElementById("offerNotes");
+
+    if(notes){
+      draft.notes=notes.value;
+    }
+
+    if(!draft.items.length){
+      toast("Bitte mindestens eine Position hinzufügen.");
+      return;
+    }
+  }
+
+  if(draft.step<4){
+    draft.step++;
+    renderCreate();
+  }
 }
-function prevStep(){draft.step--;renderCreate()}
-function analyze(auto=false){
-draft.request=document.getElementById("request")?.value||draft.request;
-let text=draft.request.toLowerCase(),found=[];
-state.catalog.forEach(a=>{let n=a.name.toLowerCase();let keys=n.split(/[ \/]/).filter(x=>x.length>3);if(keys.some(k=>text.includes(k)))found.push({...a,qty:guessQty(text,a),source:"Katalog"})});
-if(!found.length){let hints=[];if(/heizkörper|radiator/.test(text))hints.push("Heizkörper");if(/wärmepumpe/.test(text))hints.push("Wärmepumpe");if(/therme|brennwert/.test(text))hints.push("Gas-Brennwerttherme");if(/toilette|wc/.test(text))hints.push("Toilette");if(/waschtisch|waschbecken/.test(text))hints.push("Waschtisch");if(/montage|montieren|einbau/.test(text))hints.push("Montage / Arbeitszeit");hints.forEach(h=>{let a=state.catalog.find(x=>x.name===h);if(a)found.push({...a,qty:guessQty(text,a),source:"Katalog"})})}
-draft.items=found.filter((x,i,a)=>a.findIndex(y=>y.id===x.id)===i);
-if(!draft.items.length)toast("Keine sichere Katalogposition erkannt – bitte manuell hinzufügen.");
-else toast(draft.items.length+" Katalogposition(en) erkannt");
-if(!auto){draft.step=3;renderCreate()}
+
+function prevStep(){
+
+  if(draft.step>1){
+    draft.step--;
+    renderCreate();
+  }
 }
-function guessQty(text,a){let r=new RegExp("(\\d+)\\s*(?:x|stk|stück|"+a.unit.replace(".","\\.")+")?\\s*(?:"+a.name.split(" ")[0].toLowerCase()+")?");let m=text.match(r);return m?Number(m[1]):1}
-function itemEditor(it,i){return `<div class="itemrow"><div class="field itemname"><label>Position</label><select onchange="itemSelect(${i},this.value)">${state.catalog.map(a=>`<option value="${a.id}" ${a.id===it.id?"selected":""}>${esc(a.name)}</option>`).join("")}</select></div><div class="field"><label>Menge</label><input id="q${i}" type="number" min="0" step="0.01" value="${it.qty}"></div><div class="field"><label>Einheit</label><input id="u${i}" value="${esc(it.unit)}"></div><div class="field"><label>Preis netto</label><input id="p${i}" type="number" min="0" step="0.01" value="${it.price}"></div><button class="btn small" onclick="removeItem(${i})">×</button></div>`}
-function itemSelect(i,id){let a=state.catalog.find(x=>x.id===id);if(a){draft.items[i]={...a,qty:draft.items[i].qty||1};renderCreate()}}
-function addItem(){let a=state.catalog[0]||{id:"x",name:"Neue Position",unit:"Stk.",price:0};draft.items.push({...a,qty:1});renderCreate()}
-function removeItem(i){draft.items.splice(i,1);renderCreate()}
-function calc(){let net=draft.items.reduce((s,x)=>s+(Number(x.qty)||0)*(Number(x.price)||0),0);return {net,vat:net*.19,gross:net*1.19}}
-function totals(){let c=calc();return `<div class="totals"><div class="totalline"><span>Netto</span><b>${money(c.net)}</b></div><div class="totalline"><span>MwSt. 19 %</span><b>${money(c.vat)}</b></div><div class="totalline grand"><span>Gesamt</span><b>${money(c.gross)}</b></div></div>`}
-function previewHtml(o){let c=o.subtotal!==undefined?{net:o.subtotal,vat:o.subtotal*.19,gross:o.total}:calc();return `<div class="preview" id="printArea"><div class="preview-head"><div><div class="muted">${esc(state.settings.company)}</div><h1>ANGEBOT</h1><div class="muted">Angebot Nr. ${esc(o.number)}</div></div><div class="right"><b>${esc(state.settings.owner)}</b><div class="muted">${esc(state.settings.address).replace(/\n/g,"<br>")}</div></div></div><div style="display:flex;justify-content:space-between;margin-top:28px"><div><b>Für</b><div>${esc(o.customer.company)}</div><div>${esc(o.customer.address)}</div><div>${esc(o.customer.email)}</div></div><div class="right"><b>Datum</b><div>${o.date}</div></div></div><table><thead><tr><th>Leistung / Material</th><th>Menge</th><th>Einheit</th><th>Einzelpreis</th><th>Gesamt</th></tr></thead><tbody>${o.items.map(x=>`<tr><td>${esc(x.name)}</td><td>${x.qty}</td><td>${esc(x.unit)}</td><td>${money(x.price)}</td><td>${money(x.qty*x.price)}</td></tr>`).join("")}</tbody></table><div class="sum"><div class="totalline"><span>Netto</span><b>${money(c.net)}</b></div><div class="totalline"><span>MwSt. 19 %</span><b>${money(c.vat)}</b></div><div class="totalline grand"><span>Brutto</span><b>${money(c.gross)}</b></div></div><div style="margin-top:55px;padding-top:15px;border-top:1px solid #ddd" class="muted">Vielen Dank für Ihre Anfrage. ${state.settings.iban?`IBAN: ${esc(state.settings.iban)}`:""}</div></div>`}
-function saveOffer(){if(!draft.items.length){toast("Mindestens eine Position erforderlich");return}draft.items.forEach((it,i)=>{let q=document.getElementById("q"+i),p=document.getElementById("p"+i),u=document.getElementById("u"+i);if(q)it.qty=Number(q.value)||0;if(p)it.price=Number(p.value)||0;if(u)it.unit=u.value});let c=calc(),o={id:Date.now().toString(),number:"EO-"+state.nextNo++,date:new Date().toLocaleDateString("de-DE"),customer:draft.customer,items:draft.items,total:c.gross,status:"Offen"};state.offers.push(o);save();toast("Angebot "+o.number+" gespeichert");setPage("offers")}
-function printOffer(){window.print()}
-function viewOffer(id){let o=state.offers.find(x=>x.id===id);if(!o)return;document.getElementById("main").innerHTML=layout("Angebot "+o.number,"Gespeichertes Angebot",`<button class="btn" onclick="printOffer()">Drucken / PDF</button> <button class="btn" onclick="setPage('offers')">Zurück</button>`)+previewHtml({number:o.number,date:o.date,customer:o.customer,items:o.items,total:o.total,subtotal:o.total/1.19})}
+
+function addItem(){
+
+  const first=state.catalog[0];
+
+  if(!first){
+    toast("Bitte zuerst einen Artikel anlegen.");
+    return;
+  }
+
+  draft.items.push({
+    id:first.id,
+    name:first.name,
+    unit:first.unit,
+    price:Number(first.price)||0,
+    cost:Number(first.cost)||0,
+    qty:1
+  });
+
+  renderCreate();
+}
+
+function removeItem(i){
+
+  draft.items.splice(i,1);
+
+  renderCreate();
+}
+
+function itemChange(i,key,value){
+
+  if(key==="qty" || key==="price"){
+    draft.items[i][key]=Number(value)||0;
+  }else{
+    draft.items[i][key]=value;
+  }
+}
+
+function itemCatalogChange(i,id){
+
+  const item=state.catalog.find(x=>x.id===id);
+
+  if(!item) return;
+
+  draft.items[i]={
+    id:item.id,
+    name:item.name,
+    unit:item.unit,
+    price:Number(item.price)||0,
+    cost:Number(item.cost)||0,
+    qty:draft.items[i].qty || 1
+  };
+
+  renderCreate();
+}
+
+function totals(){
+
+  const net=draft.items.reduce(
+    (sum,item)=>sum+(Number(item.price)||0)*(Number(item.qty)||0),
+    0
+  );
+
+  const vat=net*0.19;
+  const gross=net+vat;
+
+  return {net,vat,gross};
+}
+
+function totalsHTML(){
+
+  const t=totals();
+
+  return `
+
+    <div class="sum">
+
+      <div class="sumline">
+        <span>Netto</span>
+        <b>${money(t.net)}</b>
+      </div>
+
+      <div class="sumline">
+        <span>MwSt. 19%</span>
+        <b>${money(t.vat)}</b>
+      </div>
+
+      <div class="sumline grand">
+        <span>Gesamt</span>
+        <b>${money(t.gross)}</b>
+      </div>
+
+    </div>
+  `;
+}
+
+function previewHTML(printMode){
+
+  const t=totals();
+  const s=state.settings;
+
+  return `
+
+    <div class="preview">
+
+      <div class="preview-head">
+
+        <div>
+
+          <h1>ANGEBOT</h1>
+
+          <div class="muted">
+            Nr. ${draft.number || "NEU"}
+          </div>
+
+          <div class="muted">
+            ${new Date().toLocaleDateString("de-DE")}
+          </div>
+
+        </div>
+
+        <div class="right">
+
+          <b>${esc(s.company)}</b>
+
+          <div style="white-space:pre-line">
+            ${esc(s.address)}
+          </div>
+
+          <div>${esc(s.owner)}</div>
+
+        </div>
+
+      </div>
+
+      <div style="margin-top:28px">
+
+        <b>Kunde</b>
+
+        <div style="margin-top:7px">
+          ${esc(draft.customer.company)}
+        </div>
+
+        <div>
+          ${esc(draft.customer.address)}
+        </div>
+
+        <div>
+          ${esc(draft.customer.email)}
+        </div>
+
+        <div>
+          ${esc(draft.customer.phone)}
+        </div>
+
+      </div>
+
+      <div style="margin-top:30px">
+
+        <b>Leistungen</b>
+
+        <table>
+
+          <thead>
+            <tr>
+              <th>Pos.</th>
+              <th>Beschreibung</th>
+              <th>Menge</th>
+              <th>Einheit</th>
+              <th>Einzelpreis</th>
+              <th>Gesamt</th>
+            </tr>
+          </thead>
+
+          <tbody>
+
+            ${draft.items.map((item,i)=>`
+
+              <tr>
+
+                <td>${i+1}</td>
+
+                <td>${esc(item.name)}</td>
+
+                <td>${item.qty}</td>
+
+                <td>${esc(item.unit)}</td>
+
+                <td>${money(item.price)}</td>
+
+                <td>${money(item.price*item.qty)}</td>
+
+              </tr>
+
+            `).join("")}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      ${draft.notes ? `
+
+        <div style="margin-top:25px">
+
+          <b>Hinweise</b>
+
+          <div style="white-space:pre-line;margin-top:7px">
+            ${esc(draft.notes)}
+          </div>
+
+        </div>
+
+      `:""}
+
+      <div class="sum">
+
+        <div class="sumline">
+          <span>Netto</span>
+          <b>${money(t.net)}</b>
+        </div>
+
+        <div class="sumline">
+          <span>MwSt. 19%</span>
+          <b>${money(t.vat)}</b>
+        </div>
+
+        <div class="sumline grand">
+          <span>Gesamt</span>
+          <b>${money(t.gross)}</b>
+        </div>
+
+      </div>
+
+      <div style="margin-top:55px;padding-top:18px;border-top:1px solid #ddd;font-size:13px">
+
+        Vielen Dank für Ihre Anfrage.
+
+        <br><br>
+
+        ${esc(s.company)} · ${esc(s.iban)}
+
+      </div>
+
+    </div>
+
+    <div class="no-print" style="display:flex;justify-content:center;gap:10px;margin-top:18px">
+
+      <button
+        class="btn"
+        onclick="window.print()"
+      >
+        🖨 PDF / Drucken
+      </button>
+
+    </div>
+
+  `;
+}
+
+function renderPreview(){
+
+  document.getElementById("main").innerHTML=
+
+    layout(
+      "Angebot",
+      "Vorschau",
+      `<button class="btn" onclick="setPage('offers')">← Zurück</button>`
+    )
+
+    +
+
+    previewHTML(true);
+}
+
+function saveOffer(){
+
+  const t=totals();
+
+  const offer={
+    id:"offer_"+Date.now(),
+    number:"EO-"+state.nextNo++,
+    date:new Date().toLocaleDateString("de-DE"),
+    customer:{...draft.customer},
+    request:draft.request,
+    items:JSON.parse(JSON.stringify(draft.items)),
+    notes:draft.notes,
+    net:t.net,
+    vat:t.vat,
+    total:t.gross,
+    status:"Offen"
+  };
+
+  state.offers.push(offer);
+
+  save();
+
+  draft.number=offer.number;
+
+  toast("Angebot gespeichert");
+
+  setTimeout(()=>{
+    viewOffer(offer.id);
+  },300);
+}
+
+function viewOffer(id){
+
+  const offer=state.offers.find(o=>o.id===id);
+
+  if(!offer) return;
+
+  draft={
+    step:4,
+    number:offer.number,
+    customer:{...offer.customer},
+    request:offer.request,
+    items:JSON.parse(JSON.stringify(offer.items)),
+    notes:offer.notes || ""
+  };
+
+  page="preview";
+
+  renderPreview();
+}
+
 render();
 </script>
+
 </body>
 </html>
