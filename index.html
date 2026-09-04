@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111">
-<title>EasyOffer v2.1</title>
+<title>EasyOffer v2.2</title>
 
 <style>
 :root{
@@ -18,6 +18,7 @@
   --green:#16803c;
   --orange:#a15c00;
   --red:#b42318;
+  --blue:#175cd3;
   --shadow:0 8px 30px rgba(0,0,0,.06);
 }
 
@@ -92,23 +93,8 @@ button{cursor:pointer}
   margin-top:5px;
 }
 
-.btn{
-  border:1px solid var(--line);
-  background:#fff;
-  padding:10px 15px;
-  border-radius:9px;
-  font-weight:650;
-}
-
-.btn.dark{
-  background:#111;
-  color:#fff;
-  border-color:#111;
-}
-
-.btn.small{
-  padding:7px 10px;
-  font-size:13px;
+.muted{
+  color:var(--muted);
 }
 
 .cards{
@@ -186,9 +172,22 @@ button{cursor:pointer}
   outline:none;
 }
 
+.field input:focus,
+.field textarea:focus,
+.field select:focus,
+.itemrow input:focus,
+.itemrow select:focus{
+  border-color:#111;
+}
+
 .field textarea{
   min-height:120px;
   resize:vertical;
+}
+
+.table-wrap{
+  width:100%;
+  overflow-x:auto;
 }
 
 .table{
@@ -207,6 +206,58 @@ button{cursor:pointer}
 .table th{
   color:var(--muted);
   font-size:12px;
+  white-space:nowrap;
+}
+
+.table td{
+  vertical-align:middle;
+}
+
+.table-actions{
+  display:flex;
+  gap:5px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:10px 15px;
+  border-radius:9px;
+  font-weight:650;
+}
+
+.btn:hover{
+  background:#f5f5f5;
+}
+
+.btn.dark{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+
+.btn.dark:hover{
+  background:#292929;
+}
+
+.btn.small{
+  padding:7px 10px;
+  font-size:13px;
+}
+
+.btn.danger{
+  color:var(--red);
+  border-color:#f0c9c5;
+}
+
+.btn.danger:hover{
+  background:#fff5f4;
+}
+
+.btn.green{
+  color:var(--green);
+  border-color:#bce5c9;
 }
 
 .badge{
@@ -215,6 +266,7 @@ button{cursor:pointer}
   border-radius:20px;
   font-size:12px;
   background:#eee;
+  white-space:nowrap;
 }
 
 .badge.green{
@@ -230,6 +282,11 @@ button{cursor:pointer}
 .badge.red{
   background:#fdecea;
   color:var(--red);
+}
+
+.badge.blue{
+  background:#eaf1ff;
+  color:var(--blue);
 }
 
 .bar{
@@ -280,6 +337,7 @@ button{cursor:pointer}
   justify-content:flex-end;
   align-items:center;
   gap:6px;
+  min-width:0;
 }
 
 .chartcol i{
@@ -462,6 +520,12 @@ button{cursor:pointer}
   background:#fff;
 }
 
+.item-label{
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:4px;
+}
+
 .ai-box{
   background:#111;
   color:#fff;
@@ -522,6 +586,100 @@ button{cursor:pointer}
   margin-top:18px;
 }
 
+.catalog-toolbar{
+  display:flex;
+  gap:10px;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px;
+  flex-wrap:wrap;
+}
+
+.search{
+  min-width:250px;
+  padding:10px 12px;
+  border:1px solid var(--line);
+  border-radius:9px;
+  outline:none;
+}
+
+.catalog-summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.catalog-stat{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px;
+}
+
+.catalog-stat span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.catalog-stat b{
+  display:block;
+  font-size:20px;
+  margin-top:5px;
+}
+
+.margin-positive{
+  color:var(--green);
+  font-weight:700;
+}
+
+.margin-negative{
+  color:var(--red);
+  font-weight:700;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:50;
+}
+
+.modal-box{
+  width:min(650px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:#fff;
+  border-radius:16px;
+  padding:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
+}
+
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.modal-head h2{
+  margin:0;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:18px;
+}
+
+.hidden{
+  display:none!important;
+}
+
 .mobilebar{
   display:none;
 }
@@ -534,28 +692,64 @@ button{cursor:pointer}
   color:#fff;
   padding:12px 16px;
   border-radius:9px;
-  z-index:30;
+  z-index:60;
 }
 
-.hidden{
-  display:none!important;
+.empty{
+  padding:30px 10px;
+  text-align:center;
+  color:var(--muted);
 }
 
-@media(max-width:950px){
+.offer-meta{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:8px;
+}
+
+.profit-box{
+  background:#f8f8f8;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:14px;
+  margin-top:15px;
+}
+
+.profit-row{
+  display:flex;
+  justify-content:space-between;
+  padding:5px 0;
+}
+
+.quick-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+@media(max-width:1100px){
 
   .cards{
     grid-template-columns:repeat(2,1fr);
   }
 
+  .customer-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:950px){
+
   .grid2{
     grid-template-columns:1fr;
   }
 
-  .customer-grid{
+  .kpi{
     grid-template-columns:1fr 1fr;
   }
 
-  .kpi{
+  .catalog-summary{
     grid-template-columns:1fr 1fr;
   }
 }
@@ -597,10 +791,14 @@ button{cursor:pointer}
   }
 
   .itemrow{
-    grid-template-columns:1fr 1fr 1fr;
+    grid-template-columns:1fr 1fr;
   }
 
   .itemrow .itemname{
+    grid-column:1/-1;
+  }
+
+  .itemrow .remove-item{
     grid-column:1/-1;
   }
 
@@ -610,6 +808,10 @@ button{cursor:pointer}
 
   .preview-head{
     flex-direction:column;
+  }
+
+  .preview table{
+    font-size:12px;
   }
 
   .calendar{
@@ -624,6 +826,23 @@ button{cursor:pointer}
   .event{
     font-size:9px;
     padding:3px;
+  }
+
+  .catalog-summary{
+    grid-template-columns:1fr;
+  }
+
+  .search{
+    min-width:0;
+    width:100%;
+  }
+
+  .catalog-toolbar{
+    align-items:stretch;
+  }
+
+  .catalog-toolbar .btn{
+    width:100%;
   }
 
   .mobilebar{
@@ -647,6 +866,22 @@ button{cursor:pointer}
 
   .mobilebar button.active{
     color:#fff;
+  }
+
+  .modal{
+    align-items:flex-end;
+    padding:0;
+  }
+
+  .modal-box{
+    width:100%;
+    max-height:92vh;
+    border-radius:16px 16px 0 0;
+  }
+
+  .table th,
+  .table td{
+    white-space:nowrap;
   }
 }
 
@@ -688,13 +923,35 @@ button{cursor:pointer}
   </div>
 
   <div class="nav">
-    <button data-page="dashboard" class="active">▦ &nbsp; Dashboard</button>
-    <button data-page="offers">▤ &nbsp; Angebote</button>
-    <button data-page="calendar">◫ &nbsp; Kalender</button>
-    <button data-page="analytics">◒ &nbsp; Analyse</button>
-    <button data-page="customers">♙ &nbsp; Kunden</button>
-    <button data-page="catalog">▧ &nbsp; Preiskatalog</button>
-    <button data-page="settings">⚙ &nbsp; Einstellungen</button>
+
+    <button data-page="dashboard" class="active">
+      ▦ &nbsp; Dashboard
+    </button>
+
+    <button data-page="offers">
+      ▤ &nbsp; Angebote
+    </button>
+
+    <button data-page="calendar">
+      ◫ &nbsp; Kalender
+    </button>
+
+    <button data-page="analytics">
+      ◒ &nbsp; Analyse
+    </button>
+
+    <button data-page="customers">
+      ♙ &nbsp; Kunden
+    </button>
+
+    <button data-page="catalog">
+      ▧ &nbsp; Preiskatalog
+    </button>
+
+    <button data-page="settings">
+      ⚙ &nbsp; Einstellungen
+    </button>
+
   </div>
 
 </aside>
@@ -702,23 +959,42 @@ button{cursor:pointer}
 <main class="main" id="main"></main>
 
 <div class="mobilebar">
-  <button data-page="dashboard" class="active">Home</button>
-  <button data-page="offers">Angebote</button>
-  <button data-page="calendar">Kalender</button>
-  <button data-page="analytics">Analyse</button>
-  <button data-page="settings">Mehr</button>
+
+  <button data-page="dashboard" class="active">
+    Home
+  </button>
+
+  <button data-page="offers">
+    Angebote
+  </button>
+
+  <button data-page="calendar">
+    Kalender
+  </button>
+
+  <button data-page="analytics">
+    Analyse
+  </button>
+
+  <button data-page="settings">
+    Mehr
+  </button>
+
 </div>
 
 <div id="toast" class="toast hidden"></div>
 
+<div id="modal" class="modal hidden"></div>
+
 <script>
 "use strict";
 
-const KEY="easyoffer_v21";
+const KEY="easyoffer_v22";
 
 const catalogDefault=[
   {
     id:"1",
+    articleNo:"SHK-001",
     name:"Gas-Brennwerttherme",
     unit:"Stk.",
     price:3200,
@@ -726,6 +1002,7 @@ const catalogDefault=[
   },
   {
     id:"2",
+    articleNo:"SHK-002",
     name:"Wärmepumpe",
     unit:"Stk.",
     price:8500,
@@ -733,6 +1010,7 @@ const catalogDefault=[
   },
   {
     id:"3",
+    articleNo:"SHK-003",
     name:"Heizkörper",
     unit:"Stk.",
     price:420,
@@ -740,6 +1018,7 @@ const catalogDefault=[
   },
   {
     id:"4",
+    articleNo:"SHK-004",
     name:"Waschtisch",
     unit:"Stk.",
     price:280,
@@ -747,6 +1026,7 @@ const catalogDefault=[
   },
   {
     id:"5",
+    articleNo:"SHK-005",
     name:"Toilette",
     unit:"Stk.",
     price:390,
@@ -754,6 +1034,7 @@ const catalogDefault=[
   },
   {
     id:"6",
+    articleNo:"SHK-006",
     name:"Montage / Arbeitszeit",
     unit:"Std.",
     price:65,
@@ -761,6 +1042,7 @@ const catalogDefault=[
   },
   {
     id:"7",
+    articleNo:"SHK-007",
     name:"Demontage",
     unit:"Std.",
     price:55,
@@ -768,6 +1050,7 @@ const catalogDefault=[
   },
   {
     id:"8",
+    articleNo:"SHK-008",
     name:"Anfahrt",
     unit:"Pausch.",
     price:45,
@@ -790,13 +1073,24 @@ const defaults={
 let state;
 
 try{
-  state=JSON.parse(localStorage.getItem(KEY)||"null")||defaults;
+
+  state=
+    JSON.parse(
+      localStorage.getItem(KEY)||"null"
+    )||defaults;
+
 }catch(e){
+
   state=defaults;
+
 }
 
-if(!state.catalog||!state.catalog.length){
-  state.catalog=catalogDefault;
+/*
+  Migration von älteren EasyOffer-Versionen.
+*/
+
+if(!state.catalog){
+  state.catalog=[];
 }
 
 if(!state.offers){
@@ -811,9 +1105,46 @@ if(!state.nextNo){
   state.nextNo=1001;
 }
 
+if(!state.catalog.length){
+
+  state.catalog=
+    catalogDefault.map(x=>({...x}));
+
+}
+
+/*
+  Alte Katalogartikel bekommen automatisch
+  eine Artikelnummer.
+*/
+
+state.catalog.forEach((item,index)=>{
+
+  if(!item.id){
+    item.id=
+      String(Date.now())+
+      String(index);
+  }
+
+  if(!item.articleNo){
+    item.articleNo=
+      "SHK-"+String(index+1).padStart(3,"0");
+  }
+
+  if(item.price===undefined){
+    item.price=0;
+  }
+
+  if(item.cost===undefined){
+    item.cost=0;
+  }
+
+});
+
 let page="dashboard";
 
 let monthCursor=new Date();
+
+let catalogSearch="";
 
 let draft={
   step:1,
@@ -830,53 +1161,135 @@ let draft={
 };
 
 function save(){
-  localStorage.setItem(KEY,JSON.stringify(state));
+
+  localStorage.setItem(
+    KEY,
+    JSON.stringify(state)
+  );
+
 }
 
 function money(n){
-  return new Intl.NumberFormat("de-DE",{
-    style:"currency",
-    currency:"EUR"
-  }).format(Number(n)||0);
+
+  return new Intl.NumberFormat(
+    "de-DE",
+    {
+      style:"currency",
+      currency:"EUR"
+    }
+  ).format(Number(n)||0);
+
+}
+
+function number(n){
+
+  return Number(n)||0;
+
 }
 
 function esc(s){
-  return String(s??"").replace(/[&<>"']/g,m=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    "\"":"&quot;",
-    "'":"&#39;"
-  }[m]));
+
+  return String(s??"").replace(
+    /[&<>"']/g,
+    m=>({
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      "\"":"&quot;",
+      "'":"&#39;"
+    }[m])
+  );
+
 }
 
 function toast(message){
-  const box=document.getElementById("toast");
+
+  const box=
+    document.getElementById("toast");
 
   box.textContent=message;
+
   box.classList.remove("hidden");
 
   setTimeout(()=>{
     box.classList.add("hidden");
   },2200);
+
 }
 
 function totals(o){
 
-  const net=(o.items||[]).reduce(
-    (sum,item)=>sum+(Number(item.qty)||0)*(Number(item.price)||0),
-    0
-  );
+  const net=
+    (o.items||[]).reduce(
+      (sum,item)=>
+        sum+
+        number(item.qty)*
+        number(item.price),
+      0
+    );
 
   return{
     net,
     vat:net*.19,
     gross:net*1.19
   };
+
+}
+
+function offerProfit(o){
+
+  return (o.items||[]).reduce(
+    (sum,item)=>{
+
+      const cost=
+        item.cost!==undefined
+        ?number(item.cost)
+        :catalogCost(item.name);
+
+      return sum+
+        number(item.qty)*
+        (
+          number(item.price)-
+          cost
+        );
+
+    },
+    0
+  );
+
+}
+
+function offerMarginPercent(o){
+
+  const net=totals(o).net;
+
+  if(!net)return 0;
+
+  return Math.round(
+    offerProfit(o)/net*100
+  );
+
+}
+
+function catalogCost(name){
+
+  const item=
+    state.catalog.find(
+      x=>
+        x.name.toLowerCase()===
+        String(name||"").toLowerCase()
+    );
+
+  return item
+    ?number(item.cost)
+    :0;
+
 }
 
 function status(o){
+
   return o.status||"Offen";
+
 }
 
 function badge(s){
@@ -886,28 +1299,48 @@ function badge(s){
   if(s==="Angenommen")cls="green";
   if(s==="Abgelehnt")cls="red";
   if(s==="Offen")cls="orange";
+  if(s==="Entwurf")cls="blue";
+  if(s==="Abgelaufen")cls="red";
 
-  return `<span class="badge ${cls}">${esc(s)}</span>`;
+  return`
+    <span class="badge ${cls}">
+      ${esc(s)}
+    </span>
+  `;
+
 }
 
 function nav(){
 
-  document.querySelectorAll("[data-page]").forEach(button=>{
+  document.querySelectorAll(
+    "[data-page]"
+  ).forEach(button=>{
+
     button.classList.toggle(
       "active",
       button.dataset.page===page
     );
+
   });
+
 }
 
-function layout(title,sub,body,action=""){
+function layout(
+  title,
+  sub,
+  body,
+  action=""
+){
 
   main.innerHTML=`
+
     <div class="top">
 
       <div>
         <h1>${title}</h1>
-        <div class="sub">${sub||""}</div>
+        <div class="sub">
+          ${sub||""}
+        </div>
       </div>
 
       ${action}
@@ -915,40 +1348,66 @@ function layout(title,sub,body,action=""){
     </div>
 
     ${body}
+
   `;
 
   nav();
+
 }
+
+/* =========================
+   DASHBOARD
+========================= */
 
 function dashboard(){
 
   const offers=state.offers;
 
-  const open=offers.filter(
-    o=>status(o)==="Offen"
-  );
+  const open=
+    offers.filter(
+      o=>status(o)==="Offen"
+    );
 
-  const accepted=offers.filter(
-    o=>status(o)==="Angenommen"
-  );
+  const accepted=
+    offers.filter(
+      o=>status(o)==="Angenommen"
+    );
 
-  const volume=offers.reduce(
-    (sum,o)=>sum+totals(o).gross,
-    0
-  );
+  const volume=
+    offers.reduce(
+      (sum,o)=>
+        sum+totals(o).gross,
+      0
+    );
 
-  const won=accepted.reduce(
-    (sum,o)=>sum+totals(o).gross,
-    0
-  );
+  const won=
+    accepted.reduce(
+      (sum,o)=>
+        sum+totals(o).gross,
+      0
+    );
 
-  const openValue=open.reduce(
-    (sum,o)=>sum+totals(o).gross,
-    0
-  );
+  const openValue=
+    open.reduce(
+      (sum,o)=>
+        sum+totals(o).gross,
+      0
+    );
 
-  const quote=offers.length
-    ?Math.round(accepted.length/offers.length*100)
+  const profit=
+    accepted.reduce(
+      (sum,o)=>
+        sum+offerProfit(o),
+      0
+    );
+
+  const quote=
+    offers.length
+    ?Math.round(
+      accepted.length/
+      offers.length*
+      100
+    )
     :0;
 
   layout(
@@ -956,26 +1415,43 @@ function dashboard(){
     "Dein Überblick über Angebote und Umsatz",
 
     `
+
     <div class="cards">
 
       <div class="card">
-        <div class="label">Angebote</div>
-        <div class="value">${offers.length}</div>
+        <div class="label">
+          Angebote
+        </div>
+        <div class="value">
+          ${offers.length}
+        </div>
       </div>
 
       <div class="card">
-        <div class="label">Offen</div>
-        <div class="value">${open.length}</div>
+        <div class="label">
+          Offen
+        </div>
+        <div class="value">
+          ${open.length}
+        </div>
       </div>
 
       <div class="card">
-        <div class="label">Angenommen</div>
-        <div class="value">${accepted.length}</div>
+        <div class="label">
+          Angenommen
+        </div>
+        <div class="value">
+          ${accepted.length}
+        </div>
       </div>
 
       <div class="card">
-        <div class="label">Angebotsvolumen</div>
-        <div class="value">${money(volume)}</div>
+        <div class="label">
+          Angebotsvolumen
+        </div>
+        <div class="value">
+          ${money(volume)}
+        </div>
       </div>
 
     </div>
@@ -984,7 +1460,9 @@ function dashboard(){
 
       <div class="panel">
 
-        <h2>Vertriebs-Pipeline</h2>
+        <h2>
+          Vertriebs-Pipeline
+        </h2>
 
         <div class="kpi">
 
@@ -1005,7 +1483,9 @@ function dashboard(){
 
         </div>
 
-        <div style="margin-top:18px">
+        <div
+          style="margin-top:18px"
+        >
 
           <div class="muted">
             Abschlussquote
@@ -1021,42 +1501,21 @@ function dashboard(){
 
       <div class="panel">
 
-        <h2>Letzte Angebote</h2>
+        <h2>
+          Gewinn
+        </h2>
 
-        ${
-          offers
-          .slice()
-          .reverse()
-          .slice(0,5)
-          .map(o=>`
+        <div class="mini">
 
-            <div style="
-              display:flex;
-              justify-content:space-between;
-              gap:10px;
-              padding:10px 0;
-              border-bottom:1px solid var(--line)
-            ">
+          <span class="muted">
+            Bruttogewinn aus angenommenen Angeboten
+          </span>
 
-              <span>
-                <b>${esc(o.no)}</b>
-                ·
-                ${esc(o.customer.company||"Kunde")}
-              </span>
+          <b>
+            ${money(profit)}
+          </b>
 
-              <span>
-                ${money(totals(o).gross)}
-              </span>
-
-            </div>
-
-          `)
-          .join("")
-          ||
-          `<div class="muted">
-            Noch keine Angebote.
-          </div>`
-        }
+        </div>
 
       </div>
 
@@ -1064,37 +1523,104 @@ function dashboard(){
 
     <div class="panel">
 
-      <h2>Schnellstart</h2>
+      <h2>
+        Letzte Angebote
+      </h2>
 
-      <button
-        class="btn dark"
-        onclick="newOffer()"
-      >
-        + Neues Angebot
-      </button>
+      ${
+        offers
+        .slice()
+        .reverse()
+        .slice(0,5)
+        .map(o=>`
 
-      <button
-        class="btn"
-        onclick="go('calendar')"
-      >
-        Kalender
-      </button>
+          <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:10px;
+            padding:10px 0;
+            border-bottom:1px solid var(--line)
+          ">
 
-      <button
-        class="btn"
-        onclick="go('analytics')"
-      >
-        Analyse
-      </button>
+            <span>
+              <b>${esc(o.no)}</b>
+              ·
+              ${esc(
+                o.customer.company||
+                "Kunde"
+              )}
+            </span>
+
+            <span>
+              ${money(totals(o).gross)}
+            </span>
+
+          </div>
+
+        `)
+        .join("")
+        ||
+        `<div class="muted">
+          Noch keine Angebote.
+        </div>`
+      }
 
     </div>
+
+    <div class="panel">
+
+      <h2>
+        Schnellstart
+      </h2>
+
+      <div class="quick-actions">
+
+        <button
+          class="btn dark"
+          onclick="newOffer()"
+        >
+          + Neues Angebot
+        </button>
+
+        <button
+          class="btn"
+          onclick="go('catalog')"
+        >
+          Preiskatalog
+        </button>
+
+        <button
+          class="btn"
+          onclick="go('calendar')"
+        >
+          Kalender
+        </button>
+
+        <button
+          class="btn"
+          onclick="go('analytics')"
+        >
+          Analyse
+        </button>
+
+      </div>
+
+    </div>
+
     `
   );
+
 }
+
+/* =========================
+   OFFERS
+========================= */
 
 function offers(){
 
-  const rows=state.offers
+  const rows=
+    state.offers
     .slice()
     .reverse();
 
@@ -1103,6 +1629,7 @@ function offers(){
     "Angebote verwalten und Status verfolgen",
 
     `
+
     <div class="panel">
 
       <div style="
@@ -1120,24 +1647,35 @@ function offers(){
         </button>
 
         <select
+          id="offerFilter"
           class="btn"
           onchange="filterOffers(this.value)"
         >
+
           <option value="Alle">
             Alle Status
           </option>
 
-          <option>
+          <option value="Entwurf">
+            Entwurf
+          </option>
+
+          <option value="Offen">
             Offen
           </option>
 
-          <option>
+          <option value="Angenommen">
             Angenommen
           </option>
 
-          <option>
+          <option value="Abgelehnt">
             Abgelehnt
           </option>
+
+          <option value="Abgelaufen">
+            Abgelaufen
+          </option>
+
         </select>
 
       </div>
@@ -1147,149 +1685,464 @@ function offers(){
       </div>
 
     </div>
+
     `
   );
+
 }
 
 function offerRows(rows){
 
   if(!rows.length){
-    return `
-      <div class="muted">
+
+    return`
+      <div class="empty">
         Noch keine Angebote vorhanden.
       </div>
     `;
+
   }
 
-  return `
-    <table class="table">
+  return`
 
-      <thead>
-        <tr>
-          <th>Nr.</th>
-          <th>Kunde</th>
-          <th>Datum</th>
-          <th>Follow-up</th>
-          <th>Summe</th>
-          <th>Status</th>
-          <th></th>
-        </tr>
-      </thead>
+    <div class="table-wrap">
 
-      <tbody>
+      <table class="table">
 
-        ${rows.map(o=>`
+        <thead>
 
           <tr>
-
-            <td>
-              <b>${esc(o.no)}</b>
-            </td>
-
-            <td>
-              ${esc(o.customer.company||"-")}
-            </td>
-
-            <td>
-              ${esc(o.date||"-")}
-            </td>
-
-            <td>
-              ${esc(o.followDate||"-")}
-            </td>
-
-            <td>
-              ${money(totals(o).gross)}
-            </td>
-
-            <td>
-              ${badge(status(o))}
-            </td>
-
-            <td>
-
-              <button
-                class="btn small"
-                onclick="changeStatus('${o.id}')"
-              >
-                Status
-              </button>
-
-              <button
-                class="btn small"
-                onclick="preview('${o.id}')"
-              >
-                Öffnen
-              </button>
-
-            </td>
-
+            <th>Nr.</th>
+            <th>Kunde</th>
+            <th>Datum</th>
+            <th>Follow-up</th>
+            <th>Summe</th>
+            <th>Gewinn</th>
+            <th>Status</th>
+            <th></th>
           </tr>
 
-        `).join("")}
+        </thead>
 
-      </tbody>
+        <tbody>
 
-    </table>
+          ${rows.map(o=>`
+
+            <tr>
+
+              <td>
+                <b>${esc(o.no)}</b>
+              </td>
+
+              <td>
+                ${esc(
+                  o.customer.company||"-"
+                )}
+              </td>
+
+              <td>
+                ${esc(o.date||"-")}
+              </td>
+
+              <td>
+                ${esc(
+                  o.followDate||"-"
+                )}
+              </td>
+
+              <td>
+                ${money(
+                  totals(o).gross
+                )}
+              </td>
+
+              <td>
+                <span class="${
+                  offerProfit(o)>=0
+                  ?"margin-positive"
+                  :"margin-negative"
+                }">
+                  ${money(
+                    offerProfit(o)
+                  )}
+                </span>
+              </td>
+
+              <td>
+                ${badge(status(o))}
+              </td>
+
+              <td>
+
+                <div class="table-actions">
+
+                  <button
+                    class="btn small"
+                    onclick="preview('${o.id}')"
+                  >
+                    Öffnen
+                  </button>
+
+                  <button
+                    class="btn small"
+                    onclick="editOffer('${o.id}')"
+                  >
+                    Bearbeiten
+                  </button>
+
+                  <button
+                    class="btn small"
+                    onclick="changeStatus('${o.id}')"
+                  >
+                    Status
+                  </button>
+
+                </div>
+
+              </td>
+
+            </tr>
+
+          `).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
+
   `;
+
 }
 
 function filterOffers(value){
 
-  let rows=state.offers
+  let rows=
+    state.offers
     .slice()
     .reverse();
 
   if(value!=="Alle"){
-    rows=rows.filter(
-      o=>status(o)===value
-    );
+
+    rows=
+      rows.filter(
+        o=>status(o)===value
+      );
+
   }
 
-  document.getElementById("offerTable")
-    .innerHTML=offerRows(rows);
+  const box=
+    document.getElementById(
+      "offerTable"
+    );
+
+  if(box){
+    box.innerHTML=
+      offerRows(rows);
+  }
+
 }
 
 function changeStatus(id){
 
-  const offer=state.offers.find(
-    x=>x.id===id
-  );
+  const offer=
+    state.offers.find(
+      x=>x.id===id
+    );
 
   if(!offer)return;
 
-  const next={
-    Offen:"Angenommen",
-    Angenommen:"Abgelehnt",
-    Abgelehnt:"Offen"
-  };
+  openStatusModal(offer);
+
+}
+
+function openStatusModal(offer){
+
+  const modal=
+    document.getElementById("modal");
+
+  modal.innerHTML=`
+
+    <div
+      class="modal-box"
+      onclick="event.stopPropagation()"
+    >
+
+      <div class="modal-head">
+
+        <h2>
+          Status ändern
+        </h2>
+
+        <button
+          class="btn small"
+          onclick="closeModal()"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <p class="muted">
+        Angebot ${esc(offer.no)}
+      </p>
+
+      <div class="field">
+
+        <label>
+          Status
+        </label>
+
+        <select id="statusSelect">
+
+          ${[
+            "Entwurf",
+            "Offen",
+            "Angenommen",
+            "Abgelehnt",
+            "Abgelaufen"
+          ].map(s=>`
+
+            <option
+              value="${s}"
+              ${status(offer)===s?"selected":""}
+            >
+              ${s}
+            </option>
+
+          `).join("")}
+
+        </select>
+
+      </div>
+
+      <div class="field"
+        style="margin-top:12px"
+      >
+
+        <label>
+          Follow-up
+        </label>
+
+        <input
+          id="statusFollow"
+          type="date"
+          value="${esc(
+            offer.followDate||""
+          )}"
+        >
+
+      </div>
+
+      <div class="modal-actions">
+
+        <button
+          class="btn"
+          onclick="closeModal()"
+        >
+          Abbrechen
+        </button>
+
+        <button
+          class="btn dark"
+          onclick="saveOfferStatus('${offer.id}')"
+        >
+          Speichern
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+  modal.classList.remove("hidden");
+
+}
+
+function saveOfferStatus(id){
+
+  const offer=
+    state.offers.find(
+      x=>x.id===id
+    );
+
+  if(!offer)return;
 
   offer.status=
-    next[status(offer)]||"Offen";
+    document.getElementById(
+      "statusSelect"
+    ).value;
+
+  offer.followDate=
+    document.getElementById(
+      "statusFollow"
+    ).value;
 
   save();
 
-  toast("Status geändert");
+  closeModal();
+
+  toast("Angebot aktualisiert");
 
   offers();
+
 }
+
+/* =========================
+   OFFER EDIT
+========================= */
+
+function editOffer(id){
+
+  const offer=
+    state.offers.find(
+      x=>x.id===id
+    );
+
+  if(!offer)return;
+
+  draft={
+    step:3,
+
+    editingId:id,
+
+    customer:{
+      company:
+        offer.customer.company||"",
+      email:
+        offer.customer.email||"",
+      phone:
+        offer.customer.phone||"",
+      address:
+        offer.customer.address||""
+    },
+
+    request:
+      offer.request||"",
+
+    items:
+      (offer.items||[]).map(
+        x=>({...x})
+      ),
+
+    notes:
+      offer.notes||"",
+
+    followDate:
+      offer.followDate||""
+
+  };
+
+  page="create";
+
+  render();
+
+}
+
+function duplicateOffer(id){
+
+  const original=
+    state.offers.find(
+      x=>x.id===id
+    );
+
+  if(!original)return;
+
+  const copy={
+    ...original,
+
+    id:
+      createId(),
+
+    no:
+      `EO-${state.nextNo++}`,
+
+    date:
+      todayString(),
+
+    followDate:
+      addDays(7),
+
+    status:"Entwurf",
+
+    items:
+      (original.items||[]).map(
+        x=>({...x})
+      ),
+
+    customer:{
+      ...original.customer
+    }
+
+  };
+
+  state.offers.push(copy);
+
+  save();
+
+  toast(
+    `Angebot ${copy.no} erstellt`
+  );
+
+  preview(copy.id);
+
+}
+
+function deleteOffer(id){
+
+  const offer=
+    state.offers.find(
+      x=>x.id===id
+    );
+
+  if(!offer)return;
+
+  const yes=
+    confirm(
+      `Angebot ${offer.no} wirklich löschen?`
+    );
+
+  if(!yes)return;
+
+  state.offers=
+    state.offers.filter(
+      x=>x.id!==id
+    );
+
+  save();
+
+  toast("Angebot gelöscht");
+
+  go("offers");
+
+}
+
+/* =========================
+   CALENDAR
+========================= */
 
 function calendar(){
 
-  const year=monthCursor.getFullYear();
-  const month=monthCursor.getMonth();
+  const year=
+    monthCursor.getFullYear();
 
-  const first=new Date(
-    year,
-    month,
-    1
-  );
+  const month=
+    monthCursor.getMonth();
 
-  const days=new Date(
-    year,
-    month+1,
-    0
-  ).getDate();
+  const first=
+    new Date(
+      year,
+      month,
+      1
+    );
+
+  const days=
+    new Date(
+      year,
+      month+1,
+      0
+    ).getDate();
 
   const start=
     (first.getDay()+6)%7;
@@ -1304,24 +2157,39 @@ function calendar(){
     "So"
   ];
 
-  let cells=names.map(
-    name=>`
-      <div class="cal-dayname">
-        ${name}
-      </div>
-    `
-  ).join("");
+  let cells=
+    names.map(
+      name=>`
+        <div class="cal-dayname">
+          ${name}
+        </div>
+      `
+    ).join("");
 
-  for(let i=0;i<start;i++){
-    cells+=`<div class="day"></div>`;
+  for(
+    let i=0;
+    i<start;
+    i++
+  ){
+
+    cells+=
+      `<div class="day"></div>`;
+
   }
 
-  const today=new Date();
+  const today=
+    new Date();
 
-  for(let day=1;day<=days;day++){
+  for(
+    let day=1;
+    day<=days;
+    day++
+  ){
 
     const date=
-      `${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+      `${year}-${String(month+1)
+        .padStart(2,"0")}-${String(day)
+        .padStart(2,"0")}`;
 
     const events=
       state.offers.filter(
@@ -1335,7 +2203,9 @@ function calendar(){
 
     cells+=`
 
-      <div class="day ${isToday?"today":""}">
+      <div
+        class="day ${isToday?"today":""}"
+      >
 
         <div class="daynum">
           ${day}
@@ -1349,26 +2219,69 @@ function calendar(){
               ?"accepted"
               :status(o)==="Abgelehnt"
               ?"rejected"
+              :status(o)==="Abgelaufen"
+              ?"expired"
               :""
             }"
             onclick="preview('${o.id}')"
           >
+
             ${esc(o.no)}
             ·
-            ${esc(o.customer.company||"Kunde")}
+            ${esc(
+              o.customer.company||
+              "Kunde"
+            )}
+
           </div>
 
         `).join("")}
 
       </div>
+
     `;
+
   }
+
+  const todayStr=
+    todayString();
+
+  const upcoming=
+    state.offers
+    .filter(o=>
+      o.followDate &&
+      o.followDate>=todayStr &&
+      status(o)==="Offen"
+    )
+    .sort(
+      (a,b)=>
+        a.followDate.localeCompare(
+          b.followDate
+        )
+    )
+    .slice(0,10);
+
+  const overdue=
+    state.offers
+    .filter(o=>
+      o.followDate &&
+      o.followDate<todayStr &&
+      status(o)==="Offen"
+    )
+    .sort(
+      (a,b)=>
+        b.followDate.localeCompare(
+          a.followDate
+        )
+    )
+    .slice(0,10);
 
   layout(
     "Kalender",
     "Follow-ups und Angebote verfolgen",
 
     `
+
     <div class="panel">
 
       <div class="calendar-head">
@@ -1415,96 +2328,149 @@ function calendar(){
 
     </div>
 
-    <div class="panel">
+    <div class="grid2">
 
-      <h2>
-        Anstehende Follow-ups
-      </h2>
+      <div class="panel">
 
-      ${
-        state.offers
-        .filter(o=>
-          o.followDate &&
-          o.followDate>=
-            new Date()
-            .toISOString()
-            .slice(0,10) &&
-          status(o)==="Offen"
-        )
-        .sort(
-          (a,b)=>
-            a.followDate.localeCompare(
-              b.followDate
-            )
-        )
-        .slice(0,10)
-        .map(o=>`
+        <h2>
+          Überfällige Follow-ups
+        </h2>
 
-          <div style="
-            display:flex;
-            justify-content:space-between;
-            gap:10px;
-            padding:11px 0;
-            border-bottom:1px solid var(--line)
-          ">
+        ${
+          overdue.length
+          ?overdue.map(
+            o=>followCard(o,true)
+          ).join("")
+          :`
+            <div class="muted">
+              Keine überfälligen Follow-ups.
+            </div>
+          `
+        }
 
-            <span>
-              <b>${esc(o.followDate)}</b>
-              ·
-              ${esc(o.customer.company||"Kunde")}
-            </span>
+      </div>
 
-            ${badge(status(o))}
+      <div class="panel">
 
-          </div>
+        <h2>
+          Anstehende Follow-ups
+        </h2>
 
-        `)
-        .join("")
-        ||
-        `
-        <div class="muted">
-          Keine offenen Follow-ups geplant.
-        </div>
-        `
-      }
+        ${
+          upcoming.length
+          ?upcoming.map(
+            o=>followCard(o,false)
+          ).join("")
+          :`
+            <div class="muted">
+              Keine offenen Follow-ups geplant.
+            </div>
+          `
+        }
+
+      </div>
 
     </div>
+
     `
   );
+
 }
+
+function followCard(o,overdue){
+
+  return`
+
+    <div style="
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      padding:11px 0;
+      border-bottom:1px solid var(--line)
+    ">
+
+      <div>
+
+        <b>
+          ${esc(o.customer.company||"Kunde")}
+        </b>
+
+        <div class="muted">
+          ${esc(o.no)}
+          ·
+          ${esc(o.followDate)}
+        </div>
+
+      </div>
+
+      <button
+        class="btn small"
+        onclick="preview('${o.id}')"
+      >
+        Öffnen
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+/* =========================
+   ANALYTICS
+========================= */
 
 function analytics(){
 
-  const offers=state.offers;
+  const offers=
+    state.offers;
 
-  const total=offers.length;
+  const total=
+    offers.length;
 
-  const accepted=offers.filter(
-    o=>status(o)==="Angenommen"
-  );
+  const accepted=
+    offers.filter(
+      o=>status(o)==="Angenommen"
+    );
 
-  const open=offers.filter(
-    o=>status(o)==="Offen"
-  );
+  const open=
+    offers.filter(
+      o=>status(o)==="Offen"
+    );
 
-  const rejected=offers.filter(
-    o=>status(o)==="Abgelehnt"
-  );
+  const rejected=
+    offers.filter(
+      o=>status(o)==="Abgelehnt"
+    );
 
-  const volume=offers.reduce(
-    (sum,o)=>sum+totals(o).gross,
-    0
-  );
+  const volume=
+    offers.reduce(
+      (sum,o)=>
+        sum+totals(o).gross,
+      0
+    );
 
-  const won=accepted.reduce(
-    (sum,o)=>sum+totals(o).gross,
-    0
-  );
+  const won=
+    accepted.reduce(
+      (sum,o)=>
+        sum+totals(o).gross,
+      0
+    );
 
-  const openVolume=open.reduce(
-    (sum,o)=>sum+totals(o).gross,
-    0
-  );
+  const openVolume=
+    open.reduce(
+      (sum,o)=>
+        sum+totals(o).gross,
+      0
+    );
+
+  const profit=
+    accepted.reduce(
+      (sum,o)=>
+        sum+offerProfit(o),
+      0
+    );
 
   const average=
     total
@@ -1514,22 +2480,39 @@ function analytics(){
   const closeRate=
     total
     ?Math.round(
-      accepted.length/total*100
+      accepted.length/
+      total*
+      100
     )
     :0;
 
-  const now=new Date();
+  const margin=
+    won
+    ?Math.round(
+      profit/
+      (won/1.19)*
+      100
+    )
+    :0;
+
+  const now=
+    new Date();
 
   const labels=[];
   const values=[];
 
-  for(let i=5;i>=0;i--){
+  for(
+    let i=5;
+    i>=0;
+    i--
+  ){
 
-    const date=new Date(
-      now.getFullYear(),
-      now.getMonth()-i,
-      1
-    );
+    const date=
+      new Date(
+        now.getFullYear(),
+        now.getMonth()-i,
+        1
+      );
 
     const key=
       `${date.getFullYear()}-${String(
@@ -1554,6 +2537,7 @@ function analytics(){
         0
       )
     );
+
   }
 
   const max=
@@ -1564,6 +2548,7 @@ function analytics(){
     "Kennzahlen deiner Angebots-Pipeline",
 
     `
+
     <div class="cards">
 
       <div class="card">
@@ -1586,19 +2571,19 @@ function analytics(){
 
       <div class="card">
         <div class="label">
-          Ø Angebotswert
+          Gewinn
         </div>
         <div class="value">
-          ${money(average)}
+          ${money(profit)}
         </div>
       </div>
 
       <div class="card">
         <div class="label">
-          Offene Pipeline
+          Ø Angebotswert
         </div>
         <div class="value">
-          ${money(openVolume)}
+          ${money(average)}
         </div>
       </div>
 
@@ -1652,60 +2637,99 @@ function analytics(){
       <div class="panel">
 
         <h2>
-          Angebotsstatus
+          Gewinn & Marge
         </h2>
 
         <div class="kpi">
 
           <div class="mini">
-            Offen
-            <b>${open.length}</b>
+            Gewinn
+            <b>
+              ${money(profit)}
+            </b>
           </div>
 
           <div class="mini">
-            Gewonnen
-            <b>${accepted.length}</b>
+            Umsatz
+            <b>
+              ${money(won)}
+            </b>
           </div>
 
           <div class="mini">
-            Abgelehnt
-            <b>${rejected.length}</b>
+            Marge
+            <b>
+              ${margin}%
+            </b>
           </div>
 
         </div>
 
-        <div style="margin-top:18px">
+      </div>
 
-          <div class="muted">
-            Gewonnen
-          </div>
+    </div>
 
-          <div class="bar">
-            <i style="
-              width:${
-                total
-                ?accepted.length/total*100
-                :0
-              }%
-            "></i>
-          </div>
+    <div class="panel">
 
-          <div
-            class="muted"
-            style="margin-top:12px"
-          >
-            Offen
-          </div>
+      <h2>
+        Angebotsstatus
+      </h2>
 
-          <div class="bar">
-            <i style="
-              width:${
-                total
-                ?open.length/total*100
-                :0
-              }%
-            "></i>
-          </div>
+      <div class="kpi">
+
+        <div class="mini">
+          Offen
+          <b>${open.length}</b>
+        </div>
+
+        <div class="mini">
+          Gewonnen
+          <b>${accepted.length}</b>
+        </div>
+
+        <div class="mini">
+          Abgelehnt
+          <b>${rejected.length}</b>
+        </div>
+
+      </div>
+
+      <div style="margin-top:18px">
+
+        <div class="muted">
+          Gewonnen
+        </div>
+
+        <div class="bar">
+
+          <i style="
+            width:${
+              total
+              ?accepted.length/
+                total*100
+              :0
+            }%
+          "></i>
+
+        </div>
+
+        <div
+          class="muted"
+          style="margin-top:12px"
+        >
+          Offen
+        </div>
+
+        <div class="bar">
+
+          <i style="
+            width:${
+              total
+              ?open.length/
+                total*100
+              :0
+            }%
+          "></i>
 
         </div>
 
@@ -1719,88 +2743,134 @@ function analytics(){
         Deine wichtigsten Kennzahlen
       </h2>
 
-      <table class="table">
+      <div class="table-wrap">
 
-        <tbody>
+        <table class="table">
 
-          <tr>
-            <td>Gesamtzahl Angebote</td>
-            <td>
-              <b>${total}</b>
-            </td>
-          </tr>
+          <tbody>
 
-          <tr>
-            <td>Gesamtes Angebotsvolumen</td>
-            <td>
-              <b>${money(volume)}</b>
-            </td>
-          </tr>
+            <tr>
+              <td>
+                Gesamtzahl Angebote
+              </td>
+              <td>
+                <b>${total}</b>
+              </td>
+            </tr>
 
-          <tr>
-            <td>Gewonnener Umsatz</td>
-            <td>
-              <b>${money(won)}</b>
-            </td>
-          </tr>
+            <tr>
+              <td>
+                Gesamtes Angebotsvolumen
+              </td>
+              <td>
+                <b>${money(volume)}</b>
+              </td>
+            </tr>
 
-          <tr>
-            <td>Offene Pipeline</td>
-            <td>
-              <b>${money(openVolume)}</b>
-            </td>
-          </tr>
+            <tr>
+              <td>
+                Gewonnener Umsatz
+              </td>
+              <td>
+                <b>${money(won)}</b>
+              </td>
+            </tr>
 
-          <tr>
-            <td>Durchschnittlicher Angebotswert</td>
-            <td>
-              <b>${money(average)}</b>
-            </td>
-          </tr>
+            <tr>
+              <td>
+                Offene Pipeline
+              </td>
+              <td>
+                <b>${money(openVolume)}</b>
+              </td>
+            </tr>
 
-          <tr>
-            <td>Abschlussquote</td>
-            <td>
-              <b>${closeRate}%</b>
-            </td>
-          </tr>
+            <tr>
+              <td>
+                Bruttogewinn
+              </td>
+              <td>
+                <b>${money(profit)}</b>
+              </td>
+            </tr>
 
-        </tbody>
+            <tr>
+              <td>
+                Ø Angebotswert
+              </td>
+              <td>
+                <b>${money(average)}</b>
+              </td>
+            </tr>
 
-      </table>
+            <tr>
+              <td>
+                Abschlussquote
+              </td>
+              <td>
+                <b>${closeRate}%</b>
+              </td>
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
 
     </div>
+
     `
   );
+
 }
+
+/* =========================
+   CUSTOMERS
+========================= */
 
 function customers(){
 
   const map={};
 
-  state.offers.forEach(offer=>{
+  state.offers.forEach(
+    offer=>{
 
-    const key=
-      offer.customer.company||
-      "Unbekannt";
+      const key=
+        offer.customer.company||
+        "Unbekannt";
 
-    if(!map[key]){
-      map[key]={
-        customer:offer.customer,
-        count:0,
-        value:0
-      };
+      if(!map[key]){
+
+        map[key]={
+          customer:
+            offer.customer,
+          count:0,
+          value:0,
+          won:0
+        };
+
+      }
+
+      map[key].count++;
+
+      map[key].value+=
+        totals(offer).gross;
+
+      if(status(offer)==="Angenommen"){
+        map[key].won+=
+          totals(offer).gross;
+      }
+
     }
-
-    map[key].count++;
-    map[key].value+=totals(offer).gross;
-  });
+  );
 
   layout(
     "Kunden",
     "Kunden aus deinen Angeboten",
 
     `
+
     <div class="customer-grid">
 
       ${
@@ -1810,22 +2880,37 @@ function customers(){
           <div class="customer-card">
 
             <h3>
-              ${esc(x.customer.company)}
+              ${esc(
+                x.customer.company||
+                "Unbekannt"
+              )}
             </h3>
 
             <p>
-              ${esc(x.customer.email||"")}
+              ${esc(
+                x.customer.email||""
+              )}
             </p>
 
             <p>
-              ${esc(x.customer.phone||"")}
+              ${esc(
+                x.customer.phone||""
+              )}
             </p>
 
             <p>
               <b>${x.count}</b>
               Angebote
-              ·
+            </p>
+
+            <p>
+              Volumen:
               <b>${money(x.value)}</b>
+            </p>
+
+            <p>
+              Gewonnen:
+              <b>${money(x.won)}</b>
             </p>
 
           </div>
@@ -1841,88 +2926,667 @@ function customers(){
       }
 
     </div>
+
     `
   );
+
 }
 
+/* =========================
+   CATALOG
+========================= */
+
 function catalog(){
+
+  const filtered=
+    state.catalog
+    .filter(item=>{
+
+      const q=
+        catalogSearch
+        .trim()
+        .toLowerCase();
+
+      if(!q)return true;
+
+      return[
+        item.articleNo,
+        item.name,
+        item.unit
+      ]
+      .join(" ")
+      .toLowerCase()
+      .includes(q);
+
+    });
+
+  const totalMargin=
+    state.catalog.reduce(
+      (sum,x)=>
+        sum+
+        (
+          number(x.price)-
+          number(x.cost)
+        ),
+      0
+    );
+
+  const avgMargin=
+    state.catalog.length
+    ?state.catalog.reduce(
+      (sum,x)=>{
+
+        const p=
+          number(x.price);
+
+        const c=
+          number(x.cost);
+
+        return sum+
+          (
+            p
+            ?(p-c)/p*100
+            :0
+          );
+
+      },
+      0
+    )/state.catalog.length
+    :0;
 
   layout(
     "Preiskatalog",
     "Deine Preise und internen Kosten",
-
     `
+
     <div class="panel">
 
-      <table class="table">
+      <div class="catalog-summary">
 
-        <thead>
+        <div class="catalog-stat">
 
-          <tr>
-            <th>Leistung</th>
-            <th>Einheit</th>
-            <th>Verkauf</th>
-            <th>Kosten</th>
-            <th>Marge</th>
-          </tr>
+          <span>
+            Artikel
+          </span>
 
-        </thead>
+          <b>
+            ${state.catalog.length}
+          </b>
 
-        <tbody>
+        </div>
 
-          ${
-            state.catalog.map(x=>{
+        <div class="catalog-stat">
 
-              const margin=
-                Number(x.price)-Number(x.cost);
+          <span>
+            Gesamtmarge je Einheit
+          </span>
 
-              const percent=
-                x.price
-                ?Math.round(
-                  margin/x.price*100
-                )
-                :0;
+          <b>
+            ${money(totalMargin)}
+          </b>
 
-              return`
+        </div>
 
+        <div class="catalog-stat">
+
+          <span>
+            Ø Marge
+          </span>
+
+          <b>
+            ${Math.round(avgMargin)}%
+          </b>
+
+        </div>
+
+      </div>
+
+      <div class="catalog-toolbar">
+
+        <input
+          class="search"
+          placeholder="Artikel suchen..."
+          value="${esc(catalogSearch)}"
+          oninput="catalogSearch=this.value;catalog()"
+        >
+
+        <button
+          class="btn dark"
+          onclick="openCatalogModal()"
+        >
+          + Artikel hinzufügen
+        </button>
+
+      </div>
+
+      <div class="table-wrap">
+
+        <table class="table">
+
+          <thead>
+
+            <tr>
+              <th>Artikel-Nr.</th>
+              <th>Leistung</th>
+              <th>Einheit</th>
+              <th>Verkauf</th>
+              <th>Einkauf</th>
+              <th>Marge</th>
+              <th></th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            ${
+              filtered.length
+              ?filtered.map(
+                catalogRow
+              ).join("")
+              :`
                 <tr>
-
-                  <td>
-                    ${esc(x.name)}
+                  <td
+                    colspan="7"
+                    class="empty"
+                  >
+                    Keine Artikel gefunden.
                   </td>
-
-                  <td>
-                    ${esc(x.unit)}
-                  </td>
-
-                  <td>
-                    ${money(x.price)}
-                  </td>
-
-                  <td>
-                    ${money(x.cost)}
-                  </td>
-
-                  <td>
-                    ${money(margin)}
-                    (${percent}%)
-                  </td>
-
                 </tr>
+              `
+            }
 
-              `;
+          </tbody>
 
-            }).join("")
-          }
+        </table>
 
-        </tbody>
-
-      </table>
+      </div>
 
     </div>
+
     `
   );
+
 }
+
+function catalogRow(item){
+
+  const margin=
+    number(item.price)-
+    number(item.cost);
+
+  const percent=
+    number(item.price)
+    ?Math.round(
+      margin/
+      number(item.price)*
+      100
+    )
+    :0;
+
+  return`
+
+    <tr>
+
+      <td>
+        <b>
+          ${esc(
+            item.articleNo||"-"
+          )}
+        </b>
+      </td>
+
+      <td>
+        ${esc(item.name)}
+      </td>
+
+      <td>
+        ${esc(item.unit)}
+      </td>
+
+      <td>
+        ${money(item.price)}
+      </td>
+
+      <td>
+        ${money(item.cost)}
+      </td>
+
+      <td>
+
+        <span class="${
+          margin>=0
+          ?"margin-positive"
+          :"margin-negative"
+        }">
+
+          ${money(margin)}
+          (${percent}%)
+
+        </span>
+
+      </td>
+
+      <td>
+
+        <div class="table-actions">
+
+          <button
+            class="btn small"
+            onclick="openCatalogModal('${item.id}')"
+          >
+            ✏️
+          </button>
+
+          <button
+            class="btn small danger"
+            onclick="deleteCatalogItem('${item.id}')"
+          >
+            🗑️
+          </button>
+
+        </div>
+
+      </td>
+
+    </tr>
+
+  `;
+
+}
+
+function openCatalogModal(id){
+
+  const item=
+    id
+    ?state.catalog.find(
+      x=>x.id===id
+    )
+    :null;
+
+  const modal=
+    document.getElementById("modal");
+
+  modal.innerHTML=`
+
+    <div
+      class="modal-box"
+      onclick="event.stopPropagation()"
+    >
+
+      <div class="modal-head">
+
+        <h2>
+          ${
+            item
+            ?"Artikel bearbeiten"
+            :"Artikel hinzufügen"
+          }
+        </h2>
+
+        <button
+          class="btn small"
+          onclick="closeModal()"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <div class="formgrid">
+
+        <div class="field">
+
+          <label>
+            Artikelnummer
+          </label>
+
+          <input
+            id="catArticleNo"
+            value="${esc(
+              item?.articleNo||""
+            )}"
+            placeholder="z.B. SHK-009"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Einheit
+          </label>
+
+          <select id="catUnit">
+
+            ${
+              [
+                "Stk.",
+                "Std.",
+                "Pausch.",
+                "m",
+                "m²",
+                "m³",
+                "kg",
+                "Set"
+              ]
+              .map(unit=>`
+
+                <option
+                  value="${unit}"
+                  ${
+                    item?.unit===unit
+                    ?"selected"
+                    :""
+                  }
+                >
+                  ${unit}
+                </option>
+
+              `)
+              .join("")
+            }
+
+          </select>
+
+        </div>
+
+        <div class="field full">
+
+          <label>
+            Leistung / Artikel
+          </label>
+
+          <input
+            id="catName"
+            value="${esc(
+              item?.name||""
+            )}"
+            placeholder="z.B. Wärmepumpe"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Verkaufspreis netto (€)
+          </label>
+
+          <input
+            id="catPrice"
+            type="number"
+            min="0"
+            step="0.01"
+            value="${
+              item
+              ?number(item.price)
+              :""
+            }"
+            oninput="updateCatalogPreview()"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            Einkaufspreis netto (€)
+          </label>
+
+          <input
+            id="catCost"
+            type="number"
+            min="0"
+            step="0.01"
+            value="${
+              item
+              ?number(item.cost)
+              :""
+            }"
+            oninput="updateCatalogPreview()"
+          >
+
+        </div>
+
+      </div>
+
+      <div
+        class="profit-box"
+        id="catalogPreview"
+      >
+        Marge wird berechnet...
+      </div>
+
+      <div class="modal-actions">
+
+        <button
+          class="btn"
+          onclick="closeModal()"
+        >
+          Abbrechen
+        </button>
+
+        <button
+          class="btn dark"
+          onclick="${
+            item
+            ?`saveCatalogItem('${item.id}')`
+            :"saveCatalogItem()"
+          }"
+        >
+          Speichern
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+  modal.classList.remove("hidden");
+
+  updateCatalogPreview();
+
+}
+
+function updateCatalogPreview(){
+
+  const price=
+    number(
+      document.getElementById(
+        "catPrice"
+      )?.value
+    );
+
+  const cost=
+    number(
+      document.getElementById(
+        "catCost"
+      )?.value
+    );
+
+  const margin=
+    price-cost;
+
+  const percent=
+    price
+    ?Math.round(
+      margin/price*100
+    )
+    :0;
+
+  const box=
+    document.getElementById(
+      "catalogPreview"
+    );
+
+  if(!box)return;
+
+  box.innerHTML=`
+
+    <div class="profit-row">
+      <span>Verkauf</span>
+      <b>${money(price)}</b>
+    </div>
+
+    <div class="profit-row">
+      <span>Einkauf</span>
+      <b>${money(cost)}</b>
+    </div>
+
+    <div class="profit-row">
+      <span>Marge</span>
+      <b class="${
+        margin>=0
+        ?"margin-positive"
+        :"margin-negative"
+      }">
+        ${money(margin)}
+        · ${percent}%
+      </b>
+    </div>
+
+  `;
+
+}
+
+function saveCatalogItem(id){
+
+  const articleNo=
+    document.getElementById(
+      "catArticleNo"
+    ).value.trim();
+
+  const name=
+    document.getElementById(
+      "catName"
+    ).value.trim();
+
+  const unit=
+    document.getElementById(
+      "catUnit"
+    ).value;
+
+  const price=
+    number(
+      document.getElementById(
+        "catPrice"
+      ).value
+    );
+
+  const cost=
+    number(
+      document.getElementById(
+        "catCost"
+      ).value
+    );
+
+  if(!name){
+
+    toast(
+      "Bitte eine Bezeichnung eingeben"
+    );
+
+    return;
+
+  }
+
+  if(id){
+
+    const item=
+      state.catalog.find(
+        x=>x.id===id
+      );
+
+    if(!item)return;
+
+    item.articleNo=
+      articleNo||
+      item.articleNo;
+
+    item.name=name;
+    item.unit=unit;
+    item.price=price;
+    item.cost=cost;
+
+    toast("Artikel aktualisiert");
+
+  }else{
+
+    const newItem={
+
+      id:createId(),
+
+      articleNo:
+        articleNo||
+        nextArticleNo(),
+
+      name,
+      unit,
+      price,
+      cost
+
+    };
+
+    state.catalog.push(
+      newItem
+    );
+
+    toast("Artikel hinzugefügt");
+
+  }
+
+  save();
+
+  closeModal();
+
+  catalog();
+
+}
+
+function nextArticleNo(){
+
+  return`
+    SHK-${String(
+      state.catalog.length+1
+    ).padStart(3,"0")}
+  `;
+
+}
+
+function deleteCatalogItem(id){
+
+  const item=
+    state.catalog.find(
+      x=>x.id===id
+    );
+
+  if(!item)return;
+
+  const yes=
+    confirm(
+      `"${item.name}" wirklich löschen?`
+    );
+
+  if(!yes)return;
+
+  state.catalog=
+    state.catalog.filter(
+      x=>x.id!==id
+    );
+
+  save();
+
+  toast("Artikel gelöscht");
+
+  catalog();
+
+}
+
+/* =========================
+   SETTINGS
+========================= */
 
 function settings(){
 
@@ -1931,6 +3595,7 @@ function settings(){
     "Firmendaten für deine Angebote",
 
     `
+
     <div class="panel">
 
       <div class="formgrid">
@@ -1943,7 +3608,9 @@ function settings(){
 
           <input
             id="setCompany"
-            value="${esc(state.settings.company)}"
+            value="${esc(
+              state.settings.company
+            )}"
           >
 
         </div>
@@ -1956,7 +3623,9 @@ function settings(){
 
           <input
             id="setOwner"
-            value="${esc(state.settings.owner)}"
+            value="${esc(
+              state.settings.owner
+            )}"
           >
 
         </div>
@@ -1967,7 +3636,9 @@ function settings(){
             Adresse
           </label>
 
-          <textarea id="setAddress">${esc(
+          <textarea
+            id="setAddress"
+          >${esc(
             state.settings.address
           )}</textarea>
 
@@ -1981,7 +3652,9 @@ function settings(){
 
           <input
             id="setIban"
-            value="${esc(state.settings.iban)}"
+            value="${esc(
+              state.settings.iban
+            )}"
           >
 
         </div>
@@ -1997,51 +3670,75 @@ function settings(){
       </button>
 
     </div>
+
     `
   );
+
 }
 
 function saveSettings(){
 
   state.settings.company=
-    document.getElementById("setCompany").value;
+    document.getElementById(
+      "setCompany"
+    ).value;
 
   state.settings.owner=
-    document.getElementById("setOwner").value;
+    document.getElementById(
+      "setOwner"
+    ).value;
 
   state.settings.address=
-    document.getElementById("setAddress").value;
+    document.getElementById(
+      "setAddress"
+    ).value;
 
   state.settings.iban=
-    document.getElementById("setIban").value;
+    document.getElementById(
+      "setIban"
+    ).value;
 
   save();
 
   toast("Gespeichert");
+
 }
+
+/* =========================
+   NEW / EDIT OFFER
+========================= */
 
 function newOffer(){
 
   draft={
     step:1,
+
+    editingId:null,
+
     customer:{
       company:"",
       email:"",
       phone:"",
       address:""
     },
+
     request:"",
     items:[],
     notes:"",
     followDate:""
+
   };
 
   page="create";
 
   render();
+
 }
 
 function create(){
+
+  const editing=
+    !!draft.editingId;
 
   const steps=[
     "1 Kunde",
@@ -2065,42 +3762,76 @@ function create(){
         <div class="formgrid">
 
           <div class="field">
-            <label>Firma / Name</label>
+
+            <label>
+              Firma / Name
+            </label>
+
             <input
               id="cCompany"
-              value="${esc(draft.customer.company)}"
+              value="${esc(
+                draft.customer.company
+              )}"
             >
+
           </div>
 
           <div class="field">
-            <label>E-Mail</label>
+
+            <label>
+              E-Mail
+            </label>
+
             <input
               id="cEmail"
-              value="${esc(draft.customer.email)}"
+              type="email"
+              value="${esc(
+                draft.customer.email
+              )}"
             >
+
           </div>
 
           <div class="field">
-            <label>Telefon</label>
+
+            <label>
+              Telefon
+            </label>
+
             <input
               id="cPhone"
-              value="${esc(draft.customer.phone)}"
+              value="${esc(
+                draft.customer.phone
+              )}"
             >
+
           </div>
 
           <div class="field">
-            <label>Adresse</label>
+
+            <label>
+              Adresse
+            </label>
+
             <input
               id="cAddress"
-              value="${esc(draft.customer.address)}"
+              value="${esc(
+                draft.customer.address
+              )}"
             >
+
           </div>
 
         </div>
 
         <div class="wizard-actions">
 
-          <span></span>
+          <button
+            class="btn"
+            onclick="go('offers')"
+          >
+            Abbrechen
+          </button>
 
           <button
             class="btn dark"
@@ -2136,7 +3867,9 @@ function create(){
         <textarea
           id="request"
           placeholder="Beispiel: Kunde benötigt eine Wärmepumpe inklusive Montage und Anfahrt."
-        >${esc(draft.request)}</textarea>
+        >${esc(
+          draft.request
+        )}</textarea>
 
         <div style="margin-top:12px">
 
@@ -2162,16 +3895,21 @@ function create(){
               <ul>
 
                 ${
-                  draft.items.map(i=>`
+                  draft.items.map(
+                    i=>`
 
-                    <li>
-                      ${i.qty}×
-                      ${esc(i.name)}
-                      –
-                      ${money(i.price)}
-                    </li>
+                      <li>
+                        ${number(i.qty)}×
+                        ${esc(i.name)}
+                        –
+                        ${money(
+                          number(i.price)*
+                          number(i.qty)
+                        )}
+                      </li>
 
-                  `).join("")
+                    `
+                  ).join("")
                 }
 
               </ul>
@@ -2217,79 +3955,21 @@ function create(){
         </h2>
 
         ${
-          draft.items.map((item,index)=>`
-
-            <div class="itemrow">
-
-              <input
-                class="itemname"
-                value="${esc(item.name)}"
-                onchange="
-                  draft.items[${index}].name=this.value
-                "
-              >
-
-              <input
-                type="number"
-                min="1"
-                value="${item.qty}"
-                onchange="
-                  draft.items[${index}].qty=this.value
-                "
-              >
-
-              <input
-                type="number"
-                min="0"
-                step="0.01"
-                value="${item.price}"
-                onchange="
-                  draft.items[${index}].price=this.value
-                "
-              >
-
-              <select
-                onchange="
-                  draft.items[${index}].unit=this.value
-                "
-              >
-                <option>
-                  ${esc(item.unit||"Stk.")}
-                </option>
-              </select>
-
-              <button
-                class="btn small"
-                onclick="
-                  draft.items.splice(${index},1);
-                  render();
-                "
-              >
-                ×
-              </button>
-
-            </div>
-
-          `).join("")
+          draft.items.map(
+            (item,index)=>
+              offerItemRow(item,index)
+          ).join("")
           ||
           `
-          <div class="muted">
-            Noch keine Positionen.
-          </div>
+            <div class="muted">
+              Noch keine Positionen.
+            </div>
           `
         }
 
         <button
           class="btn"
-          onclick="
-            draft.items.push({
-              name:'Neue Position',
-              unit:'Stk.',
-              qty:1,
-              price:0
-            });
-            render();
-          "
+          onclick="addDraftItem()"
         >
           + Position
         </button>
@@ -2305,7 +3985,9 @@ function create(){
 
           <textarea
             id="notes"
-          >${esc(draft.notes)}</textarea>
+          >${esc(
+            draft.notes
+          )}</textarea>
 
         </div>
 
@@ -2321,7 +4003,9 @@ function create(){
           <input
             id="followDate"
             type="date"
-            value="${esc(draft.followDate)}"
+            value="${esc(
+              draft.followDate
+            )}"
           >
 
         </div>
@@ -2352,36 +4036,185 @@ function create(){
 
   else{
 
-    body=previewDraft();
+    body=
+      previewDraft();
 
   }
 
   layout(
-    "Neues Angebot",
-    "In wenigen Schritten zum fertigen Angebot",
+    editing
+    ?"Angebot bearbeiten"
+    :"Neues Angebot",
+
+    editing
+    ?"Bestehendes Angebot aktualisieren"
+    :"In wenigen Schritten zum fertigen Angebot",
 
     `
+
       <div class="steps">
 
         ${
-          steps.map((step,index)=>`
+          steps.map(
+            (step,index)=>`
 
-            <div class="step ${
-              draft.step===index+1
-              ?"active"
-              :""
-            }">
-              ${step}
-            </div>
+              <div class="step ${
+                draft.step===index+1
+                ?"active"
+                :""
+              }">
+                ${step}
+              </div>
 
-          `).join("")
+            `
+          ).join("")
         }
 
       </div>
 
       ${body}
+
     `
   );
+
+}
+
+function offerItemRow(item,index){
+
+  return`
+
+    <div class="itemrow">
+
+      <div>
+
+        <div class="item-label">
+          Position
+        </div>
+
+        <input
+          class="itemname"
+          value="${esc(
+            item.name
+          )}"
+          onchange="
+            draft.items[${index}].name=this.value
+          "
+        >
+
+      </div>
+
+      <div>
+
+        <div class="item-label">
+          Menge
+        </div>
+
+        <input
+          type="number"
+          min="0"
+          step="0.01"
+          value="${number(item.qty)}"
+          onchange="
+            draft.items[${index}].qty=number(this.value);
+            render();
+          "
+        >
+
+      </div>
+
+      <div>
+
+        <div class="item-label">
+          Preis netto
+        </div>
+
+        <input
+          type="number"
+          min="0"
+          step="0.01"
+          value="${number(item.price)}"
+          onchange="
+            draft.items[${index}].price=number(this.value);
+            render();
+          "
+        >
+
+      </div>
+
+      <div>
+
+        <div class="item-label">
+          Einheit
+        </div>
+
+        <select
+          onchange="
+            draft.items[${index}].unit=this.value
+          "
+        >
+
+          ${
+            [
+              "Stk.",
+              "Std.",
+              "Pausch.",
+              "m",
+              "m²",
+              "m³",
+              "kg",
+              "Set"
+            ]
+            .map(unit=>`
+
+              <option
+                value="${unit}"
+                ${
+                  item.unit===unit
+                  ?"selected"
+                  :""
+                }
+              >
+                ${unit}
+              </option>
+
+            `)
+            .join("")
+          }
+
+        </select>
+
+      </div>
+
+      <button
+        class="btn small danger remove-item"
+        onclick="
+          draft.items.splice(${index},1);
+          render();
+        "
+      >
+        ×
+      </button>
+
+    </div>
+
+  `;
+
+}
+
+function addDraftItem(){
+
+  draft.items.push({
+
+    name:"Neue Position",
+    unit:"Stk.",
+    qty:1,
+    price:0,
+    cost:0
+
+  });
+
+  render();
+
 }
 
 function stepBack(){
@@ -2393,6 +4226,7 @@ function stepBack(){
     render();
 
   }
+
 }
 
 function stepNext(){
@@ -2400,10 +4234,25 @@ function stepNext(){
   if(draft.step===1){
 
     draft.customer={
-      company:document.getElementById("cCompany").value,
-      email:document.getElementById("cEmail").value,
-      phone:document.getElementById("cPhone").value,
-      address:document.getElementById("cAddress").value
+      company:
+        document.getElementById(
+          "cCompany"
+        ).value,
+
+      email:
+        document.getElementById(
+          "cEmail"
+        ).value,
+
+      phone:
+        document.getElementById(
+          "cPhone"
+        ).value,
+
+      address:
+        document.getElementById(
+          "cAddress"
+        ).value
     };
 
     draft.step=2;
@@ -2413,7 +4262,9 @@ function stepNext(){
   else if(draft.step===2){
 
     draft.request=
-      document.getElementById("request").value;
+      document.getElementById(
+        "request"
+      ).value;
 
     draft.step=3;
 
@@ -2422,119 +4273,172 @@ function stepNext(){
   else if(draft.step===3){
 
     draft.notes=
-      document.getElementById("notes").value;
+      document.getElementById(
+        "notes"
+      ).value;
 
     draft.followDate=
-      document.getElementById("followDate").value;
+      document.getElementById(
+        "followDate"
+      ).value;
+
+    /*
+      Positionen bekommen die aktuellen
+      Einkaufspreise aus dem Katalog,
+      falls noch kein cost gespeichert ist.
+    */
+
+    draft.items=
+      draft.items.map(item=>{
+
+        if(
+          item.cost===undefined||
+          item.cost===null
+        ){
+
+          item.cost=
+            catalogCost(item.name);
+
+        }
+
+        return item;
+
+      });
 
     draft.step=4;
 
   }
 
   render();
+
 }
+
+/* =========================
+   LOCAL AI
+========================= */
 
 function analyze(){
 
   draft.request=
-    document.getElementById("request").value;
+    document.getElementById(
+      "request"
+    ).value;
 
   const text=
     draft.request.toLowerCase();
 
   draft.items=[];
 
-  state.catalog.forEach(item=>{
+  state.catalog.forEach(
+    item=>{
 
-    const name=
-      item.name.toLowerCase();
+      const name=
+        item.name.toLowerCase();
 
-    let found=false;
+      let found=
+        text.includes(name);
 
-    if(text.includes(name)){
-      found=true;
-    }
+      const aliases={
 
-    const aliases={
-      "wärmepumpe":[
-        "wärmepumpe",
-        "wp",
-        "luftwärmepumpe"
-      ],
+        "wärmepumpe":[
+          "wärmepumpe",
+          "wp",
+          "luftwärmepumpe",
+          "luft wasser wärmepumpe"
+        ],
 
-      "gas-brennwerttherme":[
-        "gastherme",
-        "brennwerttherme",
-        "gasheizung"
-      ],
+        "gas-brennwerttherme":[
+          "gastherme",
+          "brennwerttherme",
+          "gasheizung"
+        ],
 
-      "heizkörper":[
-        "heizkörper",
-        "heizung",
-        "radiator"
-      ],
+        "heizkörper":[
+          "heizkörper",
+          "heizkörper",
+          "radiator"
+        ],
 
-      "waschtisch":[
-        "waschtisch",
-        "waschbecken"
-      ],
+        "waschtisch":[
+          "waschtisch",
+          "waschbecken",
+          "waschplatz"
+        ],
 
-      "toilette":[
-        "toilette",
-        "wc",
-        "klo"
-      ],
+        "toilette":[
+          "toilette",
+          "wc",
+          "klo"
+        ],
 
-      "montage / arbeitszeit":[
-        "montage",
-        "arbeitszeit",
-        "einbau"
-      ],
+        "montage / arbeitszeit":[
+          "montage",
+          "arbeitszeit",
+          "einbau",
+          "installation"
+        ],
 
-      "demontage":[
-        "demontage",
-        "ausbau"
-      ],
+        "demontage":[
+          "demontage",
+          "ausbau",
+          "abbau"
+        ],
 
-      "anfahrt":[
-        "anfahrt",
-        "fahrt",
-        "anfahrtskosten"
-      ]
-    };
+        "anfahrt":[
+          "anfahrt",
+          "fahrt",
+          "anfahrtskosten"
+        ]
 
-    const list=aliases[item.name.toLowerCase()]||[];
+      };
 
-    if(
-      list.some(
-        alias=>text.includes(alias)
-      )
-    ){
-      found=true;
-    }
+      const list=
+        aliases[name]||[];
 
-    if(found){
+      if(
+        list.some(
+          alias=>
+            text.includes(alias)
+        )
+      ){
 
-      let qty=1;
+        found=true;
 
-      const numberMatch=text.match(
-        /(\d+)\s*(x|stück|stk)/i
-      );
-
-      if(numberMatch){
-        qty=Number(numberMatch[1]);
       }
 
-      draft.items.push({
-        name:item.name,
-        unit:item.unit,
-        qty,
-        price:item.price
-      });
+      if(found){
+
+        let qty=
+          detectQuantity(
+            text,
+            list.length
+            ?list
+            :[name]
+          );
+
+        draft.items.push({
+
+          name:item.name,
+
+          articleNo:
+            item.articleNo,
+
+          unit:item.unit,
+
+          qty,
+
+          price:
+            number(item.price),
+
+          cost:
+            number(item.cost)
+
+        });
+
+      }
 
     }
-
-  });
+  );
 
   toast(
     draft.items.length
@@ -2543,21 +4447,95 @@ function analyze(){
   );
 
   render();
+
 }
+
+function detectQuantity(
+  text,
+  aliases
+){
+
+  for(
+    const alias of aliases
+  ){
+
+    const escaped=
+      alias.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+      );
+
+    const regex=
+      new RegExp(
+        `(\\d+(?:[,.]\\d+)?)\\s*(?:x|stück|stk\\.?|mal)?\\s*(?:${escaped})`,
+        "i"
+      );
+
+    const match=
+      text.match(regex);
+
+    if(match){
+
+      return number(
+        String(
+          match[1]
+        ).replace(",",".")
+      )||1;
+
+    }
+
+  }
+
+  const generic=
+    text.match(
+      /(\d+)\s*(x|stück|stk|mal)/i
+    );
+
+  return generic
+    ?number(generic[1])
+    :1;
+
+}
+
+/* =========================
+   PREVIEW
+========================= */
 
 function previewDraft(){
 
   const fake={
-    customer:draft.customer,
-    items:draft.items,
-    notes:draft.notes,
-    no:"NEU",
-    date:new Date()
-      .toISOString()
-      .slice(0,10)
+
+    customer:
+      draft.customer,
+
+    items:
+      draft.items,
+
+    notes:
+      draft.notes,
+
+    no:
+      draft.editingId
+      ?(
+        state.offers.find(
+          x=>x.id===draft.editingId
+        )?.no||""
+      )
+      :"NEU",
+
+    date:
+      draft.editingId
+      ?(
+        state.offers.find(
+          x=>x.id===draft.editingId
+        )?.date||
+        todayString()
+      )
+      :todayString()
+
   };
 
-  return `
+  return`
 
     <div class="panel">
 
@@ -2575,9 +4553,17 @@ function previewDraft(){
 
         <button
           class="btn dark"
-          onclick="saveOffer()"
+          onclick="${
+            draft.editingId
+            ?"updateOffer()"
+            :"saveOffer()"
+          }"
         >
-          ✓ Angebot speichern
+          ✓ ${
+            draft.editingId
+            ?"Änderungen speichern"
+            :"Angebot speichern"
+          }
         </button>
 
       </div>
@@ -2587,6 +4573,7 @@ function previewDraft(){
     </div>
 
   `;
+
 }
 
 function preview(id){
@@ -2610,13 +4597,28 @@ function preview(id){
           Angebot ${esc(offer.no)}
         </h1>
 
-        <div class="sub">
+        <div class="offer-meta">
+
           ${badge(status(offer))}
+
+          ${
+            offer.followDate
+            ?`
+              <span class="badge">
+                Follow-up:
+                ${esc(
+                  offer.followDate
+                )}
+              </span>
+            `
+            :""
+          }
+
         </div>
 
       </div>
 
-      <div>
+      <div class="quick-actions">
 
         <button
           class="btn"
@@ -2626,10 +4628,38 @@ function preview(id){
         </button>
 
         <button
+          class="btn"
+          onclick="editOffer('${offer.id}')"
+        >
+          Bearbeiten
+        </button>
+
+        <button
+          class="btn"
+          onclick="duplicateOffer('${offer.id}')"
+        >
+          Duplizieren
+        </button>
+
+        <button
+          class="btn"
+          onclick="changeStatus('${offer.id}')"
+        >
+          Status
+        </button>
+
+        <button
           class="btn dark"
           onclick="window.print()"
         >
           Drucken / PDF
+        </button>
+
+        <button
+          class="btn danger"
+          onclick="deleteOffer('${offer.id}')"
+        >
+          Löschen
         </button>
 
       </div>
@@ -2645,13 +4675,21 @@ function preview(id){
   `;
 
   nav();
+
 }
 
 function previewHtml(offer){
 
-  const total=totals(offer);
+  const total=
+    totals(offer);
 
-  return `
+  const profit=
+    offerProfit(offer);
+
+  const margin=
+    offerMarginPercent(offer);
+
+  return`
 
     <div class="preview">
 
@@ -2666,14 +4704,19 @@ function previewHtml(offer){
           <div style="margin-top:8px">
 
             <b>
-              ${esc(state.settings.company)}
+              ${esc(
+                state.settings.company
+              )}
             </b>
 
             <br>
 
             ${esc(
               state.settings.address
-            ).replace(/\n/g,"<br>")}
+            ).replace(
+              /\n/g,
+              "<br>"
+            )}
 
           </div>
 
@@ -2682,16 +4725,16 @@ function previewHtml(offer){
         <div>
 
           <b>
-            ${esc(offer.no)}
+            ${esc(
+              offer.no||"NEU"
+            )}
           </b>
 
           <br>
 
           ${esc(
             offer.date||
-            new Date()
-              .toISOString()
-              .slice(0,10)
+            todayString()
           )}
 
           <br><br>
@@ -2763,20 +4806,26 @@ function previewHtml(offer){
                 </td>
 
                 <td>
-                  ${item.qty}
+                  ${number(item.qty)}
                 </td>
 
                 <td>
-                  ${esc(item.unit||"Stk.")}
-                </td>
-
-                <td>
-                  ${money(item.price)}
+                  ${esc(
+                    item.unit||
+                    "Stk."
+                  )}
                 </td>
 
                 <td>
                   ${money(
-                    item.qty*item.price
+                    item.price
+                  )}
+                </td>
+
+                <td>
+                  ${money(
+                    number(item.qty)*
+                    number(item.price)
                   )}
                 </td>
 
@@ -2821,7 +4870,10 @@ function previewHtml(offer){
             <p>
               ${esc(
                 offer.notes
-              ).replace(/\n/g,"<br>")}
+              ).replace(
+                /\n/g,
+                "<br>"
+              )}
             </p>
 
           </div>
@@ -2830,55 +4882,277 @@ function previewHtml(offer){
         :""
       }
 
+      <div
+        class="no-print"
+        style="
+          margin-top:35px;
+          border-top:1px solid var(--line);
+          padding-top:18px
+        "
+      >
+
+        <div class="profit-box">
+
+          <div class="profit-row">
+            <span>
+              Interner Einkauf
+            </span>
+            <b>
+              ${money(
+                total.net-profitFromItems
+              )}
+            </b>
+          </div>
+
+          <div class="profit-row">
+            <span>
+              Bruttogewinn
+            </span>
+            <b class="${
+              profit>=0
+              ?"margin-positive"
+              :"margin-negative"
+            }">
+              ${money(profit)}
+            </b>
+          </div>
+
+          <div class="profit-row">
+            <span>
+              Marge
+            </span>
+            <b>
+              ${margin}%
+            </b>
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
 
   `;
+
 }
+
+/* =========================
+   SAVE / UPDATE
+========================= */
 
 function saveOffer(){
 
   const offer={
 
-    id:
-      crypto.randomUUID
-      ?crypto.randomUUID()
-      :String(Date.now()),
+    id:createId(),
 
     no:
       `EO-${state.nextNo++}`,
 
     date:
-      new Date()
-      .toISOString()
-      .slice(0,10),
+      todayString(),
 
     followDate:
       draft.followDate||
-      new Date(
-        Date.now()+7*86400000
-      )
-      .toISOString()
-      .slice(0,10),
+      addDays(7),
 
-    customer:draft.customer,
+    customer:{
+      ...draft.customer
+    },
 
-    items:draft.items,
+    items:
+      draft.items.map(
+        item=>({
 
-    notes:draft.notes,
+          ...item,
 
-    request:draft.request,
+          qty:number(item.qty),
+          price:number(item.price),
+
+          cost:
+            item.cost!==undefined
+            ?number(item.cost)
+            :catalogCost(
+              item.name
+            )
+
+        })
+      ),
+
+    notes:
+      draft.notes,
+
+    request:
+      draft.request,
 
     status:"Offen"
 
   };
 
-  state.offers.push(offer);
+  state.offers.push(
+    offer
+  );
 
   save();
 
   toast("Angebot gespeichert");
 
   preview(offer.id);
+
+}
+
+function updateOffer(){
+
+  const offer=
+    state.offers.find(
+      x=>x.id===draft.editingId
+    );
+
+  if(!offer){
+
+    toast(
+      "Angebot nicht gefunden"
+    );
+
+    return;
+
+  }
+
+  offer.customer={
+    ...draft.customer
+  };
+
+  offer.items=
+    draft.items.map(
+      item=>({
+
+        ...item,
+
+        qty:number(item.qty),
+        price:number(item.price),
+
+        cost:
+          item.cost!==undefined
+          ?number(item.cost)
+          :catalogCost(
+            item.name
+          )
+
+      })
+    );
+
+  offer.notes=
+    draft.notes;
+
+  offer.request=
+    draft.request;
+
+  offer.followDate=
+    draft.followDate||
+    addDays(7);
+
+  save();
+
+  toast("Angebot aktualisiert");
+
+  preview(offer.id);
+
+}
+
+/* =========================
+   MODAL
+========================= */
+
+function closeModal(){
+
+  const modal=
+    document.getElementById(
+      "modal"
+    );
+
+  modal.classList.add(
+    "hidden"
+  );
+
+  modal.innerHTML="";
+
+}
+
+document.getElementById(
+  "modal"
+).addEventListener(
+  "click",
+  event=>{
+
+    if(
+      event.target.id==="modal"
+    ){
+      closeModal();
+    }
+
+  }
+);
+
+/* =========================
+   HELPERS
+========================= */
+
+function createId(){
+
+  if(
+    window.crypto &&
+    crypto.randomUUID
+  ){
+
+    return crypto.randomUUID();
+
+  }
+
+  return String(
+    Date.now()
+  )+
+  String(
+    Math.random()
+  ).slice(2);
+
+}
+
+function todayString(){
+
+  const d=
+    new Date();
+
+  return`
+    ${d.getFullYear()}-
+    ${String(
+      d.getMonth()+1
+    ).padStart(2,"0")}-
+    ${String(
+      d.getDate()
+    ).padStart(2,"0")}
+  `.replace(/\s/g,"");
+
+}
+
+function addDays(days){
+
+  const d=
+    new Date();
+
+  d.setDate(
+    d.getDate()+days
+  );
+
+  return`
+    ${d.getFullYear()}-
+    ${String(
+      d.getMonth()+1
+    ).padStart(2,"0")}-
+    ${String(
+      d.getDate()
+    ).padStart(2,"0")}
+  `.replace(/\s/g,"");
+
 }
 
 function go(target){
@@ -2886,6 +5160,7 @@ function go(target){
   page=target;
 
   render();
+
 }
 
 function render(){
@@ -2922,7 +5197,17 @@ function render(){
     create();
   }
 
+  else if(page==="preview"){
+    /*
+      preview wird direkt gerendert.
+    */
+  }
+
 }
+
+/* =========================
+   NAVIGATION
+========================= */
 
 document.addEventListener(
   "click",
@@ -2945,7 +5230,63 @@ document.addEventListener(
   }
 );
 
+/*
+  Kleine Korrektur für Gewinnanzeige:
+  Einkaufssumme wird separat berechnet.
+*/
+
+const originalTotals=
+  totals;
+
+function totals(o){
+
+  const net=
+    (o.items||[]).reduce(
+      (sum,item)=>
+        sum+
+        number(item.qty)*
+        number(item.price),
+      0
+    );
+
+  const cost=
+    (o.items||[]).reduce(
+      (sum,item)=>
+        sum+
+        number(item.qty)*
+        (
+          item.cost!==undefined
+          ?number(item.cost)
+          :catalogCost(item.name)
+        ),
+      0
+    );
+
+  return{
+
+    net,
+
+    cost,
+
+    profit:
+      net-cost,
+
+    vat:
+      net*.19,
+
+    gross:
+      net*1.19
+
+  };
+
+}
+
+/* Initialisieren */
+
+save();
+
 render();
+
 </script>
 
 </body>
