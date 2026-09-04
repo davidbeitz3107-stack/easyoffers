@@ -14,15 +14,15 @@
   --muted:#737373;
   --line:#e4e4e7;
   --dark:#111;
-  --soft:#f8f8f8;
   --green:#16803c;
   --orange:#a15c00;
   --red:#b42318;
-  --blue:#175cd3;
   --shadow:0 8px 30px rgba(0,0,0,.06);
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 html,body{
   margin:0;
@@ -31,8 +31,16 @@ html,body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
 
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
+button,
+input,
+textarea,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
 
 .sidebar{
   width:240px;
@@ -50,7 +58,9 @@ button{cursor:pointer}
   padding:5px 10px 28px;
 }
 
-.brand span{color:#999}
+.brand span{
+  color:#999;
+}
 
 .nav button{
   width:100%;
@@ -93,8 +103,27 @@ button{cursor:pointer}
   margin-top:5px;
 }
 
-.muted{
-  color:var(--muted);
+.btn{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:10px 15px;
+  border-radius:9px;
+  font-weight:650;
+}
+
+.btn.dark{
+  background:#111;
+  color:#fff;
+  border-color:#111;
+}
+
+.btn.small{
+  padding:7px 10px;
+  font-size:13px;
+}
+
+.btn.danger{
+  color:var(--red);
 }
 
 .cards{
@@ -172,21 +201,12 @@ button{cursor:pointer}
   outline:none;
 }
 
-.field input:focus,
-.field textarea:focus,
-.field select:focus,
-.itemrow input:focus,
-.itemrow select:focus{
-  border-color:#111;
-}
-
 .field textarea{
   min-height:120px;
   resize:vertical;
 }
 
 .table-wrap{
-  width:100%;
   overflow-x:auto;
 }
 
@@ -206,58 +226,6 @@ button{cursor:pointer}
 .table th{
   color:var(--muted);
   font-size:12px;
-  white-space:nowrap;
-}
-
-.table td{
-  vertical-align:middle;
-}
-
-.table-actions{
-  display:flex;
-  gap:5px;
-  flex-wrap:wrap;
-}
-
-.btn{
-  border:1px solid var(--line);
-  background:#fff;
-  padding:10px 15px;
-  border-radius:9px;
-  font-weight:650;
-}
-
-.btn:hover{
-  background:#f5f5f5;
-}
-
-.btn.dark{
-  background:#111;
-  color:#fff;
-  border-color:#111;
-}
-
-.btn.dark:hover{
-  background:#292929;
-}
-
-.btn.small{
-  padding:7px 10px;
-  font-size:13px;
-}
-
-.btn.danger{
-  color:var(--red);
-  border-color:#f0c9c5;
-}
-
-.btn.danger:hover{
-  background:#fff5f4;
-}
-
-.btn.green{
-  color:var(--green);
-  border-color:#bce5c9;
 }
 
 .badge{
@@ -266,7 +234,6 @@ button{cursor:pointer}
   border-radius:20px;
   font-size:12px;
   background:#eee;
-  white-space:nowrap;
 }
 
 .badge.green{
@@ -284,9 +251,9 @@ button{cursor:pointer}
   color:var(--red);
 }
 
-.badge.blue{
-  background:#eaf1ff;
-  color:var(--blue);
+.badge.gray{
+  background:#eee;
+  color:#666;
 }
 
 .bar{
@@ -337,7 +304,6 @@ button{cursor:pointer}
   justify-content:flex-end;
   align-items:center;
   gap:6px;
-  min-width:0;
 }
 
 .chartcol i{
@@ -505,7 +471,7 @@ button{cursor:pointer}
 
 .itemrow{
   display:grid;
-  grid-template-columns:2fr .7fr .9fr 1fr auto;
+  grid-template-columns:2fr .65fr .9fr 1fr auto;
   gap:8px;
   align-items:end;
   margin-bottom:10px;
@@ -518,12 +484,6 @@ button{cursor:pointer}
   border:1px solid var(--line);
   border-radius:7px;
   background:#fff;
-}
-
-.item-label{
-  font-size:11px;
-  color:var(--muted);
-  margin-bottom:4px;
 }
 
 .ai-box{
@@ -586,98 +546,33 @@ button{cursor:pointer}
   margin-top:18px;
 }
 
-.catalog-toolbar{
+.toolbar{
   display:flex;
-  gap:10px;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:15px;
+  gap:8px;
   flex-wrap:wrap;
+  align-items:center;
 }
 
 .search{
-  min-width:250px;
-  padding:10px 12px;
-  border:1px solid var(--line);
-  border-radius:9px;
-  outline:none;
+  min-width:220px;
 }
 
-.catalog-summary{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.catalog-stat{
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:14px;
-}
-
-.catalog-stat span{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.catalog-stat b{
-  display:block;
-  font-size:20px;
-  margin-top:5px;
-}
-
-.margin-positive{
-  color:var(--green);
+.profit{
   font-weight:700;
 }
 
-.margin-negative{
+.muted{
+  color:var(--muted);
+}
+
+.empty{
+  padding:25px 5px;
+  color:var(--muted);
+}
+
+.overdue{
   color:var(--red);
   font-weight:700;
-}
-
-.modal{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.45);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  z-index:50;
-}
-
-.modal-box{
-  width:min(650px,100%);
-  max-height:90vh;
-  overflow:auto;
-  background:#fff;
-  border-radius:16px;
-  padding:22px;
-  box-shadow:0 20px 60px rgba(0,0,0,.2);
-}
-
-.modal-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:18px;
-}
-
-.modal-head h2{
-  margin:0;
-}
-
-.modal-actions{
-  display:flex;
-  justify-content:flex-end;
-  gap:8px;
-  margin-top:18px;
-}
-
-.hidden{
-  display:none!important;
 }
 
 .mobilebar{
@@ -692,64 +587,76 @@ button{cursor:pointer}
   color:#fff;
   padding:12px 16px;
   border-radius:9px;
-  z-index:60;
+  z-index:50;
 }
 
-.empty{
-  padding:30px 10px;
-  text-align:center;
-  color:var(--muted);
+.hidden{
+  display:none!important;
 }
 
-.offer-meta{
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.45);
+  z-index:40;
   display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-top:8px;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
 }
 
-.profit-box{
-  background:#f8f8f8;
-  border:1px solid var(--line);
-  border-radius:10px;
-  padding:14px;
-  margin-top:15px;
+.modal{
+  background:#fff;
+  width:min(620px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 20px 60px rgba(0,0,0,.2);
 }
 
-.profit-row{
+.modal-head{
   display:flex;
   justify-content:space-between;
-  padding:5px 0;
+  gap:10px;
+  align-items:center;
+  margin-bottom:16px;
 }
 
-.quick-actions{
+.modal-head h2{
+  margin:0;
+}
+
+.modal-actions{
   display:flex;
+  justify-content:flex-end;
   gap:8px;
-  flex-wrap:wrap;
+  margin-top:18px;
 }
 
-@media(max-width:1100px){
+.notice{
+  padding:11px 13px;
+  border-radius:9px;
+  background:#f8f8f8;
+  margin-top:10px;
+  font-size:13px;
+}
+
+@media(max-width:950px){
 
   .cards{
     grid-template-columns:repeat(2,1fr);
   }
 
-  .customer-grid{
-    grid-template-columns:1fr 1fr;
-  }
-}
-
-@media(max-width:950px){
-
   .grid2{
     grid-template-columns:1fr;
   }
 
-  .kpi{
+  .customer-grid{
     grid-template-columns:1fr 1fr;
   }
 
-  .catalog-summary{
+  .kpi{
     grid-template-columns:1fr 1fr;
   }
 }
@@ -791,14 +698,10 @@ button{cursor:pointer}
   }
 
   .itemrow{
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:1fr 1fr 1fr;
   }
 
   .itemrow .itemname{
-    grid-column:1/-1;
-  }
-
-  .itemrow .remove-item{
     grid-column:1/-1;
   }
 
@@ -808,10 +711,6 @@ button{cursor:pointer}
 
   .preview-head{
     flex-direction:column;
-  }
-
-  .preview table{
-    font-size:12px;
   }
 
   .calendar{
@@ -826,23 +725,6 @@ button{cursor:pointer}
   .event{
     font-size:9px;
     padding:3px;
-  }
-
-  .catalog-summary{
-    grid-template-columns:1fr;
-  }
-
-  .search{
-    min-width:0;
-    width:100%;
-  }
-
-  .catalog-toolbar{
-    align-items:stretch;
-  }
-
-  .catalog-toolbar .btn{
-    width:100%;
   }
 
   .mobilebar{
@@ -868,20 +750,12 @@ button{cursor:pointer}
     color:#fff;
   }
 
-  .modal{
-    align-items:flex-end;
-    padding:0;
+  .table{
+    min-width:760px;
   }
 
-  .modal-box{
-    width:100%;
-    max-height:92vh;
-    border-radius:16px 16px 0 0;
-  }
-
-  .table th,
-  .table td{
-    white-space:nowrap;
+  .search{
+    min-width:180px;
   }
 }
 
@@ -984,14 +858,25 @@ button{cursor:pointer}
 
 <div id="toast" class="toast hidden"></div>
 
-<div id="modal" class="modal hidden"></div>
+<div id="modalRoot"></div>
 
 <script>
 "use strict";
 
-const KEY="easyoffer_v22";
+/* =========================================================
+   EASY OFFER v2.2
+   ========================================================= */
 
-const catalogDefault=[
+const OLD_KEY = "easyoffer_v21";
+const KEY = "easyoffer_v22";
+
+
+/* =========================================================
+   DEFAULT CATALOG
+   ========================================================= */
+
+const catalogDefault = [
+
   {
     id:"1",
     articleNo:"SHK-001",
@@ -1000,6 +885,7 @@ const catalogDefault=[
     price:3200,
     cost:2200
   },
+
   {
     id:"2",
     articleNo:"SHK-002",
@@ -1008,6 +894,7 @@ const catalogDefault=[
     price:8500,
     cost:6100
   },
+
   {
     id:"3",
     articleNo:"SHK-003",
@@ -1016,6 +903,7 @@ const catalogDefault=[
     price:420,
     cost:260
   },
+
   {
     id:"4",
     articleNo:"SHK-004",
@@ -1024,6 +912,7 @@ const catalogDefault=[
     price:280,
     cost:150
   },
+
   {
     id:"5",
     articleNo:"SHK-005",
@@ -1032,6 +921,7 @@ const catalogDefault=[
     price:390,
     cost:210
   },
+
   {
     id:"6",
     articleNo:"SHK-006",
@@ -1040,6 +930,7 @@ const catalogDefault=[
     price:65,
     cost:32
   },
+
   {
     id:"7",
     articleNo:"SHK-007",
@@ -1048,6 +939,7 @@ const catalogDefault=[
     price:55,
     cost:28
   },
+
   {
     id:"8",
     articleNo:"SHK-008",
@@ -1056,109 +948,187 @@ const catalogDefault=[
     price:45,
     cost:15
   }
+
 ];
 
-const defaults={
+
+/* =========================================================
+   DEFAULT STATE
+   ========================================================= */
+
+const defaults = {
+
   settings:{
     company:"Muster SHK GmbH",
     owner:"Max Mustermann",
     address:"Musterstraße 1\n34117 Kassel",
     iban:"DE00 0000 0000 0000 0000 00"
   },
+
   catalog:catalogDefault,
+
   offers:[],
+
   nextNo:1001
+
 };
 
-let state;
+
+/* =========================================================
+   STATE LOAD + MIGRATION
+   ========================================================= */
+
+let state = null;
 
 try{
 
-  state=
+  const current =
     JSON.parse(
-      localStorage.getItem(KEY)||"null"
-    )||defaults;
+      localStorage.getItem(KEY) || "null"
+    );
 
-}catch(e){
+  if(current){
 
-  state=defaults;
+    state=current;
+
+  }else{
+
+    const old =
+      JSON.parse(
+        localStorage.getItem(OLD_KEY) || "null"
+      );
+
+    state =
+      old ||
+      JSON.parse(JSON.stringify(defaults));
+
+  }
+
+}catch(error){
+
+  state =
+    JSON.parse(JSON.stringify(defaults));
 
 }
 
-/*
-  Migration von älteren EasyOffer-Versionen.
-*/
 
-if(!state.catalog){
-  state.catalog=[];
+/* =========================================================
+   STATE REPAIR
+   ========================================================= */
+
+if(!Array.isArray(state.catalog) || !state.catalog.length){
+
+  state.catalog =
+    JSON.parse(
+      JSON.stringify(catalogDefault)
+    );
+
 }
 
-if(!state.offers){
+if(!Array.isArray(state.offers)){
+
   state.offers=[];
+
 }
 
 if(!state.settings){
-  state.settings=defaults.settings;
+
+  state.settings =
+    JSON.parse(
+      JSON.stringify(defaults.settings)
+    );
+
 }
 
 if(!state.nextNo){
+
   state.nextNo=1001;
-}
-
-if(!state.catalog.length){
-
-  state.catalog=
-    catalogDefault.map(x=>({...x}));
 
 }
 
-/*
-  Alte Katalogartikel bekommen automatisch
-  eine Artikelnummer.
-*/
 
-state.catalog.forEach((item,index)=>{
+/* =========================================================
+   NORMALIZE CATALOG
+   ========================================================= */
 
-  if(!item.id){
-    item.id=
-      String(Date.now())+
-      String(index);
-  }
+state.catalog =
+  state.catalog.map(
+    (item,index)=>({
 
-  if(!item.articleNo){
-    item.articleNo=
-      "SHK-"+String(index+1).padStart(3,"0");
-  }
+      ...item,
 
-  if(item.price===undefined){
-    item.price=0;
-  }
+      id:String(
+        item.id ||
+        Date.now()+index
+      ),
 
-  if(item.cost===undefined){
-    item.cost=0;
-  }
+      articleNo:
+        item.articleNo ||
+        `SHK-${String(index+1).padStart(3,"0")}`,
 
-});
+      name:
+        item.name ||
+        "Artikel",
+
+      unit:
+        item.unit ||
+        "Stk.",
+
+      price:
+        Number(item.price) || 0,
+
+      cost:
+        Number(item.cost) || 0
+
+    })
+  );
+
+
+/* =========================================================
+   UI STATE
+   ========================================================= */
 
 let page="dashboard";
 
-let monthCursor=new Date();
+let monthCursor =
+  new Date();
+
+let offerFilter="Alle";
+
+let offerSearch="";
 
 let catalogSearch="";
 
+
+/* =========================================================
+   DRAFT
+   ========================================================= */
+
 let draft={
+
   step:1,
+
   customer:{
     company:"",
     email:"",
     phone:"",
     address:""
   },
+
   request:"",
+
   items:[],
+
   notes:"",
+
   followDate:""
+
 };
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
 
 function save(){
 
@@ -1169,7 +1139,8 @@ function save(){
 
 }
 
-function money(n){
+
+function money(value){
 
   return new Intl.NumberFormat(
     "de-DE",
@@ -1177,153 +1148,186 @@ function money(n){
       style:"currency",
       currency:"EUR"
     }
-  ).format(Number(n)||0);
+  ).format(
+    Number(value) || 0
+  );
 
 }
 
-function number(n){
 
-  return Number(n)||0;
+function esc(value){
 
-}
-
-function esc(s){
-
-  return String(s??"").replace(
+  return String(
+    value ?? ""
+  ).replace(
     /[&<>"']/g,
-    m=>({
+    character=>({
+
       "&":"&amp;",
       "<":"&lt;",
       ">":"&gt;",
       "\"":"&quot;",
       "'":"&#39;"
-    }[m])
+
+    }[character])
   );
 
 }
 
-function toast(message){
 
-  const box=
-    document.getElementById("toast");
+function todayISO(){
 
-  box.textContent=message;
-
-  box.classList.remove("hidden");
-
-  setTimeout(()=>{
-    box.classList.add("hidden");
-  },2200);
+  return new Date()
+    .toISOString()
+    .slice(0,10);
 
 }
 
-function totals(o){
 
-  const net=
-    (o.items||[]).reduce(
+function toast(message){
+
+  const box =
+    document.getElementById(
+      "toast"
+    );
+
+  box.textContent=message;
+
+  box.classList.remove(
+    "hidden"
+  );
+
+  clearTimeout(
+    window.__easyOfferToast
+  );
+
+  window.__easyOfferToast =
+    setTimeout(
+      ()=>{
+        box.classList.add(
+          "hidden"
+        );
+      },
+      2200
+    );
+
+}
+
+
+/* =========================================================
+   OFFER CALCULATIONS
+   ========================================================= */
+
+function totals(offer){
+
+  const net =
+    (offer.items || [])
+    .reduce(
       (sum,item)=>
-        sum+
-        number(item.qty)*
-        number(item.price),
+        sum +
+        (Number(item.qty)||0) *
+        (Number(item.price)||0),
       0
     );
 
   return{
+
     net,
-    vat:net*.19,
-    gross:net*1.19
+
+    vat:
+      net * 0.19,
+
+    gross:
+      net * 1.19
+
   };
 
 }
 
-function offerProfit(o){
 
-  return (o.items||[]).reduce(
-    (sum,item)=>{
+function costTotal(offer){
 
-      const cost=
-        item.cost!==undefined
-        ?number(item.cost)
-        :catalogCost(item.name);
-
-      return sum+
-        number(item.qty)*
-        (
-          number(item.price)-
-          cost
-        );
-
-    },
+  return(
+    offer.items || []
+  ).reduce(
+    (sum,item)=>
+      sum +
+      (Number(item.qty)||0) *
+      (Number(item.cost)||0),
     0
   );
 
 }
 
-function offerMarginPercent(o){
 
-  const net=totals(o).net;
+function profit(offer){
 
-  if(!net)return 0;
-
-  return Math.round(
-    offerProfit(o)/net*100
+  return(
+    totals(offer).net -
+    costTotal(offer)
   );
 
 }
 
-function catalogCost(name){
 
-  const item=
-    state.catalog.find(
-      x=>
-        x.name.toLowerCase()===
-        String(name||"").toLowerCase()
-    );
+function status(offer){
 
-  return item
-    ?number(item.cost)
-    :0;
+  return (
+    offer.status ||
+    "Offen"
+  );
 
 }
 
-function status(o){
 
-  return o.status||"Offen";
-
-}
-
-function badge(s){
+function badge(currentStatus){
 
   let cls="";
 
-  if(s==="Angenommen")cls="green";
-  if(s==="Abgelehnt")cls="red";
-  if(s==="Offen")cls="orange";
-  if(s==="Entwurf")cls="blue";
-  if(s==="Abgelaufen")cls="red";
+  if(currentStatus==="Angenommen")
+    cls="green";
 
-  return`
+  if(currentStatus==="Abgelehnt")
+    cls="red";
+
+  if(currentStatus==="Abgelaufen")
+    cls="gray";
+
+  if(currentStatus==="Offen")
+    cls="orange";
+
+  return `
     <span class="badge ${cls}">
-      ${esc(s)}
+      ${esc(currentStatus)}
     </span>
   `;
 
 }
 
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
 function nav(){
 
-  document.querySelectorAll(
-    "[data-page]"
-  ).forEach(button=>{
+  document
+    .querySelectorAll(
+      "[data-page]"
+    )
+    .forEach(
+      button=>{
 
-    button.classList.toggle(
-      "active",
-      button.dataset.page===page
+        button.classList.toggle(
+          "active",
+          button.dataset.page===page
+        );
+
+      }
     );
 
-  });
-
 }
+
 
 function layout(
   title,
@@ -1332,83 +1336,86 @@ function layout(
   action=""
 ){
 
-  main.innerHTML=`
+  document
+    .getElementById("main")
+    .innerHTML=`
 
-    <div class="top">
+      <div class="top">
 
-      <div>
-        <h1>${title}</h1>
-        <div class="sub">
-          ${sub||""}
+        <div>
+
+          <h1>
+            ${esc(title)}
+          </h1>
+
+          <div class="sub">
+            ${sub || ""}
+          </div>
+
         </div>
+
+        ${action}
+
       </div>
 
-      ${action}
+      ${body}
 
-    </div>
-
-    ${body}
-
-  `;
+    `;
 
   nav();
 
 }
 
-/* =========================
+
+/* =========================================================
    DASHBOARD
-========================= */
+   ========================================================= */
 
 function dashboard(){
 
-  const offers=state.offers;
+  const offers =
+    state.offers;
 
-  const open=
+  const open =
     offers.filter(
       o=>status(o)==="Offen"
     );
 
-  const accepted=
+  const accepted =
     offers.filter(
       o=>status(o)==="Angenommen"
     );
 
-  const volume=
+  const volume =
     offers.reduce(
       (sum,o)=>
-        sum+totals(o).gross,
+        sum + totals(o).gross,
       0
     );
 
-  const won=
+  const won =
     accepted.reduce(
       (sum,o)=>
-        sum+totals(o).gross,
+        sum + totals(o).gross,
       0
     );
 
-  const openValue=
+  const openValue =
     open.reduce(
       (sum,o)=>
-        sum+totals(o).gross,
+        sum + totals(o).gross,
       0
     );
 
-  const profit=
-    accepted.reduce(
-      (sum,o)=>
-        sum+offerProfit(o),
-      0
-    );
-
-  const quote=
+  const closeRate =
     offers.length
-    ?Math.round(
-      accepted.length/
-      offers.length*
-      100
-    )
-    :0;
+    ? Math.round(
+        accepted.length /
+        offers.length *
+        100
+      )
+    : 0;
+
 
   layout(
     "Dashboard",
@@ -1419,44 +1426,61 @@ function dashboard(){
     <div class="cards">
 
       <div class="card">
+
         <div class="label">
           Angebote
         </div>
+
         <div class="value">
           ${offers.length}
         </div>
+
       </div>
 
+
       <div class="card">
+
         <div class="label">
           Offen
         </div>
+
         <div class="value">
           ${open.length}
         </div>
+
       </div>
 
+
       <div class="card">
+
         <div class="label">
           Angenommen
         </div>
+
         <div class="value">
           ${accepted.length}
         </div>
+
       </div>
 
+
       <div class="card">
+
         <div class="label">
           Angebotsvolumen
         </div>
+
         <div class="value">
           ${money(volume)}
         </div>
+
       </div>
 
     </div>
 
+
     <div class="grid2">
+
 
       <div class="panel">
 
@@ -1468,105 +1492,111 @@ function dashboard(){
 
           <div class="mini">
             Offen
-            <b>${money(openValue)}</b>
+            <b>
+              ${money(openValue)}
+            </b>
           </div>
 
           <div class="mini">
             Gewonnen
-            <b>${money(won)}</b>
+            <b>
+              ${money(won)}
+            </b>
           </div>
 
           <div class="mini">
             Abschlussquote
-            <b>${quote}%</b>
+            <b>
+              ${closeRate}%
+            </b>
           </div>
 
         </div>
 
-        <div
-          style="margin-top:18px"
-        >
+
+        <div style="margin-top:18px">
 
           <div class="muted">
             Abschlussquote
           </div>
 
           <div class="bar">
-            <i style="width:${quote}%"></i>
+
+            <i
+              style="width:${closeRate}%"
+            ></i>
+
           </div>
 
         </div>
 
       </div>
+
 
       <div class="panel">
 
         <h2>
-          Gewinn
+          Letzte Angebote
         </h2>
 
-        <div class="mini">
+        ${
+          offers
+          .slice()
+          .reverse()
+          .slice(0,5)
+          .map(
+            offer=>`
 
-          <span class="muted">
-            Bruttogewinn aus angenommenen Angeboten
-          </span>
+              <div
+                style="
+                  display:flex;
+                  justify-content:space-between;
+                  gap:10px;
+                  padding:10px 0;
+                  border-bottom:1px solid var(--line)
+                "
+              >
 
-          <b>
-            ${money(profit)}
-          </b>
+                <span>
 
-        </div>
+                  <b>
+                    ${esc(offer.no)}
+                  </b>
+
+                  ·
+
+                  ${esc(
+                    offer.customer?.company ||
+                    "Kunde"
+                  )}
+
+                </span>
+
+                <span>
+                  ${money(
+                    totals(offer).gross
+                  )}
+                </span>
+
+              </div>
+
+            `
+          )
+          .join("")
+
+          ||
+
+          `
+          <div class="muted">
+            Noch keine Angebote.
+          </div>
+          `
+        }
 
       </div>
 
     </div>
 
-    <div class="panel">
-
-      <h2>
-        Letzte Angebote
-      </h2>
-
-      ${
-        offers
-        .slice()
-        .reverse()
-        .slice(0,5)
-        .map(o=>`
-
-          <div style="
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            gap:10px;
-            padding:10px 0;
-            border-bottom:1px solid var(--line)
-          ">
-
-            <span>
-              <b>${esc(o.no)}</b>
-              ·
-              ${esc(
-                o.customer.company||
-                "Kunde"
-              )}
-            </span>
-
-            <span>
-              ${money(totals(o).gross)}
-            </span>
-
-          </div>
-
-        `)
-        .join("")
-        ||
-        `<div class="muted">
-          Noch keine Angebote.
-        </div>`
-      }
-
-    </div>
 
     <div class="panel">
 
@@ -1574,37 +1604,26 @@ function dashboard(){
         Schnellstart
       </h2>
 
-      <div class="quick-actions">
+      <button
+        class="btn dark"
+        onclick="newOffer()"
+      >
+        + Neues Angebot
+      </button>
 
-        <button
-          class="btn dark"
-          onclick="newOffer()"
-        >
-          + Neues Angebot
-        </button>
+      <button
+        class="btn"
+        onclick="go('catalog')"
+      >
+        Preiskatalog
+      </button>
 
-        <button
-          class="btn"
-          onclick="go('catalog')"
-        >
-          Preiskatalog
-        </button>
-
-        <button
-          class="btn"
-          onclick="go('calendar')"
-        >
-          Kalender
-        </button>
-
-        <button
-          class="btn"
-          onclick="go('analytics')"
-        >
-          Analyse
-        </button>
-
-      </div>
+      <button
+        class="btn"
+        onclick="go('calendar')"
+      >
+        Kalender
+      </button>
 
     </div>
 
@@ -1613,16 +1632,77 @@ function dashboard(){
 
 }
 
-/* =========================
+
+/* =========================================================
    OFFERS
-========================= */
+   ========================================================= */
 
-function offers(){
+function filteredOffers(){
 
-  const rows=
+  let rows =
     state.offers
     .slice()
     .reverse();
+
+
+  if(
+    offerFilter !==
+    "Alle"
+  ){
+
+    rows =
+      rows.filter(
+        offer=>
+          status(offer) ===
+          offerFilter
+      );
+
+  }
+
+
+  if(
+    offerSearch.trim()
+  ){
+
+    const query =
+      offerSearch
+      .toLowerCase()
+      .trim();
+
+    rows =
+      rows.filter(
+        offer=>{
+
+          const text =
+            [
+
+              offer.no,
+
+              offer.customer?.company,
+
+              offer.customer?.email,
+
+              offer.customer?.phone
+
+            ]
+            .join(" ")
+            .toLowerCase();
+
+          return text.includes(
+            query
+          );
+
+        }
+      );
+
+  }
+
+  return rows;
+
+}
+
+
+function offers(){
 
   layout(
     "Angebote",
@@ -1632,12 +1712,7 @@ function offers(){
 
     <div class="panel">
 
-      <div style="
-        display:flex;
-        gap:8px;
-        flex-wrap:wrap;
-        margin-bottom:14px
-      ">
+      <div class="toolbar">
 
         <button
           class="btn dark"
@@ -1646,33 +1721,58 @@ function offers(){
           + Neues Angebot
         </button>
 
-        <select
-          id="offerFilter"
-          class="btn"
-          onchange="filterOffers(this.value)"
+
+        <input
+          class="btn search"
+          placeholder="Kunde / Angebotsnr. suchen…"
+          value="${esc(offerSearch)}"
+          oninput="
+            offerSearch=this.value;
+            renderOffersTable();
+          "
         >
 
-          <option value="Alle">
+
+        <select
+          class="btn"
+          onchange="
+            offerFilter=this.value;
+            renderOffersTable();
+          "
+        >
+
+          <option
+            value="Alle"
+            ${offerFilter==="Alle"?"selected":""}
+          >
             Alle Status
           </option>
 
-          <option value="Entwurf">
-            Entwurf
-          </option>
-
-          <option value="Offen">
+          <option
+            value="Offen"
+            ${offerFilter==="Offen"?"selected":""}
+          >
             Offen
           </option>
 
-          <option value="Angenommen">
+          <option
+            value="Angenommen"
+            ${offerFilter==="Angenommen"?"selected":""}
+          >
             Angenommen
           </option>
 
-          <option value="Abgelehnt">
+          <option
+            value="Abgelehnt"
+            ${offerFilter==="Abgelehnt"?"selected":""}
+          >
             Abgelehnt
           </option>
 
-          <option value="Abgelaufen">
+          <option
+            value="Abgelaufen"
+            ${offerFilter==="Abgelaufen"?"selected":""}
+          >
             Abgelaufen
           </option>
 
@@ -1680,8 +1780,13 @@ function offers(){
 
       </div>
 
+
       <div id="offerTable">
-        ${offerRows(rows)}
+
+        ${offerRows(
+          filteredOffers()
+        )}
+
       </div>
 
     </div>
@@ -1691,19 +1796,21 @@ function offers(){
 
 }
 
+
 function offerRows(rows){
 
   if(!rows.length){
 
-    return`
+    return `
       <div class="empty">
-        Noch keine Angebote vorhanden.
+        Keine passenden Angebote.
       </div>
     `;
 
   }
 
-  return`
+
+  return `
 
     <div class="table-wrap">
 
@@ -1712,98 +1819,124 @@ function offerRows(rows){
         <thead>
 
           <tr>
-            <th>Nr.</th>
-            <th>Kunde</th>
-            <th>Datum</th>
-            <th>Follow-up</th>
-            <th>Summe</th>
-            <th>Gewinn</th>
-            <th>Status</th>
+
+            <th>
+              Nr.
+            </th>
+
+            <th>
+              Kunde
+            </th>
+
+            <th>
+              Datum
+            </th>
+
+            <th>
+              Follow-up
+            </th>
+
+            <th>
+              Summe
+            </th>
+
+            <th>
+              Marge
+            </th>
+
+            <th>
+              Status
+            </th>
+
             <th></th>
+
           </tr>
 
         </thead>
 
+
         <tbody>
 
-          ${rows.map(o=>`
+          ${
+            rows
+            .map(
+              offer=>`
 
-            <tr>
+                <tr>
 
-              <td>
-                <b>${esc(o.no)}</b>
-              </td>
+                  <td>
+                    <b>
+                      ${esc(offer.no)}
+                    </b>
+                  </td>
 
-              <td>
-                ${esc(
-                  o.customer.company||"-"
-                )}
-              </td>
+                  <td>
+                    ${esc(
+                      offer.customer?.company ||
+                      "-"
+                    )}
+                  </td>
 
-              <td>
-                ${esc(o.date||"-")}
-              </td>
+                  <td>
+                    ${esc(
+                      offer.date ||
+                      "-"
+                    )}
+                  </td>
 
-              <td>
-                ${esc(
-                  o.followDate||"-"
-                )}
-              </td>
+                  <td>
+                    ${esc(
+                      offer.followDate ||
+                      "-"
+                    )}
+                  </td>
 
-              <td>
-                ${money(
-                  totals(o).gross
-                )}
-              </td>
+                  <td>
+                    ${money(
+                      totals(offer).gross
+                    )}
+                  </td>
 
-              <td>
-                <span class="${
-                  offerProfit(o)>=0
-                  ?"margin-positive"
-                  :"margin-negative"
-                }">
-                  ${money(
-                    offerProfit(o)
-                  )}
-                </span>
-              </td>
+                  <td class="profit">
+                    ${money(
+                      profit(offer)
+                    )}
+                  </td>
 
-              <td>
-                ${badge(status(o))}
-              </td>
+                  <td>
+                    ${badge(
+                      status(offer)
+                    )}
+                  </td>
 
-              <td>
+                  <td>
 
-                <div class="table-actions">
+                    <button
+                      class="btn small"
+                      onclick="
+                        editOffer('${offer.id}')
+                      "
+                    >
+                      Bearbeiten
+                    </button>
 
-                  <button
-                    class="btn small"
-                    onclick="preview('${o.id}')"
-                  >
-                    Öffnen
-                  </button>
+                    <button
+                      class="btn small"
+                      onclick="
+                        preview('${offer.id}')
+                      "
+                    >
+                      Öffnen
+                    </button>
 
-                  <button
-                    class="btn small"
-                    onclick="editOffer('${o.id}')"
-                  >
-                    Bearbeiten
-                  </button>
+                  </td>
 
-                  <button
-                    class="btn small"
-                    onclick="changeStatus('${o.id}')"
-                  >
-                    Status
-                  </button>
+                </tr>
 
-                </div>
-
-              </td>
-
-            </tr>
-
-          `).join("")}
+              `
+            )
+            .join("")
+          }
 
         </tbody>
 
@@ -1815,77 +1948,108 @@ function offerRows(rows){
 
 }
 
-function filterOffers(value){
 
-  let rows=
-    state.offers
-    .slice()
-    .reverse();
+function renderOffersTable(){
 
-  if(value!=="Alle"){
-
-    rows=
-      rows.filter(
-        o=>status(o)===value
-      );
-
-  }
-
-  const box=
+  const table =
     document.getElementById(
       "offerTable"
     );
 
-  if(box){
-    box.innerHTML=
-      offerRows(rows);
-  }
+  if(!table)return;
+
+  table.innerHTML =
+    offerRows(
+      filteredOffers()
+    );
 
 }
 
-function changeStatus(id){
 
-  const offer=
+/* =========================================================
+   EDIT OFFER
+   ========================================================= */
+
+function editOffer(id){
+
+  const offer =
     state.offers.find(
       x=>x.id===id
     );
 
   if(!offer)return;
 
-  openStatusModal(offer);
 
-}
+  showModal(
+    "Angebot bearbeiten",
 
-function openStatusModal(offer){
+    `
 
-  const modal=
-    document.getElementById("modal");
+    <div class="formgrid">
 
-  modal.innerHTML=`
+      <div class="field">
 
-    <div
-      class="modal-box"
-      onclick="event.stopPropagation()"
-    >
+        <label>
+          Firma / Name
+        </label>
 
-      <div class="modal-head">
-
-        <h2>
-          Status ändern
-        </h2>
-
-        <button
-          class="btn small"
-          onclick="closeModal()"
+        <input
+          id="eoCompany"
+          value="${esc(
+            offer.customer?.company
+          )}"
         >
-          ×
-        </button>
 
       </div>
 
-      <p class="muted">
-        Angebot ${esc(offer.no)}
-      </p>
+
+      <div class="field">
+
+        <label>
+          E-Mail
+        </label>
+
+        <input
+          id="eoEmail"
+          value="${esc(
+            offer.customer?.email
+          )}"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Telefon
+        </label>
+
+        <input
+          id="eoPhone"
+          value="${esc(
+            offer.customer?.phone
+          )}"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Adresse
+        </label>
+
+        <input
+          id="eoAddress"
+          value="${esc(
+            offer.customer?.address
+          )}"
+        >
+
+      </div>
+
 
       <div class="field">
 
@@ -1893,259 +2057,364 @@ function openStatusModal(offer){
           Status
         </label>
 
-        <select id="statusSelect">
+        <select id="eoStatus">
 
-          ${[
-            "Entwurf",
-            "Offen",
-            "Angenommen",
-            "Abgelehnt",
-            "Abgelaufen"
-          ].map(s=>`
+          <option
+            value="Offen"
+            ${status(offer)==="Offen"?"selected":""}
+          >
+            Offen
+          </option>
 
-            <option
-              value="${s}"
-              ${status(offer)===s?"selected":""}
-            >
-              ${s}
-            </option>
+          <option
+            value="Angenommen"
+            ${status(offer)==="Angenommen"?"selected":""}
+          >
+            Angenommen
+          </option>
 
-          `).join("")}
+          <option
+            value="Abgelehnt"
+            ${status(offer)==="Abgelehnt"?"selected":""}
+          >
+            Abgelehnt
+          </option>
+
+          <option
+            value="Abgelaufen"
+            ${status(offer)==="Abgelaufen"?"selected":""}
+          >
+            Abgelaufen
+          </option>
 
         </select>
 
       </div>
 
-      <div class="field"
-        style="margin-top:12px"
-      >
+
+      <div class="field">
 
         <label>
           Follow-up
         </label>
 
         <input
-          id="statusFollow"
+          id="eoFollow"
           type="date"
           value="${esc(
-            offer.followDate||""
+            offer.followDate || ""
           )}"
         >
 
       </div>
 
-      <div class="modal-actions">
 
-        <button
-          class="btn"
-          onclick="closeModal()"
-        >
-          Abbrechen
-        </button>
+      <div class="field full">
 
-        <button
-          class="btn dark"
-          onclick="saveOfferStatus('${offer.id}')"
-        >
-          Speichern
-        </button>
+        <label>
+          Notizen
+        </label>
+
+        <textarea id="eoNotes">${esc(
+          offer.notes || ""
+        )}</textarea>
 
       </div>
 
     </div>
 
-  `;
+    `,
 
-  modal.classList.remove("hidden");
+    ()=>{
+
+      offer.customer={
+
+        company:
+          document
+          .getElementById("eoCompany")
+          .value,
+
+        email:
+          document
+          .getElementById("eoEmail")
+          .value,
+
+        phone:
+          document
+          .getElementById("eoPhone")
+          .value,
+
+        address:
+          document
+          .getElementById("eoAddress")
+          .value
+
+      };
+
+
+      offer.status =
+        document
+        .getElementById("eoStatus")
+        .value;
+
+
+      offer.followDate =
+        document
+        .getElementById("eoFollow")
+        .value;
+
+
+      offer.notes =
+        document
+        .getElementById("eoNotes")
+        .value;
+
+
+      save();
+
+      closeModal();
+
+      toast(
+        "Angebot aktualisiert"
+      );
+
+      preview(
+        offer.id
+      );
+
+    }
+
+  );
 
 }
 
-function saveOfferStatus(id){
 
-  const offer=
+/* =========================================================
+   STATUS
+   ========================================================= */
+
+function changeStatus(id){
+
+  const offer =
     state.offers.find(
       x=>x.id===id
     );
 
   if(!offer)return;
 
-  offer.status=
-    document.getElementById(
-      "statusSelect"
-    ).value;
 
-  offer.followDate=
-    document.getElementById(
-      "statusFollow"
-    ).value;
+  showModal(
+    "Status ändern",
 
-  save();
+    `
 
-  closeModal();
+    <div class="field">
 
-  toast("Angebot aktualisiert");
+      <label>
+        Status
+      </label>
 
-  offers();
+      <select id="statusEdit">
 
-}
+        <option>
+          Offen
+        </option>
 
-/* =========================
-   OFFER EDIT
-========================= */
+        <option>
+          Angenommen
+        </option>
 
-function editOffer(id){
+        <option>
+          Abgelehnt
+        </option>
 
-  const offer=
-    state.offers.find(
-      x=>x.id===id
-    );
+        <option>
+          Abgelaufen
+        </option>
 
-  if(!offer)return;
+      </select>
 
-  draft={
-    step:3,
+    </div>
 
-    editingId:id,
+    `,
 
-    customer:{
-      company:
-        offer.customer.company||"",
-      email:
-        offer.customer.email||"",
-      phone:
-        offer.customer.phone||"",
-      address:
-        offer.customer.address||""
+    ()=>{
+
+      offer.status =
+        document
+        .getElementById("statusEdit")
+        .value;
+
+      save();
+
+      closeModal();
+
+      toast(
+        "Status geändert"
+      );
+
+      render();
+
+    }
+
+  );
+
+
+  setTimeout(
+    ()=>{
+
+      const select =
+        document.getElementById(
+          "statusEdit"
+        );
+
+      if(select){
+
+        select.value =
+          status(offer);
+
+      }
+
     },
-
-    request:
-      offer.request||"",
-
-    items:
-      (offer.items||[]).map(
-        x=>({...x})
-      ),
-
-    notes:
-      offer.notes||"",
-
-    followDate:
-      offer.followDate||""
-
-  };
-
-  page="create";
-
-  render();
+    0
+  );
 
 }
+
+
+/* =========================================================
+   DUPLICATE OFFER
+   ========================================================= */
 
 function duplicateOffer(id){
 
-  const original=
+  const offer =
     state.offers.find(
       x=>x.id===id
     );
 
-  if(!original)return;
+  if(!offer)return;
 
-  const copy={
-    ...original,
 
-    id:
-      createId(),
+  const copy =
+    JSON.parse(
+      JSON.stringify(offer)
+    );
 
-    no:
-      `EO-${state.nextNo++}`,
 
-    date:
-      todayString(),
+  copy.id =
+    crypto.randomUUID
+      ? crypto.randomUUID()
+      : String(Date.now());
 
-    followDate:
-      addDays(7),
 
-    status:"Entwurf",
+  copy.no =
+    `EO-${state.nextNo++}`;
 
-    items:
-      (original.items||[]).map(
-        x=>({...x})
-      ),
 
-    customer:{
-      ...original.customer
-    }
+  copy.date =
+    todayISO();
 
-  };
 
-  state.offers.push(copy);
+  copy.status =
+    "Offen";
+
+
+  copy.followDate =
+    "";
+
+
+  state.offers.push(
+    copy
+  );
 
   save();
 
   toast(
-    `Angebot ${copy.no} erstellt`
+    "Angebot dupliziert"
   );
 
-  preview(copy.id);
+  preview(
+    copy.id
+  );
 
 }
 
+
+/* =========================================================
+   DELETE OFFER
+   ========================================================= */
+
 function deleteOffer(id){
 
-  const offer=
+  const offer =
     state.offers.find(
       x=>x.id===id
     );
 
   if(!offer)return;
 
-  const yes=
-    confirm(
+
+  if(
+    !confirm(
       `Angebot ${offer.no} wirklich löschen?`
-    );
+    )
+  ){
 
-  if(!yes)return;
+    return;
 
-  state.offers=
+  }
+
+
+  state.offers =
     state.offers.filter(
       x=>x.id!==id
     );
 
+
   save();
 
-  toast("Angebot gelöscht");
+  toast(
+    "Angebot gelöscht"
+  );
 
   go("offers");
 
 }
 
-/* =========================
+
+/* =========================================================
    CALENDAR
-========================= */
+   ========================================================= */
 
 function calendar(){
 
-  const year=
+  const year =
     monthCursor.getFullYear();
 
-  const month=
+  const month =
     monthCursor.getMonth();
 
-  const first=
+
+  const first =
     new Date(
       year,
       month,
       1
     );
 
-  const days=
+
+  const days =
     new Date(
       year,
       month+1,
       0
     ).getDate();
 
-  const start=
+
+  const start =
     (first.getDay()+6)%7;
+
 
   const names=[
     "Mo",
@@ -2157,14 +2426,20 @@ function calendar(){
     "So"
   ];
 
-  let cells=
-    names.map(
+
+  let cells =
+    names
+    .map(
       name=>`
+
         <div class="cal-dayname">
           ${name}
         </div>
+
       `
-    ).join("");
+    )
+    .join("");
+
 
   for(
     let i=0;
@@ -2172,13 +2447,16 @@ function calendar(){
     i++
   ){
 
-    cells+=
-      `<div class="day"></div>`;
+    cells += `
+      <div class="day"></div>
+    `;
 
   }
 
-  const today=
-    new Date();
+
+  const today =
+    todayISO();
+
 
   for(
     let day=1;
@@ -2186,22 +2464,26 @@ function calendar(){
     day++
   ){
 
-    const date=
-      `${year}-${String(month+1)
-        .padStart(2,"0")}-${String(day)
-        .padStart(2,"0")}`;
+    const date =
+      `${year}-${String(
+        month+1
+      ).padStart(2,"0")}-${String(
+        day
+      ).padStart(2,"0")}`;
 
-    const events=
+
+    const events =
       state.offers.filter(
-        o=>o.followDate===date
+        offer=>
+          offer.followDate===date
       );
 
-    const isToday=
-      today.getFullYear()===year &&
-      today.getMonth()===month &&
-      today.getDate()===day;
 
-    cells+=`
+    const isToday =
+      today===date;
+
+
+    cells += `
 
       <div
         class="day ${isToday?"today":""}"
@@ -2211,31 +2493,42 @@ function calendar(){
           ${day}
         </div>
 
-        ${events.map(o=>`
+        ${
+          events
+          .map(
+            offer=>`
 
-          <div
-            class="event ${
-              status(o)==="Angenommen"
-              ?"accepted"
-              :status(o)==="Abgelehnt"
-              ?"rejected"
-              :status(o)==="Abgelaufen"
-              ?"expired"
-              :""
-            }"
-            onclick="preview('${o.id}')"
-          >
+              <div
+                class="
+                  event
+                  ${
+                    status(offer)==="Angenommen"
+                    ?"accepted"
+                    :status(offer)==="Abgelehnt"
+                    ?"rejected"
+                    :status(offer)==="Abgelaufen"
+                    ?"expired"
+                    :""
+                  }
+                "
+                onclick="
+                  preview('${offer.id}')
+                "
+              >
 
-            ${esc(o.no)}
-            ·
-            ${esc(
-              o.customer.company||
-              "Kunde"
-            )}
+                ${esc(offer.no)}
+                ·
+                ${esc(
+                  offer.customer?.company ||
+                  "Kunde"
+                )}
 
-          </div>
+              </div>
 
-        `).join("")}
+            `
+          )
+          .join("")
+        }
 
       </div>
 
@@ -2243,15 +2536,13 @@ function calendar(){
 
   }
 
-  const todayStr=
-    todayString();
 
-  const upcoming=
+  const upcoming =
     state.offers
-    .filter(o=>
-      o.followDate &&
-      o.followDate>=todayStr &&
-      status(o)==="Offen"
+    .filter(
+      offer=>
+        offer.followDate &&
+        status(offer)==="Offen"
     )
     .sort(
       (a,b)=>
@@ -2261,20 +2552,6 @@ function calendar(){
     )
     .slice(0,10);
 
-  const overdue=
-    state.offers
-    .filter(o=>
-      o.followDate &&
-      o.followDate<todayStr &&
-      status(o)==="Offen"
-    )
-    .sort(
-      (a,b)=>
-        b.followDate.localeCompare(
-          a.followDate
-        )
-    )
-    .slice(0,10);
 
   layout(
     "Kalender",
@@ -2298,15 +2575,23 @@ function calendar(){
           ‹
         </button>
 
+
         <h2 style="margin:0">
-          ${new Intl.DateTimeFormat(
-            "de-DE",
-            {
-              month:"long",
-              year:"numeric"
-            }
-          ).format(monthCursor)}
+
+          ${
+            new Intl.DateTimeFormat(
+              "de-DE",
+              {
+                month:"long",
+                year:"numeric"
+              }
+            ).format(
+              monthCursor
+            )
+          }
+
         </h2>
+
 
         <button
           class="btn"
@@ -2322,53 +2607,85 @@ function calendar(){
 
       </div>
 
+
       <div class="calendar">
+
         ${cells}
+
       </div>
 
     </div>
 
-    <div class="grid2">
 
-      <div class="panel">
+    <div class="panel">
 
-        <h2>
-          Überfällige Follow-ups
-        </h2>
+      <h2>
+        Anstehende Follow-ups
+      </h2>
 
-        ${
-          overdue.length
-          ?overdue.map(
-            o=>followCard(o,true)
-          ).join("")
-          :`
-            <div class="muted">
-              Keine überfälligen Follow-ups.
+
+      ${
+        upcoming
+        .map(
+          offer=>`
+
+            <div
+              style="
+                display:flex;
+                justify-content:space-between;
+                gap:10px;
+                padding:11px 0;
+                border-bottom:1px solid var(--line)
+              "
+            >
+
+              <span>
+
+                <b>
+                  ${esc(
+                    offer.followDate
+                  )}
+                </b>
+
+                ·
+
+                ${esc(
+                  offer.customer?.company ||
+                  "Kunde"
+                )}
+
+                ${
+                  offer.followDate < today
+                  ?
+                  `
+                  <span class="overdue">
+                    · überfällig
+                  </span>
+                  `
+                  :
+                  ""
+                }
+
+              </span>
+
+              ${badge(
+                status(offer)
+              )}
+
             </div>
+
           `
-        }
+        )
+        .join("")
 
-      </div>
+        ||
 
-      <div class="panel">
-
-        <h2>
-          Anstehende Follow-ups
-        </h2>
-
-        ${
-          upcoming.length
-          ?upcoming.map(
-            o=>followCard(o,false)
-          ).join("")
-          :`
-            <div class="muted">
-              Keine offenen Follow-ups geplant.
-            </div>
-          `
-        }
-
-      </div>
+        `
+        <div class="muted">
+          Keine offenen Follow-ups geplant.
+        </div>
+        `
+      }
 
     </div>
 
@@ -2377,129 +2694,98 @@ function calendar(){
 
 }
 
-function followCard(o,overdue){
 
-  return`
-
-    <div style="
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      padding:11px 0;
-      border-bottom:1px solid var(--line)
-    ">
-
-      <div>
-
-        <b>
-          ${esc(o.customer.company||"Kunde")}
-        </b>
-
-        <div class="muted">
-          ${esc(o.no)}
-          ·
-          ${esc(o.followDate)}
-        </div>
-
-      </div>
-
-      <button
-        class="btn small"
-        onclick="preview('${o.id}')"
-      >
-        Öffnen
-      </button>
-
-    </div>
-
-  `;
-
-}
-
-/* =========================
+/* =========================================================
    ANALYTICS
-========================= */
+   ========================================================= */
 
 function analytics(){
 
-  const offers=
+  const offers =
     state.offers;
 
-  const total=
+
+  const total =
     offers.length;
 
-  const accepted=
+
+  const accepted =
     offers.filter(
-      o=>status(o)==="Angenommen"
+      offer=>
+        status(offer)==="Angenommen"
     );
 
-  const open=
+
+  const open =
     offers.filter(
-      o=>status(o)==="Offen"
+      offer=>
+        status(offer)==="Offen"
     );
 
-  const rejected=
+
+  const rejected =
     offers.filter(
-      o=>status(o)==="Abgelehnt"
+      offer=>
+        status(offer)==="Abgelehnt"
     );
 
-  const volume=
+
+  const volume =
     offers.reduce(
-      (sum,o)=>
-        sum+totals(o).gross,
+      (sum,offer)=>
+        sum + totals(offer).gross,
       0
     );
 
-  const won=
+
+  const won =
     accepted.reduce(
-      (sum,o)=>
-        sum+totals(o).gross,
+      (sum,offer)=>
+        sum + totals(offer).gross,
       0
     );
 
-  const openVolume=
+
+  const openVolume =
     open.reduce(
-      (sum,o)=>
-        sum+totals(o).gross,
+      (sum,offer)=>
+        sum + totals(offer).gross,
       0
     );
 
-  const profit=
+
+  const grossProfit =
     accepted.reduce(
-      (sum,o)=>
-        sum+offerProfit(o),
+      (sum,offer)=>
+        sum + profit(offer),
       0
     );
 
-  const average=
+
+  const average =
     total
-    ?volume/total
-    :0;
+    ? volume / total
+    : 0;
 
-  const closeRate=
+
+  const closeRate =
     total
-    ?Math.round(
-      accepted.length/
-      total*
-      100
-    )
-    :0;
+    ? Math.round(
+        accepted.length /
+        total *
+        100
+      )
+    : 0;
 
-  const margin=
-    won
-    ?Math.round(
-      profit/
-      (won/1.19)*
-      100
-    )
-    :0;
 
-  const now=
+  const now =
     new Date();
 
+
   const labels=[];
+
   const values=[];
+
 
   for(
     let i=5;
@@ -2507,41 +2793,64 @@ function analytics(){
     i--
   ){
 
-    const date=
+    const date =
       new Date(
         now.getFullYear(),
         now.getMonth()-i,
         1
       );
 
-    const key=
+
+    const key =
       `${date.getFullYear()}-${String(
         date.getMonth()+1
       ).padStart(2,"0")}`;
 
+
     labels.push(
       new Intl.DateTimeFormat(
         "de-DE",
-        {month:"short"}
-      ).format(date)
+        {
+          month:"short"
+        }
+      ).format(
+        date
+      )
     );
 
+
     values.push(
+
       offers
-      .filter(o=>
-        (o.date||"").startsWith(key)
+
+      .filter(
+        offer=>
+          (
+            offer.date ||
+            ""
+          ).startsWith(
+            key
+          )
       )
+
       .reduce(
-        (sum,o)=>
-          sum+totals(o).gross,
+        (sum,offer)=>
+          sum +
+          totals(offer).gross,
         0
       )
+
     );
 
   }
 
-  const max=
-    Math.max(...values,1);
+
+  const max =
+    Math.max(
+      ...values,
+      1
+    );
+
 
   layout(
     "Analyse",
@@ -2552,44 +2861,61 @@ function analytics(){
     <div class="cards">
 
       <div class="card">
+
         <div class="label">
           Abschlussquote
         </div>
+
         <div class="value">
           ${closeRate}%
         </div>
+
       </div>
 
+
       <div class="card">
+
         <div class="label">
           Gewonnener Umsatz
         </div>
+
         <div class="value">
           ${money(won)}
         </div>
+
       </div>
 
-      <div class="card">
-        <div class="label">
-          Gewinn
-        </div>
-        <div class="value">
-          ${money(profit)}
-        </div>
-      </div>
 
       <div class="card">
+
         <div class="label">
-          Ø Angebotswert
+          Bruttogewinn gewonnen
         </div>
+
         <div class="value">
-          ${money(average)}
+          ${money(grossProfit)}
         </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="label">
+          Offene Pipeline
+        </div>
+
+        <div class="value">
+          ${money(openVolume)}
+        </div>
+
       </div>
 
     </div>
 
+
     <div class="grid2">
+
 
       <div class="panel">
 
@@ -2597,70 +2923,129 @@ function analytics(){
           Angebotsvolumen · letzte 6 Monate
         </h2>
 
+
         <div class="chart">
 
-          ${values.map(
-            (value,index)=>`
+          ${
+            values
+            .map(
+              (value,index)=>`
 
-              <div class="chartcol">
+                <div class="chartcol">
 
-                <b>
-                  ${
-                    value
-                    ?money(value)
-                    :""
-                  }
-                </b>
+                  <b>
+                    ${
+                      value
+                      ? money(value)
+                      : ""
+                    }
+                  </b>
 
-                <i
-                  style="
-                    height:${Math.max(
-                      3,
-                      value/max*160
-                    )}px
-                  "
-                ></i>
+                  <i
+                    style="
+                      height:${Math.max(
+                        3,
+                        value/max*160
+                      )}px
+                    "
+                  ></i>
 
-                <span>
-                  ${labels[index]}
-                </span>
+                  <span>
+                    ${labels[index]}
+                  </span>
 
-              </div>
+                </div>
 
-            `
-          ).join("")}
+              `
+            )
+            .join("")
+          }
 
         </div>
 
       </div>
+
 
       <div class="panel">
 
         <h2>
-          Gewinn & Marge
+          Angebotsstatus
         </h2>
+
 
         <div class="kpi">
 
           <div class="mini">
-            Gewinn
+            Offen
             <b>
-              ${money(profit)}
+              ${open.length}
             </b>
           </div>
 
+
           <div class="mini">
-            Umsatz
+            Gewonnen
             <b>
-              ${money(won)}
+              ${accepted.length}
             </b>
           </div>
 
+
           <div class="mini">
-            Marge
+            Abgelehnt
             <b>
-              ${margin}%
+              ${rejected.length}
             </b>
+          </div>
+
+        </div>
+
+
+        <div style="margin-top:18px">
+
+          <div class="muted">
+            Gewonnen
+          </div>
+
+          <div class="bar">
+
+            <i
+              style="
+                width:${
+                  total
+                  ? accepted.length /
+                    total *
+                    100
+                  : 0
+                }%
+              "
+            ></i>
+
+          </div>
+
+
+          <div
+            class="muted"
+            style="margin-top:12px"
+          >
+            Offen
+          </div>
+
+
+          <div class="bar">
+
+            <i
+              style="
+                width:${
+                  total
+                  ? open.length /
+                    total *
+                    100
+                  : 0
+                }%
+              "
+            ></i>
+
           </div>
 
         </div>
@@ -2669,73 +3054,6 @@ function analytics(){
 
     </div>
 
-    <div class="panel">
-
-      <h2>
-        Angebotsstatus
-      </h2>
-
-      <div class="kpi">
-
-        <div class="mini">
-          Offen
-          <b>${open.length}</b>
-        </div>
-
-        <div class="mini">
-          Gewonnen
-          <b>${accepted.length}</b>
-        </div>
-
-        <div class="mini">
-          Abgelehnt
-          <b>${rejected.length}</b>
-        </div>
-
-      </div>
-
-      <div style="margin-top:18px">
-
-        <div class="muted">
-          Gewonnen
-        </div>
-
-        <div class="bar">
-
-          <i style="
-            width:${
-              total
-              ?accepted.length/
-                total*100
-              :0
-            }%
-          "></i>
-
-        </div>
-
-        <div
-          class="muted"
-          style="margin-top:12px"
-        >
-          Offen
-        </div>
-
-        <div class="bar">
-
-          <i style="
-            width:${
-              total
-              ?open.length/
-                total*100
-              :0
-            }%
-          "></i>
-
-        </div>
-
-      </div>
-
-    </div>
 
     <div class="panel">
 
@@ -2743,80 +3061,118 @@ function analytics(){
         Deine wichtigsten Kennzahlen
       </h2>
 
-      <div class="table-wrap">
 
-        <table class="table">
+      <table class="table">
 
-          <tbody>
+        <tbody>
 
-            <tr>
-              <td>
-                Gesamtzahl Angebote
-              </td>
-              <td>
-                <b>${total}</b>
-              </td>
-            </tr>
+          <tr>
 
-            <tr>
-              <td>
-                Gesamtes Angebotsvolumen
-              </td>
-              <td>
-                <b>${money(volume)}</b>
-              </td>
-            </tr>
+            <td>
+              Gesamtzahl Angebote
+            </td>
 
-            <tr>
-              <td>
-                Gewonnener Umsatz
-              </td>
-              <td>
-                <b>${money(won)}</b>
-              </td>
-            </tr>
+            <td>
+              <b>
+                ${total}
+              </b>
+            </td>
 
-            <tr>
-              <td>
-                Offene Pipeline
-              </td>
-              <td>
-                <b>${money(openVolume)}</b>
-              </td>
-            </tr>
+          </tr>
 
-            <tr>
-              <td>
-                Bruttogewinn
-              </td>
-              <td>
-                <b>${money(profit)}</b>
-              </td>
-            </tr>
 
-            <tr>
-              <td>
-                Ø Angebotswert
-              </td>
-              <td>
-                <b>${money(average)}</b>
-              </td>
-            </tr>
+          <tr>
 
-            <tr>
-              <td>
-                Abschlussquote
-              </td>
-              <td>
-                <b>${closeRate}%</b>
-              </td>
-            </tr>
+            <td>
+              Gesamtes Angebotsvolumen
+            </td>
 
-          </tbody>
+            <td>
+              <b>
+                ${money(volume)}
+              </b>
+            </td>
 
-        </table>
+          </tr>
 
-      </div>
+
+          <tr>
+
+            <td>
+              Gewonnener Umsatz
+            </td>
+
+            <td>
+              <b>
+                ${money(won)}
+              </b>
+            </td>
+
+          </tr>
+
+
+          <tr>
+
+            <td>
+              Bruttogewinn aus gewonnenen Angeboten
+            </td>
+
+            <td>
+              <b>
+                ${money(grossProfit)}
+              </b>
+            </td>
+
+          </tr>
+
+
+          <tr>
+
+            <td>
+              Offene Pipeline
+            </td>
+
+            <td>
+              <b>
+                ${money(openVolume)}
+              </b>
+            </td>
+
+          </tr>
+
+
+          <tr>
+
+            <td>
+              Durchschnittlicher Angebotswert
+            </td>
+
+            <td>
+              <b>
+                ${money(average)}
+              </b>
+            </td>
+
+          </tr>
+
+
+          <tr>
+
+            <td>
+              Abschlussquote
+            </td>
+
+            <td>
+              <b>
+                ${closeRate}%
+              </b>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
 
     </div>
 
@@ -2825,45 +3181,63 @@ function analytics(){
 
 }
 
-/* =========================
+
+/* =========================================================
    CUSTOMERS
-========================= */
+   ========================================================= */
 
 function customers(){
 
   const map={};
 
+
   state.offers.forEach(
     offer=>{
 
-      const key=
-        offer.customer.company||
+      const key =
+        (
+          offer.customer?.company ||
+          "Unbekannt"
+        ).trim() ||
         "Unbekannt";
+
 
       if(!map[key]){
 
         map[key]={
+
           customer:
-            offer.customer,
+            offer.customer || {},
+
           count:0,
+
           value:0,
+
           won:0
+
         };
 
       }
 
+
       map[key].count++;
 
-      map[key].value+=
+      map[key].value +=
         totals(offer).gross;
 
-      if(status(offer)==="Angenommen"){
-        map[key].won+=
+
+      if(
+        status(offer)==="Angenommen"
+      ){
+
+        map[key].won +=
           totals(offer).gross;
+
       }
 
     }
   );
+
 
   layout(
     "Kunden",
@@ -2875,49 +3249,74 @@ function customers(){
 
       ${
         Object.values(map)
-        .map(x=>`
+        .map(
+          customer=>`
 
-          <div class="customer-card">
+            <div class="customer-card">
 
-            <h3>
-              ${esc(
-                x.customer.company||
-                "Unbekannt"
-              )}
-            </h3>
+              <h3>
+                ${esc(
+                  customer.customer.company ||
+                  "Unbekannt"
+                )}
+              </h3>
 
-            <p>
-              ${esc(
-                x.customer.email||""
-              )}
-            </p>
 
-            <p>
-              ${esc(
-                x.customer.phone||""
-              )}
-            </p>
+              <p>
+                ${esc(
+                  customer.customer.email ||
+                  ""
+                )}
+              </p>
 
-            <p>
-              <b>${x.count}</b>
-              Angebote
-            </p>
 
-            <p>
-              Volumen:
-              <b>${money(x.value)}</b>
-            </p>
+              <p>
+                ${esc(
+                  customer.customer.phone ||
+                  ""
+                )}
+              </p>
 
-            <p>
-              Gewonnen:
-              <b>${money(x.won)}</b>
-            </p>
 
-          </div>
+              <p>
 
-        `)
+                <b>
+                  ${customer.count}
+                </b>
+
+                Angebote
+
+                ·
+
+                <b>
+                  ${money(
+                    customer.value
+                  )}
+                </b>
+
+              </p>
+
+
+              <p>
+
+                Gewonnen:
+
+                <b>
+                  ${money(
+                    customer.won
+                  )}
+                </b>
+
+              </p>
+
+            </div>
+
+          `
+        )
         .join("")
+
         ||
+
         `
         <div class="panel">
           Noch keine Kunden vorhanden.
@@ -2932,173 +3331,71 @@ function customers(){
 
 }
 
-/* =========================
+
+/* =========================================================
    CATALOG
-========================= */
+   ========================================================= */
 
 function catalog(){
 
-  const filtered=
-    state.catalog
-    .filter(item=>{
+  const query =
+    catalogSearch
+    .toLowerCase()
+    .trim();
 
-      const q=
-        catalogSearch
-        .trim()
-        .toLowerCase();
 
-      if(!q)return true;
-
-      return[
-        item.articleNo,
-        item.name,
-        item.unit
-      ]
-      .join(" ")
-      .toLowerCase()
-      .includes(q);
-
-    });
-
-  const totalMargin=
-    state.catalog.reduce(
-      (sum,x)=>
-        sum+
-        (
-          number(x.price)-
-          number(x.cost)
-        ),
-      0
+  const rows =
+    state.catalog.filter(
+      item=>
+        [
+          item.articleNo,
+          item.name,
+          item.unit
+        ]
+        .join(" ")
+        .toLowerCase()
+        .includes(
+          query
+        )
     );
 
-  const avgMargin=
-    state.catalog.length
-    ?state.catalog.reduce(
-      (sum,x)=>{
-
-        const p=
-          number(x.price);
-
-        const c=
-          number(x.cost);
-
-        return sum+
-          (
-            p
-            ?(p-c)/p*100
-            :0
-          );
-
-      },
-      0
-    )/state.catalog.length
-    :0;
 
   layout(
     "Preiskatalog",
-    "Deine Preise und internen Kosten",
+    "Preise, Einkaufskosten und Margen verwalten",
+
     `
 
     <div class="panel">
 
-      <div class="catalog-summary">
-
-        <div class="catalog-stat">
-
-          <span>
-            Artikel
-          </span>
-
-          <b>
-            ${state.catalog.length}
-          </b>
-
-        </div>
-
-        <div class="catalog-stat">
-
-          <span>
-            Gesamtmarge je Einheit
-          </span>
-
-          <b>
-            ${money(totalMargin)}
-          </b>
-
-        </div>
-
-        <div class="catalog-stat">
-
-          <span>
-            Ø Marge
-          </span>
-
-          <b>
-            ${Math.round(avgMargin)}%
-          </b>
-
-        </div>
-
-      </div>
-
-      <div class="catalog-toolbar">
-
-        <input
-          class="search"
-          placeholder="Artikel suchen..."
-          value="${esc(catalogSearch)}"
-          oninput="catalogSearch=this.value;catalog()"
-        >
+      <div class="toolbar">
 
         <button
           class="btn dark"
-          onclick="openCatalogModal()"
+          onclick="addCatalogItem()"
         >
           + Artikel hinzufügen
         </button>
 
+
+        <input
+          class="btn search"
+          placeholder="Artikel suchen…"
+          value="${esc(
+            catalogSearch
+          )}"
+          oninput="
+            catalogSearch=this.value;
+            renderCatalogTable();
+          "
+        >
+
       </div>
 
-      <div class="table-wrap">
 
-        <table class="table">
+      <div id="catalogTable">
 
-          <thead>
-
-            <tr>
-              <th>Artikel-Nr.</th>
-              <th>Leistung</th>
-              <th>Einheit</th>
-              <th>Verkauf</th>
-              <th>Einkauf</th>
-              <th>Marge</th>
-              <th></th>
-            </tr>
-
-          </thead>
-
-          <tbody>
-
-            ${
-              filtered.length
-              ?filtered.map(
-                catalogRow
-              ).join("")
-              :`
-                <tr>
-                  <td
-                    colspan="7"
-                    class="empty"
-                  >
-                    Keine Artikel gefunden.
-                  </td>
-                </tr>
-              `
-            }
-
-          </tbody>
-
-        </table>
+        ${catalogRows(rows)}
 
       </div>
 
@@ -3109,484 +3406,578 @@ function catalog(){
 
 }
 
-function catalogRow(item){
 
-  const margin=
-    number(item.price)-
-    number(item.cost);
+function catalogRows(rows){
 
-  const percent=
-    number(item.price)
-    ?Math.round(
-      margin/
-      number(item.price)*
-      100
-    )
-    :0;
+  if(!rows.length){
 
-  return`
-
-    <tr>
-
-      <td>
-        <b>
-          ${esc(
-            item.articleNo||"-"
-          )}
-        </b>
-      </td>
-
-      <td>
-        ${esc(item.name)}
-      </td>
-
-      <td>
-        ${esc(item.unit)}
-      </td>
-
-      <td>
-        ${money(item.price)}
-      </td>
-
-      <td>
-        ${money(item.cost)}
-      </td>
-
-      <td>
-
-        <span class="${
-          margin>=0
-          ?"margin-positive"
-          :"margin-negative"
-        }">
-
-          ${money(margin)}
-          (${percent}%)
-
-        </span>
-
-      </td>
-
-      <td>
-
-        <div class="table-actions">
-
-          <button
-            class="btn small"
-            onclick="openCatalogModal('${item.id}')"
-          >
-            ✏️
-          </button>
-
-          <button
-            class="btn small danger"
-            onclick="deleteCatalogItem('${item.id}')"
-          >
-            🗑️
-          </button>
-
-        </div>
-
-      </td>
-
-    </tr>
-
-  `;
-
-}
-
-function openCatalogModal(id){
-
-  const item=
-    id
-    ?state.catalog.find(
-      x=>x.id===id
-    )
-    :null;
-
-  const modal=
-    document.getElementById("modal");
-
-  modal.innerHTML=`
-
-    <div
-      class="modal-box"
-      onclick="event.stopPropagation()"
-    >
-
-      <div class="modal-head">
-
-        <h2>
-          ${
-            item
-            ?"Artikel bearbeiten"
-            :"Artikel hinzufügen"
-          }
-        </h2>
-
-        <button
-          class="btn small"
-          onclick="closeModal()"
-        >
-          ×
-        </button>
-
+    return `
+      <div class="empty">
+        Keine Artikel gefunden.
       </div>
-
-      <div class="formgrid">
-
-        <div class="field">
-
-          <label>
-            Artikelnummer
-          </label>
-
-          <input
-            id="catArticleNo"
-            value="${esc(
-              item?.articleNo||""
-            )}"
-            placeholder="z.B. SHK-009"
-          >
-
-        </div>
-
-        <div class="field">
-
-          <label>
-            Einheit
-          </label>
-
-          <select id="catUnit">
-
-            ${
-              [
-                "Stk.",
-                "Std.",
-                "Pausch.",
-                "m",
-                "m²",
-                "m³",
-                "kg",
-                "Set"
-              ]
-              .map(unit=>`
-
-                <option
-                  value="${unit}"
-                  ${
-                    item?.unit===unit
-                    ?"selected"
-                    :""
-                  }
-                >
-                  ${unit}
-                </option>
-
-              `)
-              .join("")
-            }
-
-          </select>
-
-        </div>
-
-        <div class="field full">
-
-          <label>
-            Leistung / Artikel
-          </label>
-
-          <input
-            id="catName"
-            value="${esc(
-              item?.name||""
-            )}"
-            placeholder="z.B. Wärmepumpe"
-          >
-
-        </div>
-
-        <div class="field">
-
-          <label>
-            Verkaufspreis netto (€)
-          </label>
-
-          <input
-            id="catPrice"
-            type="number"
-            min="0"
-            step="0.01"
-            value="${
-              item
-              ?number(item.price)
-              :""
-            }"
-            oninput="updateCatalogPreview()"
-          >
-
-        </div>
-
-        <div class="field">
-
-          <label>
-            Einkaufspreis netto (€)
-          </label>
-
-          <input
-            id="catCost"
-            type="number"
-            min="0"
-            step="0.01"
-            value="${
-              item
-              ?number(item.cost)
-              :""
-            }"
-            oninput="updateCatalogPreview()"
-          >
-
-        </div>
-
-      </div>
-
-      <div
-        class="profit-box"
-        id="catalogPreview"
-      >
-        Marge wird berechnet...
-      </div>
-
-      <div class="modal-actions">
-
-        <button
-          class="btn"
-          onclick="closeModal()"
-        >
-          Abbrechen
-        </button>
-
-        <button
-          class="btn dark"
-          onclick="${
-            item
-            ?`saveCatalogItem('${item.id}')`
-            :"saveCatalogItem()"
-          }"
-        >
-          Speichern
-        </button>
-
-      </div>
-
-    </div>
-
-  `;
-
-  modal.classList.remove("hidden");
-
-  updateCatalogPreview();
-
-}
-
-function updateCatalogPreview(){
-
-  const price=
-    number(
-      document.getElementById(
-        "catPrice"
-      )?.value
-    );
-
-  const cost=
-    number(
-      document.getElementById(
-        "catCost"
-      )?.value
-    );
-
-  const margin=
-    price-cost;
-
-  const percent=
-    price
-    ?Math.round(
-      margin/price*100
-    )
-    :0;
-
-  const box=
-    document.getElementById(
-      "catalogPreview"
-    );
-
-  if(!box)return;
-
-  box.innerHTML=`
-
-    <div class="profit-row">
-      <span>Verkauf</span>
-      <b>${money(price)}</b>
-    </div>
-
-    <div class="profit-row">
-      <span>Einkauf</span>
-      <b>${money(cost)}</b>
-    </div>
-
-    <div class="profit-row">
-      <span>Marge</span>
-      <b class="${
-        margin>=0
-        ?"margin-positive"
-        :"margin-negative"
-      }">
-        ${money(margin)}
-        · ${percent}%
-      </b>
-    </div>
-
-  `;
-
-}
-
-function saveCatalogItem(id){
-
-  const articleNo=
-    document.getElementById(
-      "catArticleNo"
-    ).value.trim();
-
-  const name=
-    document.getElementById(
-      "catName"
-    ).value.trim();
-
-  const unit=
-    document.getElementById(
-      "catUnit"
-    ).value;
-
-  const price=
-    number(
-      document.getElementById(
-        "catPrice"
-      ).value
-    );
-
-  const cost=
-    number(
-      document.getElementById(
-        "catCost"
-      ).value
-    );
-
-  if(!name){
-
-    toast(
-      "Bitte eine Bezeichnung eingeben"
-    );
-
-    return;
+    `;
 
   }
 
-  if(id){
 
-    const item=
-      state.catalog.find(
-        x=>x.id===id
+  return `
+
+    <div class="table-wrap">
+
+      <table class="table">
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Art.-Nr.
+            </th>
+
+            <th>
+              Leistung
+            </th>
+
+            <th>
+              Einheit
+            </th>
+
+            <th>
+              Verkauf netto
+            </th>
+
+            <th>
+              Einkauf
+            </th>
+
+            <th>
+              Marge
+            </th>
+
+            <th></th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody>
+
+          ${
+            rows
+            .map(
+              item=>{
+
+                const margin =
+                  Number(item.price) -
+                  Number(item.cost);
+
+
+                const percent =
+                  item.price
+                  ? margin /
+                    item.price *
+                    100
+                  : 0;
+
+
+                return `
+
+                  <tr>
+
+                    <td>
+                      ${esc(
+                        item.articleNo
+                      )}
+                    </td>
+
+
+                    <td>
+                      <b>
+                        ${esc(
+                          item.name
+                        )}
+                      </b>
+                    </td>
+
+
+                    <td>
+                      ${esc(
+                        item.unit
+                      )}
+                    </td>
+
+
+                    <td>
+                      ${money(
+                        item.price
+                      )}
+                    </td>
+
+
+                    <td>
+                      ${money(
+                        item.cost
+                      )}
+                    </td>
+
+
+                    <td>
+
+                      <b>
+                        ${money(
+                          margin
+                        )}
+                      </b>
+
+                      (
+                      ${percent.toFixed(0)}%
+                      )
+
+                    </td>
+
+
+                    <td>
+
+                      <button
+                        class="btn small"
+                        onclick="
+                          editCatalogItem(
+                            '${item.id}'
+                          )
+                        "
+                      >
+                        Bearbeiten
+                      </button>
+
+
+                      <button
+                        class="
+                          btn
+                          small
+                          danger
+                        "
+                        onclick="
+                          deleteCatalogItem(
+                            '${item.id}'
+                          )
+                        "
+                      >
+                        Löschen
+                      </button>
+
+                    </td>
+
+                  </tr>
+
+                `;
+
+              }
+            )
+            .join("")
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  `;
+
+}
+
+
+function renderCatalogTable(){
+
+  const table =
+    document.getElementById(
+      "catalogTable"
+    );
+
+  if(!table)return;
+
+
+  const query =
+    catalogSearch
+    .toLowerCase()
+    .trim();
+
+
+  const rows =
+    state.catalog.filter(
+      item=>
+        [
+          item.articleNo,
+          item.name,
+          item.unit
+        ]
+        .join(" ")
+        .toLowerCase()
+        .includes(
+          query
+        )
+    );
+
+
+  table.innerHTML =
+    catalogRows(rows);
+
+}
+
+
+/* =========================================================
+   CATALOG FORM
+   ========================================================= */
+
+function catalogForm(
+  item={}
+){
+
+  return `
+
+    <div class="formgrid">
+
+      <div class="field">
+
+        <label>
+          Artikelnummer
+        </label>
+
+        <input
+          id="catNo"
+          value="${esc(
+            item.articleNo || ""
+          )}"
+          placeholder="z. B. SHK-009"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Einheit
+        </label>
+
+        <input
+          id="catUnit"
+          value="${esc(
+            item.unit || "Stk."
+          )}"
+          placeholder="Stk."
+        >
+
+      </div>
+
+
+      <div class="field full">
+
+        <label>
+          Leistung / Artikel
+        </label>
+
+        <input
+          id="catName"
+          value="${esc(
+            item.name || ""
+          )}"
+          placeholder="z. B. Rohrleitung DN25"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Verkaufspreis netto (€)
+        </label>
+
+        <input
+          id="catPrice"
+          type="number"
+          min="0"
+          step="0.01"
+          value="${Number(
+            item.price
+          ) || 0}"
+        >
+
+      </div>
+
+
+      <div class="field">
+
+        <label>
+          Einkaufspreis (€)
+        </label>
+
+        <input
+          id="catCost"
+          type="number"
+          min="0"
+          step="0.01"
+          value="${Number(
+            item.cost
+          ) || 0}"
+        >
+
+      </div>
+
+    </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   ADD CATALOG ITEM
+   ========================================================= */
+
+function addCatalogItem(){
+
+  showModal(
+
+    "Artikel hinzufügen",
+
+    catalogForm(),
+
+    ()=>{
+
+      const name =
+        document
+        .getElementById(
+          "catName"
+        )
+        .value
+        .trim();
+
+
+      if(!name){
+
+        toast(
+          "Bitte Artikelname eingeben"
+        );
+
+        return;
+
+      }
+
+
+      state.catalog.push({
+
+        id:
+          crypto.randomUUID
+          ? crypto.randomUUID()
+          : String(Date.now()),
+
+        articleNo:
+          document
+          .getElementById(
+            "catNo"
+          )
+          .value
+          .trim(),
+
+        name,
+
+        unit:
+          document
+          .getElementById(
+            "catUnit"
+          )
+          .value
+          .trim() ||
+          "Stk.",
+
+        price:
+          Number(
+            document
+            .getElementById(
+              "catPrice"
+            )
+            .value
+          ) || 0,
+
+        cost:
+          Number(
+            document
+            .getElementById(
+              "catCost"
+            )
+            .value
+          ) || 0
+
+      });
+
+
+      save();
+
+      closeModal();
+
+      toast(
+        "Artikel hinzugefügt"
       );
 
-    if(!item)return;
+      catalog();
 
-    item.articleNo=
-      articleNo||
-      item.articleNo;
+    }
 
-    item.name=name;
-    item.unit=unit;
-    item.price=price;
-    item.cost=cost;
-
-    toast("Artikel aktualisiert");
-
-  }else{
-
-    const newItem={
-
-      id:createId(),
-
-      articleNo:
-        articleNo||
-        nextArticleNo(),
-
-      name,
-      unit,
-      price,
-      cost
-
-    };
-
-    state.catalog.push(
-      newItem
-    );
-
-    toast("Artikel hinzugefügt");
-
-  }
-
-  save();
-
-  closeModal();
-
-  catalog();
+  );
 
 }
 
-function nextArticleNo(){
 
-  return`
-    SHK-${String(
-      state.catalog.length+1
-    ).padStart(3,"0")}
-  `;
+/* =========================================================
+   EDIT CATALOG ITEM
+   ========================================================= */
 
-}
+function editCatalogItem(id){
 
-function deleteCatalogItem(id){
-
-  const item=
+  const item =
     state.catalog.find(
       x=>x.id===id
     );
 
   if(!item)return;
 
-  const yes=
-    confirm(
-      `"${item.name}" wirklich löschen?`
+
+  showModal(
+
+    "Artikel bearbeiten",
+
+    catalogForm(item),
+
+    ()=>{
+
+      const name =
+        document
+        .getElementById(
+          "catName"
+        )
+        .value
+        .trim();
+
+
+      if(!name){
+
+        toast(
+          "Bitte Artikelname eingeben"
+        );
+
+        return;
+
+      }
+
+
+      item.articleNo =
+        document
+        .getElementById(
+          "catNo"
+        )
+        .value
+        .trim();
+
+
+      item.name =
+        name;
+
+
+      item.unit =
+        document
+        .getElementById(
+          "catUnit"
+        )
+        .value
+        .trim() ||
+        "Stk.";
+
+
+      item.price =
+        Number(
+          document
+          .getElementById(
+            "catPrice"
+          )
+          .value
+        ) || 0;
+
+
+      item.cost =
+        Number(
+          document
+          .getElementById(
+            "catCost"
+          )
+          .value
+        ) || 0;
+
+
+      save();
+
+      closeModal();
+
+      toast(
+        "Artikel gespeichert"
+      );
+
+      catalog();
+
+    }
+
+  );
+
+}
+
+
+/* =========================================================
+   DELETE CATALOG ITEM
+   ========================================================= */
+
+function deleteCatalogItem(id){
+
+  const item =
+    state.catalog.find(
+      x=>x.id===id
     );
 
-  if(!yes)return;
+  if(!item)return;
 
-  state.catalog=
+
+  if(
+    !confirm(
+      `Artikel „${item.name}" löschen?`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  state.catalog =
     state.catalog.filter(
       x=>x.id!==id
     );
 
+
   save();
 
-  toast("Artikel gelöscht");
+  toast(
+    "Artikel gelöscht"
+  );
 
   catalog();
 
 }
 
-/* =========================
+
+/* =========================================================
    SETTINGS
-========================= */
+   ========================================================= */
 
 function settings(){
 
@@ -3599,6 +3990,7 @@ function settings(){
     <div class="panel">
 
       <div class="formgrid">
+
 
         <div class="field">
 
@@ -3615,6 +4007,7 @@ function settings(){
 
         </div>
 
+
         <div class="field">
 
           <label>
@@ -3630,6 +4023,7 @@ function settings(){
 
         </div>
 
+
         <div class="field full">
 
           <label>
@@ -3643,6 +4037,7 @@ function settings(){
           )}</textarea>
 
         </div>
+
 
         <div class="field full">
 
@@ -3659,7 +4054,9 @@ function settings(){
 
         </div>
 
+
       </div>
+
 
       <button
         class="btn dark"
@@ -3676,44 +4073,59 @@ function settings(){
 
 }
 
+
 function saveSettings(){
 
-  state.settings.company=
-    document.getElementById(
+  state.settings.company =
+    document
+    .getElementById(
       "setCompany"
-    ).value;
+    )
+    .value;
 
-  state.settings.owner=
-    document.getElementById(
+
+  state.settings.owner =
+    document
+    .getElementById(
       "setOwner"
-    ).value;
+    )
+    .value;
 
-  state.settings.address=
-    document.getElementById(
+
+  state.settings.address =
+    document
+    .getElementById(
       "setAddress"
-    ).value;
+    )
+    .value;
 
-  state.settings.iban=
-    document.getElementById(
+
+  state.settings.iban =
+    document
+    .getElementById(
       "setIban"
-    ).value;
+    )
+    .value;
+
 
   save();
 
-  toast("Gespeichert");
+  toast(
+    "Gespeichert"
+  );
 
 }
 
-/* =========================
-   NEW / EDIT OFFER
-========================= */
+
+/* =========================================================
+   NEW OFFER
+   ========================================================= */
 
 function newOffer(){
 
   draft={
-    step:1,
 
-    editingId:null,
+    step:1,
 
     customer:{
       company:"",
@@ -3723,11 +4135,15 @@ function newOffer(){
     },
 
     request:"",
+
     items:[],
+
     notes:"",
+
     followDate:""
 
   };
+
 
   page="create";
 
@@ -3735,21 +4151,31 @@ function newOffer(){
 
 }
 
+
+/* =========================================================
+   CREATE OFFER
+   ========================================================= */
+
 function create(){
 
-  const editing=
-    !!draft.editingId;
-
   const steps=[
+
     "1 Kunde",
     "2 Anfrage + KI",
     "3 Positionen",
     "4 Vorschau"
+
   ];
+
 
   let body="";
 
-  if(draft.step===1){
+
+  /* STEP 1 */
+
+  if(
+    draft.step===1
+  ){
 
     body=`
 
@@ -3759,7 +4185,9 @@ function create(){
           Kundendaten
         </h2>
 
+
         <div class="formgrid">
+
 
           <div class="field">
 
@@ -3776,6 +4204,7 @@ function create(){
 
           </div>
 
+
           <div class="field">
 
             <label>
@@ -3784,13 +4213,13 @@ function create(){
 
             <input
               id="cEmail"
-              type="email"
               value="${esc(
                 draft.customer.email
               )}"
             >
 
           </div>
+
 
           <div class="field">
 
@@ -3807,6 +4236,7 @@ function create(){
 
           </div>
 
+
           <div class="field">
 
             <label>
@@ -3822,16 +4252,13 @@ function create(){
 
           </div>
 
+
         </div>
+
 
         <div class="wizard-actions">
 
-          <button
-            class="btn"
-            onclick="go('offers')"
-          >
-            Abbrechen
-          </button>
+          <span></span>
 
           <button
             class="btn dark"
@@ -3848,7 +4275,12 @@ function create(){
 
   }
 
-  else if(draft.step===2){
+
+  /* STEP 2 */
+
+  else if(
+    draft.step===2
+  ){
 
     body=`
 
@@ -3858,11 +4290,13 @@ function create(){
           ✦ KI-Angebotsassistent
         </h2>
 
+
         <p>
           Beschreibe die Kundenanfrage.
           EasyOffer erkennt passende Positionen
           aus deinem Preiskatalog.
         </p>
+
 
         <textarea
           id="request"
@@ -3870,6 +4304,7 @@ function create(){
         >${esc(
           draft.request
         )}</textarea>
+
 
         <div style="margin-top:12px">
 
@@ -3882,45 +4317,62 @@ function create(){
 
         </div>
 
+
         ${
           draft.items.length
-          ?`
-
-            <div class="ai-result">
-
-              <b>
-                Erkannte Positionen
-              </b>
-
-              <ul>
-
-                ${
-                  draft.items.map(
-                    i=>`
-
-                      <li>
-                        ${number(i.qty)}×
-                        ${esc(i.name)}
-                        –
-                        ${money(
-                          number(i.price)*
-                          number(i.qty)
-                        )}
-                      </li>
-
-                    `
-                  ).join("")
-                }
-
-              </ul>
-
-            </div>
+          ?
 
           `
-          :""
+
+          <div class="ai-result">
+
+            <b>
+              Erkannte Positionen
+            </b>
+
+
+            <ul>
+
+              ${
+                draft.items
+                .map(
+                  item=>`
+
+                    <li>
+
+                      ${item.qty}×
+
+                      ${esc(
+                        item.name
+                      )}
+
+                      –
+
+                      ${money(
+                        item.price
+                      )}
+
+                    </li>
+
+                  `
+                )
+                .join("")
+              }
+
+            </ul>
+
+          </div>
+
+          `
+
+          :
+
+          ""
+
         }
 
       </div>
+
 
       <div class="wizard-actions">
 
@@ -3930,6 +4382,7 @@ function create(){
         >
           ← Zurück
         </button>
+
 
         <button
           class="btn dark"
@@ -3944,7 +4397,12 @@ function create(){
 
   }
 
-  else if(draft.step===3){
+
+  /* STEP 3 */
+
+  else if(
+    draft.step===3
+  ){
 
     body=`
 
@@ -3954,18 +4412,144 @@ function create(){
           Positionen prüfen
         </h2>
 
+
         ${
-          draft.items.map(
-            (item,index)=>
-              offerItemRow(item,index)
-          ).join("")
+          draft.items
+          .map(
+            (item,index)=>`
+
+              <div class="itemrow">
+
+
+                <select
+                  class="itemname"
+                  onchange="
+                    selectDraftCatalog(
+                      ${index},
+                      this.value
+                    )
+                  "
+                >
+
+                  <option value="">
+                    Artikel wählen…
+                  </option>
+
+
+                  ${
+                    state.catalog
+                    .map(
+                      catalogItem=>`
+
+                        <option
+                          value="${esc(
+                            catalogItem.id
+                          )}"
+                          ${
+                            catalogItem.name ===
+                            item.name
+                            ? "selected"
+                            : ""
+                          }
+                        >
+                          ${esc(
+                            catalogItem.name
+                          )}
+                        </option>
+
+                      `
+                    )
+                    .join("")
+                  }
+
+
+                  <option
+                    value="custom"
+                    ${
+                      !state.catalog.some(
+                        catalogItem=>
+                          catalogItem.name ===
+                          item.name
+                      )
+                      ? "selected"
+                      : ""
+                    }
+                  >
+                    Eigene Position
+                  </option>
+
+                </select>
+
+
+                <input
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  value="${Number(
+                    item.qty
+                  ) || 1}"
+                  onchange="
+                    draft.items[${index}].qty=
+                    Number(this.value)||1
+                  "
+                >
+
+
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  value="${Number(
+                    item.price
+                  ) || 0}"
+                  onchange="
+                    draft.items[${index}].price=
+                    Number(this.value)||0
+                  "
+                >
+
+
+                <input
+                  value="${esc(
+                    item.unit ||
+                    "Stk."
+                  )}"
+                  onchange="
+                    draft.items[${index}].unit=
+                    this.value
+                  "
+                >
+
+
+                <button
+                  class="btn small"
+                  onclick="
+                    draft.items.splice(
+                      ${index},
+                      1
+                    );
+                    render();
+                  "
+                >
+                  ×
+                </button>
+
+
+              </div>
+
+            `
+          )
+          .join("")
+
           ||
+
           `
-            <div class="muted">
-              Noch keine Positionen.
-            </div>
+          <div class="muted">
+            Noch keine Positionen.
+          </div>
           `
         }
+
 
         <button
           class="btn"
@@ -3973,6 +4557,7 @@ function create(){
         >
           + Position
         </button>
+
 
         <div
           class="field"
@@ -3990,6 +4575,7 @@ function create(){
           )}</textarea>
 
         </div>
+
 
         <div
           class="field"
@@ -4010,6 +4596,7 @@ function create(){
 
         </div>
 
+
         <div class="wizard-actions">
 
           <button
@@ -4018,6 +4605,7 @@ function create(){
           >
             ← Zurück
           </button>
+
 
           <button
             class="btn dark"
@@ -4034,43 +4622,51 @@ function create(){
 
   }
 
+
+  /* STEP 4 */
+
   else{
 
-    body=
+    body =
       previewDraft();
 
   }
 
-  layout(
-    editing
-    ?"Angebot bearbeiten"
-    :"Neues Angebot",
 
-    editing
-    ?"Bestehendes Angebot aktualisieren"
-    :"In wenigen Schritten zum fertigen Angebot",
+  layout(
+    "Neues Angebot",
+    "In wenigen Schritten zum fertigen Angebot",
 
     `
 
       <div class="steps">
 
         ${
-          steps.map(
+          steps
+          .map(
             (step,index)=>`
 
-              <div class="step ${
-                draft.step===index+1
-                ?"active"
-                :""
-              }">
+              <div
+                class="
+                  step
+                  ${
+                    draft.step===
+                    index+1
+                    ? "active"
+                    : ""
+                  }
+                "
+              >
                 ${step}
               </div>
 
             `
-          ).join("")
+          )
+          .join("")
         }
 
       </div>
+
 
       ${body}
 
@@ -4079,147 +4675,107 @@ function create(){
 
 }
 
-function offerItemRow(item,index){
 
-  return`
+/* =========================================================
+   DRAFT CATALOG SELECT
+   ========================================================= */
 
-    <div class="itemrow">
+function selectDraftCatalog(
+  index,
+  id
+){
 
-      <div>
+  if(
+    id==="custom"
+  ){
 
-        <div class="item-label">
-          Position
-        </div>
+    draft.items[index].name =
+      "Eigene Position";
 
-        <input
-          class="itemname"
-          value="${esc(
-            item.name
-          )}"
-          onchange="
-            draft.items[${index}].name=this.value
-          "
-        >
+    draft.items[index].unit =
+      "Stk.";
 
-      </div>
+    draft.items[index].cost =
+      0;
 
-      <div>
+    render();
 
-        <div class="item-label">
-          Menge
-        </div>
+    return;
 
-        <input
-          type="number"
-          min="0"
-          step="0.01"
-          value="${number(item.qty)}"
-          onchange="
-            draft.items[${index}].qty=number(this.value);
-            render();
-          "
-        >
+  }
 
-      </div>
 
-      <div>
+  const item =
+    state.catalog.find(
+      x=>x.id===id
+    );
 
-        <div class="item-label">
-          Preis netto
-        </div>
 
-        <input
-          type="number"
-          min="0"
-          step="0.01"
-          value="${number(item.price)}"
-          onchange="
-            draft.items[${index}].price=number(this.value);
-            render();
-          "
-        >
+  if(item){
 
-      </div>
+    draft.items[index]={
 
-      <div>
+      ...draft.items[index],
 
-        <div class="item-label">
-          Einheit
-        </div>
+      name:item.name,
 
-        <select
-          onchange="
-            draft.items[${index}].unit=this.value
-          "
-        >
+      articleNo:item.articleNo,
 
-          ${
-            [
-              "Stk.",
-              "Std.",
-              "Pausch.",
-              "m",
-              "m²",
-              "m³",
-              "kg",
-              "Set"
-            ]
-            .map(unit=>`
+      unit:item.unit,
 
-              <option
-                value="${unit}"
-                ${
-                  item.unit===unit
-                  ?"selected"
-                  :""
-                }
-              >
-                ${unit}
-              </option>
+      price:Number(
+        item.price
+      ),
 
-            `)
-            .join("")
-          }
+      cost:Number(
+        item.cost
+      )
 
-        </select>
+    };
 
-      </div>
+  }
 
-      <button
-        class="btn small danger remove-item"
-        onclick="
-          draft.items.splice(${index},1);
-          render();
-        "
-      >
-        ×
-      </button>
 
-    </div>
-
-  `;
+  render();
 
 }
+
+
+/* =========================================================
+   ADD DRAFT ITEM
+   ========================================================= */
 
 function addDraftItem(){
 
   draft.items.push({
 
     name:"Neue Position",
+
     unit:"Stk.",
+
     qty:1,
+
     price:0,
+
     cost:0
 
   });
+
 
   render();
 
 }
 
+
+/* =========================================================
+   STEP BACK
+   ========================================================= */
+
 function stepBack(){
 
-  if(draft.step>1){
+  if(
+    draft.step>1
+  ){
 
     draft.step--;
 
@@ -4229,277 +4785,276 @@ function stepBack(){
 
 }
 
+
+/* =========================================================
+   STEP NEXT
+   ========================================================= */
+
 function stepNext(){
 
-  if(draft.step===1){
+  if(
+    draft.step===1
+  ){
 
     draft.customer={
+
       company:
-        document.getElementById(
+        document
+        .getElementById(
           "cCompany"
-        ).value,
+        )
+        .value,
 
       email:
-        document.getElementById(
+        document
+        .getElementById(
           "cEmail"
-        ).value,
+        )
+        .value,
 
       phone:
-        document.getElementById(
+        document
+        .getElementById(
           "cPhone"
-        ).value,
+        )
+        .value,
 
       address:
-        document.getElementById(
+        document
+        .getElementById(
           "cAddress"
-        ).value
+        )
+        .value
+
     };
+
+
+    if(
+      !draft.customer.company.trim()
+    ){
+
+      toast(
+        "Bitte Kunde/Firma eingeben"
+      );
+
+      return;
+
+    }
+
 
     draft.step=2;
 
   }
 
-  else if(draft.step===2){
 
-    draft.request=
-      document.getElementById(
+  else if(
+    draft.step===2
+  ){
+
+    draft.request =
+      document
+      .getElementById(
         "request"
-      ).value;
+      )
+      .value;
 
     draft.step=3;
 
   }
 
-  else if(draft.step===3){
 
-    draft.notes=
-      document.getElementById(
+  else if(
+    draft.step===3
+  ){
+
+    draft.notes =
+      document
+      .getElementById(
         "notes"
-      ).value;
+      )
+      .value;
 
-    draft.followDate=
-      document.getElementById(
+
+    draft.followDate =
+      document
+      .getElementById(
         "followDate"
-      ).value;
+      )
+      .value;
 
-    /*
-      Positionen bekommen die aktuellen
-      Einkaufspreise aus dem Katalog,
-      falls noch kein cost gespeichert ist.
-    */
-
-    draft.items=
-      draft.items.map(item=>{
-
-        if(
-          item.cost===undefined||
-          item.cost===null
-        ){
-
-          item.cost=
-            catalogCost(item.name);
-
-        }
-
-        return item;
-
-      });
 
     draft.step=4;
 
   }
 
+
   render();
 
 }
 
-/* =========================
-   LOCAL AI
-========================= */
+
+/* =========================================================
+   LOCAL AI / PARSER
+   ========================================================= */
 
 function analyze(){
 
-  draft.request=
-    document.getElementById(
+  draft.request =
+    document
+    .getElementById(
       "request"
-    ).value;
+    )
+    .value;
 
-  const text=
-    draft.request.toLowerCase();
+
+  const text =
+    draft.request
+    .toLowerCase();
+
 
   draft.items=[];
+
+
+  const aliases={
+
+    "wärmepumpe":[
+      "wärmepumpe",
+      "wp",
+      "luftwärmepumpe"
+    ],
+
+    "gas-brennwerttherme":[
+      "gastherme",
+      "brennwerttherme",
+      "gasheizung"
+    ],
+
+    "heizkörper":[
+      "heizkörper",
+      "radiator"
+    ],
+
+    "waschtisch":[
+      "waschtisch",
+      "waschbecken"
+    ],
+
+    "toilette":[
+      "toilette",
+      "wc",
+      "klo"
+    ],
+
+    "montage / arbeitszeit":[
+      "montage",
+      "arbeitszeit",
+      "einbau"
+    ],
+
+    "demontage":[
+      "demontage",
+      "ausbau"
+    ],
+
+    "anfahrt":[
+      "anfahrt",
+      "anfahrtskosten"
+    ]
+
+  };
+
 
   state.catalog.forEach(
     item=>{
 
-      const name=
-        item.name.toLowerCase();
+      const name =
+        item.name
+        .toLowerCase();
 
-      let found=
-        text.includes(name);
 
-      const aliases={
+      const list =
+        aliases[name] ||
+        [];
 
-        "wärmepumpe":[
-          "wärmepumpe",
-          "wp",
-          "luftwärmepumpe",
-          "luft wasser wärmepumpe"
-        ],
 
-        "gas-brennwerttherme":[
-          "gastherme",
-          "brennwerttherme",
-          "gasheizung"
-        ],
-
-        "heizkörper":[
-          "heizkörper",
-          "heizkörper",
-          "radiator"
-        ],
-
-        "waschtisch":[
-          "waschtisch",
-          "waschbecken",
-          "waschplatz"
-        ],
-
-        "toilette":[
-          "toilette",
-          "wc",
-          "klo"
-        ],
-
-        "montage / arbeitszeit":[
-          "montage",
-          "arbeitszeit",
-          "einbau",
-          "installation"
-        ],
-
-        "demontage":[
-          "demontage",
-          "ausbau",
-          "abbau"
-        ],
-
-        "anfahrt":[
-          "anfahrt",
-          "fahrt",
-          "anfahrtskosten"
-        ]
-
-      };
-
-      const list=
-        aliases[name]||[];
-
-      if(
+      const found =
+        text.includes(name) ||
         list.some(
           alias=>
-            text.includes(alias)
-        )
-      ){
+            text.includes(
+              alias
+            )
+        );
 
-        found=true;
 
-      }
+      if(!found)return;
 
-      if(found){
 
-        let qty=
-          detectQuantity(
-            text,
-            list.length
-            ?list
-            :[name]
-          );
+      let qty=1;
 
-        draft.items.push({
 
-          name:item.name,
+      const numberMatch =
+        text.match(
+          /(\d+)\s*(?:x|stück|stk)/i
+        );
 
-          articleNo:
-            item.articleNo,
 
-          unit:item.unit,
+      if(numberMatch){
 
-          qty,
-
-          price:
-            number(item.price),
-
-          cost:
-            number(item.cost)
-
-        });
+        qty =
+          Number(
+            numberMatch[1]
+          ) || 1;
 
       }
+
+
+      draft.items.push({
+
+        name:item.name,
+
+        articleNo:
+          item.articleNo,
+
+        unit:item.unit,
+
+        qty,
+
+        price:
+          Number(item.price),
+
+        cost:
+          Number(item.cost)
+
+      });
 
     }
   );
 
+
   toast(
+
     draft.items.length
-    ?`${draft.items.length} Position(en) erkannt`
-    :"Keine Position erkannt"
+
+    ?
+
+    `${draft.items.length} Position(en) erkannt`
+
+    :
+
+    "Keine Position erkannt"
+
   );
+
 
   render();
 
 }
 
-function detectQuantity(
-  text,
-  aliases
-){
 
-  for(
-    const alias of aliases
-  ){
-
-    const escaped=
-      alias.replace(
-        /[.*+?^${}()|[\]\\]/g,
-        "\\$&"
-      );
-
-    const regex=
-      new RegExp(
-        `(\\d+(?:[,.]\\d+)?)\\s*(?:x|stück|stk\\.?|mal)?\\s*(?:${escaped})`,
-        "i"
-      );
-
-    const match=
-      text.match(regex);
-
-    if(match){
-
-      return number(
-        String(
-          match[1]
-        ).replace(",",".")
-      )||1;
-
-    }
-
-  }
-
-  const generic=
-    text.match(
-      /(\d+)\s*(x|stück|stk|mal)/i
-    );
-
-  return generic
-    ?number(generic[1])
-    :1;
-
-}
-
-/* =========================
-   PREVIEW
-========================= */
+/* =========================================================
+   PREVIEW DRAFT
+   ========================================================= */
 
 function previewDraft(){
 
@@ -4515,27 +5070,15 @@ function previewDraft(){
       draft.notes,
 
     no:
-      draft.editingId
-      ?(
-        state.offers.find(
-          x=>x.id===draft.editingId
-        )?.no||""
-      )
-      :"NEU",
+      "NEU",
 
     date:
-      draft.editingId
-      ?(
-        state.offers.find(
-          x=>x.id===draft.editingId
-        )?.date||
-        todayString()
-      )
-      :todayString()
+      todayISO()
 
   };
 
-  return`
+
+  return `
 
     <div class="panel">
 
@@ -4551,22 +5094,16 @@ function previewDraft(){
           ← Zurück
         </button>
 
+
         <button
           class="btn dark"
-          onclick="${
-            draft.editingId
-            ?"updateOffer()"
-            :"saveOffer()"
-          }"
+          onclick="saveOffer()"
         >
-          ✓ ${
-            draft.editingId
-            ?"Änderungen speichern"
-            :"Angebot speichern"
-          }
+          ✓ Angebot speichern
         </button>
 
       </div>
+
 
       ${previewHtml(fake)}
 
@@ -4576,130 +5113,145 @@ function previewDraft(){
 
 }
 
+
+/* =========================================================
+   PREVIEW EXISTING OFFER
+   ========================================================= */
+
 function preview(id){
 
-  const offer=
+  const offer =
     state.offers.find(
       x=>x.id===id
     );
 
   if(!offer)return;
 
+
   page="preview";
 
-  main.innerHTML=`
 
-    <div class="top no-print">
+  document
+    .getElementById("main")
+    .innerHTML=`
 
-      <div>
+      <div class="top no-print">
 
-        <h1>
-          Angebot ${esc(offer.no)}
-        </h1>
+        <div>
 
-        <div class="offer-meta">
+          <h1>
+            Angebot ${esc(
+              offer.no
+            )}
+          </h1>
 
-          ${badge(status(offer))}
+          <div class="sub">
+            ${badge(
+              status(offer)
+            )}
+          </div>
 
-          ${
-            offer.followDate
-            ?`
-              <span class="badge">
-                Follow-up:
-                ${esc(
-                  offer.followDate
-                )}
-              </span>
-            `
-            :""
-          }
+        </div>
+
+
+        <div class="toolbar">
+
+          <button
+            class="btn"
+            onclick="go('offers')"
+          >
+            ← Zurück
+          </button>
+
+
+          <button
+            class="btn"
+            onclick="
+              editOffer(
+                '${offer.id}'
+              )
+            "
+          >
+            Bearbeiten
+          </button>
+
+
+          <button
+            class="btn"
+            onclick="
+              duplicateOffer(
+                '${offer.id}'
+              )
+            "
+          >
+            Duplizieren
+          </button>
+
+
+          <button
+            class="btn danger"
+            onclick="
+              deleteOffer(
+                '${offer.id}'
+              )
+            "
+          >
+            Löschen
+          </button>
+
+
+          <button
+            class="btn dark"
+            onclick="window.print()"
+          >
+            Drucken / PDF
+          </button>
 
         </div>
 
       </div>
 
-      <div class="quick-actions">
 
-        <button
-          class="btn"
-          onclick="go('offers')"
-        >
-          ← Zurück
-        </button>
+      <div class="panel">
 
-        <button
-          class="btn"
-          onclick="editOffer('${offer.id}')"
-        >
-          Bearbeiten
-        </button>
-
-        <button
-          class="btn"
-          onclick="duplicateOffer('${offer.id}')"
-        >
-          Duplizieren
-        </button>
-
-        <button
-          class="btn"
-          onclick="changeStatus('${offer.id}')"
-        >
-          Status
-        </button>
-
-        <button
-          class="btn dark"
-          onclick="window.print()"
-        >
-          Drucken / PDF
-        </button>
-
-        <button
-          class="btn danger"
-          onclick="deleteOffer('${offer.id}')"
-        >
-          Löschen
-        </button>
+        ${previewHtml(
+          offer
+        )}
 
       </div>
 
-    </div>
+    `;
 
-    <div class="panel">
-
-      ${previewHtml(offer)}
-
-    </div>
-
-  `;
 
   nav();
 
 }
 
+
+/* =========================================================
+   PREVIEW HTML
+   ========================================================= */
+
 function previewHtml(offer){
 
-  const total=
+  const total =
     totals(offer);
 
-  const profit=
-    offerProfit(offer);
 
-  const margin=
-    offerMarginPercent(offer);
-
-  return`
+  return `
 
     <div class="preview">
 
+
       <div class="preview-head">
+
 
         <div>
 
           <h1>
             Angebot
           </h1>
+
 
           <div style="margin-top:8px">
 
@@ -4722,22 +5274,25 @@ function previewHtml(offer){
 
         </div>
 
+
         <div>
 
           <b>
             ${esc(
-              offer.no||"NEU"
+              offer.no
             )}
           </b>
 
           <br>
 
           ${esc(
-            offer.date||
-            todayString()
+            offer.date ||
+            todayISO()
           )}
 
+
           <br><br>
+
 
           <b>
             Kunde
@@ -4746,22 +5301,40 @@ function previewHtml(offer){
           <br>
 
           ${esc(
-            offer.customer.company||""
+            offer.customer?.company ||
+            ""
           )}
 
           <br>
 
           ${esc(
-            offer.customer.address||""
+            offer.customer?.address ||
+            ""
+          )}
+
+          <br>
+
+          ${esc(
+            offer.customer?.email ||
+            ""
+          )}
+
+          <br>
+
+          ${esc(
+            offer.customer?.phone ||
+            ""
           )}
 
         </div>
 
       </div>
 
+
       <h2 style="margin-top:30px">
         Leistungen
       </h2>
+
 
       <table>
 
@@ -4793,142 +5366,161 @@ function previewHtml(offer){
 
         </thead>
 
+
         <tbody>
 
           ${
-            (offer.items||[])
-            .map(item=>`
+            (offer.items || [])
+            .map(
+              item=>`
 
-              <tr>
+                <tr>
 
-                <td>
-                  ${esc(item.name)}
-                </td>
+                  <td>
+                    ${esc(
+                      item.name
+                    )}
+                  </td>
 
-                <td>
-                  ${number(item.qty)}
-                </td>
+                  <td>
+                    ${Number(
+                      item.qty
+                    ) || 0}
+                  </td>
 
-                <td>
-                  ${esc(
-                    item.unit||
-                    "Stk."
-                  )}
-                </td>
+                  <td>
+                    ${esc(
+                      item.unit ||
+                      "Stk."
+                    )}
+                  </td>
 
-                <td>
-                  ${money(
-                    item.price
-                  )}
-                </td>
+                  <td>
+                    ${money(
+                      item.price
+                    )}
+                  </td>
 
-                <td>
-                  ${money(
-                    number(item.qty)*
-                    number(item.price)
-                  )}
-                </td>
+                  <td>
+                    ${money(
+                      (
+                        Number(
+                          item.qty
+                        ) || 0
+                      ) *
+                      (
+                        Number(
+                          item.price
+                        ) || 0
+                      )
+                    )}
+                  </td>
 
-              </tr>
+                </tr>
 
-            `).join("")
+              `
+            )
+            .join("")
+
+            ||
+
+            `
+            <tr>
+              <td colspan="5">
+                Keine Positionen
+              </td>
+            </tr>
+            `
           }
 
         </tbody>
 
       </table>
 
+
       <div class="sum">
 
         <div class="sumline">
-          <span>Netto</span>
-          <b>${money(total.net)}</b>
+
+          <span>
+            Netto
+          </span>
+
+          <b>
+            ${money(
+              total.net
+            )}
+          </b>
+
         </div>
+
 
         <div class="sumline">
-          <span>MwSt. 19%</span>
-          <b>${money(total.vat)}</b>
+
+          <span>
+            MwSt. 19%
+          </span>
+
+          <b>
+            ${money(
+              total.vat
+            )}
+          </b>
+
         </div>
 
+
         <div class="sumline grand">
-          <span>Gesamt</span>
-          <b>${money(total.gross)}</b>
+
+          <span>
+            Gesamt
+          </span>
+
+          <b>
+            ${money(
+              total.gross
+            )}
+          </b>
+
         </div>
 
       </div>
+
 
       ${
         offer.notes
-        ?`
 
-          <div style="margin-top:35px">
-
-            <b>
-              Hinweise
-            </b>
-
-            <p>
-              ${esc(
-                offer.notes
-              ).replace(
-                /\n/g,
-                "<br>"
-              )}
-            </p>
-
-          </div>
+        ?
 
         `
-        :""
-      }
 
-      <div
-        class="no-print"
-        style="
-          margin-top:35px;
-          border-top:1px solid var(--line);
-          padding-top:18px
-        "
-      >
+        <div
+          style="margin-top:35px"
+        >
 
-        <div class="profit-box">
+          <b>
+            Hinweise
+          </b>
 
-          <div class="profit-row">
-            <span>
-              Interner Einkauf
-            </span>
-            <b>
-              ${money(
-                total.net-profitFromItems
-              )}
-            </b>
-          </div>
-
-          <div class="profit-row">
-            <span>
-              Bruttogewinn
-            </span>
-            <b class="${
-              profit>=0
-              ?"margin-positive"
-              :"margin-negative"
-            }">
-              ${money(profit)}
-            </b>
-          </div>
-
-          <div class="profit-row">
-            <span>
-              Marge
-            </span>
-            <b>
-              ${margin}%
-            </b>
-          </div>
+          <p>
+            ${esc(
+              offer.notes
+            ).replace(
+              /\n/g,
+              "<br>"
+            )}
+          </p>
 
         </div>
 
-      </div>
+        `
+
+        :
+
+        ""
+
+      }
+
 
     </div>
 
@@ -4936,29 +5528,48 @@ function previewHtml(offer){
 
 }
 
-/* =========================
-   SAVE / UPDATE
-========================= */
+
+/* =========================================================
+   SAVE OFFER
+   ========================================================= */
 
 function saveOffer(){
 
   const offer={
 
-    id:createId(),
+    id:
+      crypto.randomUUID
+      ? crypto.randomUUID()
+      : String(Date.now()),
+
 
     no:
       `EO-${state.nextNo++}`,
 
+
     date:
-      todayString(),
+      todayISO(),
+
 
     followDate:
-      draft.followDate||
-      addDays(7),
+      draft.followDate ||
 
-    customer:{
-      ...draft.customer
-    },
+      new Date(
+        Date.now() +
+        7 *
+        86400000
+      )
+      .toISOString()
+      .slice(0,10),
+
+
+    customer:
+      JSON.parse(
+        JSON.stringify(
+          draft.customer
+        )
+      ),
+
 
     items:
       draft.items.map(
@@ -4966,194 +5577,155 @@ function saveOffer(){
 
           ...item,
 
-          qty:number(item.qty),
-          price:number(item.price),
+          qty:
+            Number(
+              item.qty
+            ) || 0,
+
+          price:
+            Number(
+              item.price
+            ) || 0,
 
           cost:
-            item.cost!==undefined
-            ?number(item.cost)
-            :catalogCost(
-              item.name
-            )
+            Number(
+              item.cost
+            ) || 0
 
         })
       ),
 
+
     notes:
       draft.notes,
+
 
     request:
       draft.request,
 
-    status:"Offen"
+
+    status:
+      "Offen"
 
   };
+
 
   state.offers.push(
     offer
   );
 
-  save();
-
-  toast("Angebot gespeichert");
-
-  preview(offer.id);
-
-}
-
-function updateOffer(){
-
-  const offer=
-    state.offers.find(
-      x=>x.id===draft.editingId
-    );
-
-  if(!offer){
-
-    toast(
-      "Angebot nicht gefunden"
-    );
-
-    return;
-
-  }
-
-  offer.customer={
-    ...draft.customer
-  };
-
-  offer.items=
-    draft.items.map(
-      item=>({
-
-        ...item,
-
-        qty:number(item.qty),
-        price:number(item.price),
-
-        cost:
-          item.cost!==undefined
-          ?number(item.cost)
-          :catalogCost(
-            item.name
-          )
-
-      })
-    );
-
-  offer.notes=
-    draft.notes;
-
-  offer.request=
-    draft.request;
-
-  offer.followDate=
-    draft.followDate||
-    addDays(7);
 
   save();
 
-  toast("Angebot aktualisiert");
+  toast(
+    "Angebot gespeichert"
+  );
 
-  preview(offer.id);
+
+  preview(
+    offer.id
+  );
 
 }
 
-/* =========================
+
+/* =========================================================
    MODAL
-========================= */
+   ========================================================= */
+
+function showModal(
+  title,
+  body,
+  onSave
+){
+
+  document
+    .getElementById(
+      "modalRoot"
+    )
+    .innerHTML=`
+
+      <div
+        class="modal-backdrop"
+        onclick="
+          if(event.target===this)
+            closeModal()
+        "
+      >
+
+        <div class="modal">
+
+
+          <div class="modal-head">
+
+            <h2>
+              ${title}
+            </h2>
+
+
+            <button
+              class="btn small"
+              onclick="closeModal()"
+            >
+              ×
+            </button>
+
+          </div>
+
+
+          ${body}
+
+
+          <div class="modal-actions">
+
+            <button
+              class="btn"
+              onclick="closeModal()"
+            >
+              Abbrechen
+            </button>
+
+
+            <button
+              class="btn dark"
+              id="modalSave"
+            >
+              Speichern
+            </button>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+    `;
+
+
+  document
+    .getElementById(
+      "modalSave"
+    )
+    .onclick=onSave;
+
+}
+
 
 function closeModal(){
 
-  const modal=
-    document.getElementById(
-      "modal"
-    );
-
-  modal.classList.add(
-    "hidden"
-  );
-
-  modal.innerHTML="";
+  document
+    .getElementById(
+      "modalRoot"
+    )
+    .innerHTML="";
 
 }
 
-document.getElementById(
-  "modal"
-).addEventListener(
-  "click",
-  event=>{
 
-    if(
-      event.target.id==="modal"
-    ){
-      closeModal();
-    }
-
-  }
-);
-
-/* =========================
-   HELPERS
-========================= */
-
-function createId(){
-
-  if(
-    window.crypto &&
-    crypto.randomUUID
-  ){
-
-    return crypto.randomUUID();
-
-  }
-
-  return String(
-    Date.now()
-  )+
-  String(
-    Math.random()
-  ).slice(2);
-
-}
-
-function todayString(){
-
-  const d=
-    new Date();
-
-  return`
-    ${d.getFullYear()}-
-    ${String(
-      d.getMonth()+1
-    ).padStart(2,"0")}-
-    ${String(
-      d.getDate()
-    ).padStart(2,"0")}
-  `.replace(/\s/g,"");
-
-}
-
-function addDays(days){
-
-  const d=
-    new Date();
-
-  d.setDate(
-    d.getDate()+days
-  );
-
-  return`
-    ${d.getFullYear()}-
-    ${String(
-      d.getMonth()+1
-    ).padStart(2,"0")}-
-    ${String(
-      d.getDate()
-    ).padStart(2,"0")}
-  `.replace(/\s/g,"");
-
-}
+/* =========================================================
+   NAVIGATION FUNCTIONS
+   ========================================================= */
 
 function go(target){
 
@@ -5163,64 +5735,105 @@ function go(target){
 
 }
 
+
+/* =========================================================
+   RENDER
+   ========================================================= */
+
 function render(){
 
-  if(page==="dashboard"){
+  if(
+    page==="dashboard"
+  ){
+
     dashboard();
+
   }
 
-  else if(page==="offers"){
+  else if(
+    page==="offers"
+  ){
+
     offers();
+
   }
 
-  else if(page==="calendar"){
+  else if(
+    page==="calendar"
+  ){
+
     calendar();
+
   }
 
-  else if(page==="analytics"){
+  else if(
+    page==="analytics"
+  ){
+
     analytics();
+
   }
 
-  else if(page==="customers"){
+  else if(
+    page==="customers"
+  ){
+
     customers();
+
   }
 
-  else if(page==="catalog"){
+  else if(
+    page==="catalog"
+  ){
+
     catalog();
+
   }
 
-  else if(page==="settings"){
+  else if(
+    page==="settings"
+  ){
+
     settings();
+
   }
 
-  else if(page==="create"){
+  else if(
+    page==="create"
+  ){
+
     create();
+
   }
 
-  else if(page==="preview"){
-    /*
-      preview wird direkt gerendert.
-    */
+  else if(
+    page==="preview"
+  ){
+
+    go("offers");
+
   }
 
 }
 
-/* =========================
-   NAVIGATION
-========================= */
+
+/* =========================================================
+   GLOBAL PAGE NAVIGATION
+   ========================================================= */
 
 document.addEventListener(
   "click",
   event=>{
 
-    const button=
+    const button =
       event.target.closest(
         "[data-page]"
       );
 
+
     if(button){
 
-      page=
+      page =
         button.dataset.page;
 
       render();
@@ -5230,60 +5843,17 @@ document.addEventListener(
   }
 );
 
-/*
-  Kleine Korrektur für Gewinnanzeige:
-  Einkaufssumme wird separat berechnet.
-*/
 
-const originalTotals=
-  totals;
-
-function totals(o){
-
-  const net=
-    (o.items||[]).reduce(
-      (sum,item)=>
-        sum+
-        number(item.qty)*
-        number(item.price),
-      0
-    );
-
-  const cost=
-    (o.items||[]).reduce(
-      (sum,item)=>
-        sum+
-        number(item.qty)*
-        (
-          item.cost!==undefined
-          ?number(item.cost)
-          :catalogCost(item.name)
-        ),
-      0
-    );
-
-  return{
-
-    net,
-
-    cost,
-
-    profit:
-      net-cost,
-
-    vat:
-      net*.19,
-
-    gross:
-      net*1.19
-
-  };
-
-}
-
-/* Initialisieren */
+/* =========================================================
+   FIRST SAVE
+   ========================================================= */
 
 save();
+
+
+/* =========================================================
+   START APP
+   ========================================================= */
 
 render();
 
