@@ -1,12 +1,23 @@
 const K='easyoffer_v22';
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const eur=n=>new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(Number(n)||0);
+const eur=n=>new Intl.NumberFormat(db?.settings?.language==='en'?'en-US':'de-DE',{style:'currency',currency:db?.settings?.currency||'EUR'}).format(Number(n)||0);
 const uid=()=>crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);
+const COLORS={green:'#16a36a',blue:'#2563eb',violet:'#7c3aed',orange:'#ea580c',graphite:'#334155'};
+const EN={
+  'Angebot':'Offer','Datum:':'Date:','Ihre Anfrage:':'Your request:','Einzelpreis netto':'Unit price net','Gesamt netto':'Total net','Dieses Angebot ist':'This offer is valid for','Tage gültig.':'days.','Steuernummer:':'Tax number:','USt-IdNr.:':'VAT ID:',
+  'SHK-Angebote':'Plumbing, heating & HVAC offers','Übersicht':'Overview','Neues Angebot':'New offer','Angebote':'Offers','Kunden':'Customers','Preiskatalog':'Price catalog','Statistik':'Analytics','Einstellungen':'Settings','Vom Kundenkontakt zum Angebot.':'From customer request to offer.',
+  'Deine Angebote.':'Your offers.','Schneller fertig.':'Done faster.','Kundenanfrage rein. Leistungen prüfen. Angebot raus.':'Customer request in. Review services. Send offer.','Neues Angebot':'New offer','Von der Anfrage zur sauberen Kalkulation.':'From request to reliable calculation.','EasyOffer schlägt Leistungen aus deiner eigenen Preisliste vor. Du prüfst, änderst und versendest.':'EasyOffer suggests services from your own price list. You review, edit and send.','Angebot starten →':'Start offer →','Kunde':'Customer','Anfrage':'Request','Analyse':'Analysis','Positionen':'Line items','Fertig':'Done','Letzte Angebote':'Recent offers','Schnell wieder öffnen.':'Open again quickly.','Alle →':'All →','Noch kein Angebot':'No offers yet','Starte mit einer Kundenanfrage.':'Start with a customer request.','Erstes Angebot erstellen':'Create first offer',
+  'Entwurf':'Draft','Offen':'Open','Angenommen':'Accepted','Abgelehnt':'Rejected','Abgelaufen':'Expired','Unbenannter Kunde':'Unnamed customer','Für wen ist das Angebot?':'Who is this offer for?','Was möchte der Kunde?':'What does the customer need?','EasyOffer analysiert.':'EasyOffer is analyzing.','Prüfen & kalkulieren.':'Review & calculate.','Fertig.':'Done.','Kundendaten eingeben.':'Enter customer details.','Anfrage so einfügen, wie sie eingegangen ist.':'Paste the request as it was received.','Vorschläge aus deinem Katalog prüfen.':'Review suggestions from your catalog.','Preise, Mengen und Marge kontrollieren.':'Check prices, quantities and margin.','Alles prüfen und als PDF ausgeben.':'Review everything and export as PDF.','← Übersicht':'← Overview','Speichern':'Save','ANGEBOT ERSTELLEN':'CREATE OFFER','Kundenname *':'Customer name *','E-Mail':'Email','Telefon':'Phone','Adresse':'Address','Weiter →':'Continue →','← Zurück':'← Back','Anfrage analysieren ✦':'Analyze request ✦','Baustellenfotos':'Site photos','Fotos können später von der echten KI analysiert werden.':'Photos can be analyzed by real AI later.','Analyse bereit':'Analysis ready','passende Positionen aus deinem Katalog wurden vorgeschlagen.':'matching line items from your catalog were suggested.','Dies ist aktuell eine lokale Demo-Analyse. Vor Versand technische Details prüfen.':'This is currently a local demo analysis. Review technical details before sending.','Vorgeschlagene Positionen':'Suggested line items','Vorschläge prüfen →':'Review suggestions →','Position hinzufügen':'Add line item','Neue Position':'New line item','Netto':'Net','MwSt.':'VAT','Gesamt':'Total','Deckungsbeitrag':'Gross profit','Marge:':'Margin:','Angebot erstellen →':'Create offer →','ANGEBOT':'OFFER','An:':'To:','Sieht gut aus.':'Looks good.','Prüfe alles noch einmal. Danach kannst du das Angebot als PDF ausgeben.':'Review everything once more. Then export the offer as a PDF.','GEWINN':'PROFIT','PDF / Drucken':'PDF / Print','Als offen speichern':'Save as open','Zu meinen Angeboten':'My offers',
+  'VERWALTUNG':'MANAGEMENT','Alle Angebote zentral verwalten.':'Manage all offers in one place.','⌕ Kunde oder Nummer suchen':'⌕ Search customer or number','Alle Status':'All statuses','Entwürfe':'Drafts','Keine Angebote gefunden':'No offers found','Erstelle dein erstes Angebot.':'Create your first offer.','Deine Kunden.':'Your customers.','Kunden aus deinen Angeboten.':'Customers from your offers.','Neuer Kunde':'New customer','Keine E-Mail':'No email','Keine Telefonnummer':'No phone number','Noch keine Kunden':'No customers yet','Deine Kunden werden automatisch aus Angeboten übernommen.':'Customers are automatically created from offers.','Deine Preise.':'Your prices.','Eigene Leistungen und Verkaufspreise verwalten.':'Manage your services and sales prices.','Artikel':'Item','Bezeichnung':'Description','Einheit':'Unit','VK netto':'Sales price net','Auswertung':'Analytics','Deine Zahlen.':'Your figures.','Ein schneller Überblick über deine Angebote.':'A quick overview of your offers.','Daten exportieren':'Export data','VOLUMEN':'VOLUME','Aufträge':'Orders','Ø ANGEBOT':'AVG. OFFER','Gesamt':'Total','Status':'Status',
+  'EasyOffer anpassen.':'Customize EasyOffer.','Deine Daten, Preise und Vorlagen.':'Your details, prices and templates.','Unternehmen':'Company','Design':'Design','E-Mail':'Email','KI':'AI','Benachrichtigungen':'Notifications','Firmenname':'Company name','Inhaber / Ansprechpartner':'Owner / contact person','Website':'Website','Steuernummer':'Tax number','Bankverbindung':'Bank details','Logo URL':'Logo URL','Theme':'Theme','Hell':'Light','Dunkel':'Dark','System (automatisch)':'System (automatic)','Akzentfarbe':'Accent color','Farbvorlage':'Color preset','Eigene Farbe':'Custom color','Grün':'Green','Blau':'Blue','Violett':'Violet','Orange':'Orange','Graphit':'Graphite','Dichte':'Density','Normal':'Normal','Kompakt':'Compact','Sprache':'Language','Angebotsnummer Präfix':'Offer number prefix','Nächste Angebotsnummer':'Next offer number','Gültigkeit (Tage)':'Validity (days)','Zahlungsziel (Tage)':'Payment term (days)','Bedingungen':'Terms','Betreff':'Subject','E-Mail Text':'Email text','Signatur':'Signature','KI-Vorschläge aktivieren':'Enable AI suggestions','Aktueller KI-Modus':'Current AI mode','EasyOffer nutzt momentan eine lokale Erkennung für typische SHK-Anfragen. Eine echte API-Anbindung kann später ergänzt werden.':'EasyOffer currently uses local recognition for typical HVAC requests. A real API connection can be added later.','Benachrichtigungen aktivieren':'Enable notifications','Automatische Follow-ups vorbereiten':'Prepare automatic follow-ups',
+  'Einstellungen gespeichert':'Settings saved','Gespeichert':'Saved','Kundenname fehlt':'Customer name is missing','Bitte Anfrage eingeben':'Please enter a request','Angebot gespeichert':'Offer saved','Backup exportiert':'Backup exported','Backup importiert':'Backup imported','Datei ist ungültig':'File is invalid','Popup blockiert – bitte Popups erlauben':'Popup blocked – please allow popups'
+};
+const tr=text=>db?.settings?.language==='en'?Object.entries(EN).sort((a,b)=>b[0].length-a[0].length).reduce((result,[de,en])=>result.split(de).join(en),String(text)):String(text);
 const defaults=[
  ['SHK-001','Gas-Brennwerttherme','Stk.',4800,3200],['SHK-002','Wärmepumpe','Stk.',8200,5600],['SHK-003','Heizkörper','Stk.',390,210],['SHK-004','Waschtisch','Stk.',690,390],['SHK-005','Toilette','Stk.',620,330],['SHK-006','Montage / Arbeitszeit','Std.',78,42],['SHK-007','Demontage','Stk.',250,120],['SHK-008','Anfahrt','pa.',85,20]
 ];
-function normalize(x){const d={offers:[],settings:{company:'Dein SHK-Betrieb',owner:'',address:'',email:'',phone:'',website:'',taxNo:'',vatId:'',bank:'',logo:'',language:'de',theme:'light',accent:'#16a36a',density:'normal',currency:'EUR',offerValidity:14,paymentTerm:14,offerPrefix:'ANG-',offerNext:1001,offerFooter:'Vielen Dank für Ihre Anfrage.',offerTerms:'',emailSubject:'Ihr Angebot von {firma} – #{nummer}',emailText:'Guten Tag {kunde},\n\nhier erhalten Sie unser Angebot #{nummer}.\n\nViele Grüße\n{firma}',emailSignature:'',autoFollowups:true,notifications:true,aiSuggestions:true,next:1001},catalog:defaults.map(a=>({id:uid(),article:a[0],name:a[1],unit:a[2],price:a[3],cost:a[4]}))}; if(!x)return d; x.settings={...d.settings,...(x.settings||{})}; x.settings.next=Number(x.settings.next)||1001; x.settings.offerNext=Number(x.settings.offerNext)||x.settings.next; x.catalog=(x.catalog||d.catalog).map(a=>({...a,id:a.id||uid(),article:a.article||'',unit:a.unit||'Stk.',price:+a.price||0,cost:+a.cost||0})); x.offers=(x.offers||[]).map(o=>({...o,id:o.id||uid(),no:o.no||x.settings.next++,customer:{name:'',email:'',phone:'',address:'',...(o.customer||{})},items:(o.items||[]).map(i=>({...i,qty:+i.qty||1,price:+i.price||0,cost:+i.cost||0})),status:o.status||'entwurf',vat:+o.vat||19,created:o.created||new Date().toISOString(),followUp:o.followUp||'',notes:o.notes||'',request:o.request||'',title:o.title||'SHK-Angebot'})); x.settings.next=Math.max(x.settings.next||1001,...x.offers.map(o=>(+o.no||0)+1)); return x;}
+function normalize(x){const d={offers:[],settings:{company:'Dein SHK-Betrieb',owner:'',address:'',email:'',phone:'',website:'',taxNo:'',vatId:'',bank:'',logo:'',language:'de',theme:'system',accent:'#16a36a',colorPreset:'green',density:'normal',currency:'EUR',vat:19,offerValidity:14,paymentTerm:14,offerPrefix:'ANG-',offerNext:1001,offerFooter:'Vielen Dank für Ihre Anfrage.',offerTerms:'',emailSubject:'Ihr Angebot von {firma} – #{nummer}',emailText:'Guten Tag {kunde},\n\nhier erhalten Sie unser Angebot #{nummer}.\n\nViele Grüße\n{firma}',emailSignature:'',autoFollowups:true,notifications:true,aiSuggestions:true,next:1001},catalog:defaults.map(a=>({id:uid(),article:a[0],name:a[1],unit:a[2],price:a[3],cost:a[4]}))}; if(!x)return d; x.settings={...d.settings,...(x.settings||{})}; x.settings.colorPreset=x.settings.colorPreset||Object.keys(COLORS).find(k=>COLORS[k]===x.settings.accent)||'custom'; x.settings.next=Number(x.settings.next)||1001; x.settings.offerNext=Number(x.settings.offerNext)||x.settings.next; x.catalog=(x.catalog||d.catalog).map(a=>({...a,id:a.id||uid(),article:a.article||'',unit:a.unit||'Stk.',price:+a.price||0,cost:+a.cost||0})); x.offers=(x.offers||[]).map(o=>({...o,id:o.id||uid(),no:o.no||x.settings.next++,customer:{name:'',email:'',phone:'',address:'',...(o.customer||{})},items:(o.items||[]).map(i=>({...i,qty:+i.qty||1,price:+i.price||0,cost:+i.cost||0})),status:o.status||'entwurf',vat:+o.vat||19,created:o.created||new Date().toISOString(),followUp:o.followUp||'',notes:o.notes||'',request:o.request||'',title:o.title||'SHK-Angebot'})); x.settings.next=Math.max(x.settings.next||1001,...x.offers.map(o=>(+o.no||0)+1)); return x;}
 let db=normalize(JSON.parse(localStorage.getItem(K)||localStorage.getItem('easyoffer_v21')||'null')); localStorage.setItem(K,JSON.stringify(db));
 let st={page:'home',step:1,o:null,photos:[],settingsTab:'company'};
 const save=()=>localStorage.setItem(K,JSON.stringify(db));
@@ -20,7 +31,7 @@ function go(p){st.page=p;render()}
 function home(){const won=db.offers.filter(o=>o.status==='angenommen');return `<div class="top"><div><span class="eyebrow">EASYOFFER FÜR SHK</span><h1>Deine Angebote.<br><em>Schneller fertig.</em></h1><p class="lead">Kundenanfrage rein. Leistungen prüfen. Angebot raus.</p></div><button class="primary big" onclick="newOffer()">＋ Neues Angebot</button></div><div class="hero"><div class="heroCard"><div class="spark">✦ DIGITALER ANGEBOTSASSISTENT</div><h2>Von der Anfrage zur sauberen Kalkulation.</h2><p>EasyOffer schlägt Leistungen aus deiner eigenen Preisliste vor. Du prüfst, änderst und versendest.</p><button class="primary" onclick="newOffer()">Angebot starten →</button><div class="flow"><span>01 Kunde</span><span>02 Anfrage</span><span>03 Analyse</span><span>04 Kalkulation</span><span>05 Angebot</span></div></div><div class="stats"><div class="stat"><small>ANGEBOTE</small><strong>${db.offers.length}</strong><span>gesamt</span></div><div class="stat"><small>GEWONNEN</small><strong>${eur(won.reduce((a,o)=>a+net(o),0))}</strong><span>Auftragswert netto</span></div><div class="stat"><small>ARTIKEL</small><strong>${db.catalog.length}</strong><span>im Katalog</span></div></div></div><section class="section"><div class="sectionHead"><div><h2>Letzte Angebote</h2><p class="lead">Schnell wieder öffnen.</p></div><button class="ghost" onclick="go('offers')">Alle →</button></div><div class="card rows">${db.offers.length?db.offers.slice(-6).reverse().map(row).join(''):`<div class="empty"><h3>Noch kein Angebot</h3><p>Starte mit einer Kundenanfrage.</p><button class="primary" onclick="newOffer()">Erstes Angebot erstellen</button></div>`}</div></section>`}
 function statusLabel(s){return ({entwurf:'Entwurf',offen:'Offen',angenommen:'Angenommen',abgelehnt:'Abgelehnt',abgelaufen:'Abgelaufen'})[s]||s}
 function row(o){return `<div class="row" onclick="openOffer('${o.id}')"><b>#${o.no}</b><div><b>${esc(o.customer.name||'Unbenannter Kunde')}</b><br><span>${esc(o.title)}</span></div><span class="badge ${o.status==='angenommen'?'open':''}">${statusLabel(o.status)}</span><strong>${eur(net(o))}</strong><b>›</b></div>`}
-function newOffer(){st.o={id:uid(),no:db.settings.next++,customer:{name:'',email:'',phone:'',address:''},request:'',title:'',items:[],notes:'',status:'entwurf',vat:db.settings.vat,validity:14,followUp:''};st.photos=[];st.page='new';st.step=1;save();render()}
+function newOffer(){st.o={id:uid(),no:db.settings.next++,customer:{name:'',email:'',phone:'',address:''},request:'',title:'',items:[],notes:'',status:'entwurf',vat:db.settings.vat||19,validity:db.settings.offerValidity||14,followUp:''};st.photos=[];st.page='new';st.step=1;save();render()}
 function progress(){return `<div class="progress">${['Kunde','Anfrage','Analyse','Positionen','Fertig'].map((x,i)=>`<div class="pstep ${i+1===st.step?'current':''} ${i+1<st.step?'done':''}"><i>${i+1<st.step?'✓':i+1}</i><span>${x}</span></div>`).join('')}</div>`}
 function wizard(){const o=st.o;const bodies=[customer,request,analysis,items,finish];return `<div class="wizardTop"><button class="back" onclick="go('home')">← Übersicht</button><b>Angebot #${o.no}</b><button class="ghost" onclick="persist();toast('Gespeichert')">Speichern</button></div><div class="wizard"><div class="wizardIntro"><span class="eyebrow">ANGEBOT ERSTELLEN</span><h1>${['Für wen ist das Angebot?','Was möchte der Kunde?','EasyOffer analysiert.','Prüfen & kalkulieren.','Fertig.'][st.step-1]}</h1><p class="lead">${['Kundendaten eingeben.','Anfrage so einfügen, wie sie eingegangen ist.','Vorschläge aus deinem Katalog prüfen.','Preise, Mengen und Marge kontrollieren.','Alles prüfen und als PDF ausgeben.'][st.step-1]}</p></div>${progress()}${bodies[st.step-1](o)}</div>`}
 function field(l,id,v,p){return `<label class="field"><span>${l}</span><input id="${id}" value="${esc(v)}" placeholder="${p||''}"></label>`}
@@ -362,10 +373,11 @@ function settingsContent(){
     ${field('Logo URL','logo',s.logo,'https://...')}
   </div>`;
   if(st.settingsTab==='design')return `<div class="card formgrid">
-    <label class="field"><span>Theme</span><select id="theme"><option value="light" ${s.theme==='light'?'selected':''}>Hell</option><option value="dark" ${s.theme==='dark'?'selected':''}>Dunkel</option></select></label>
-    <label class="field"><span>Akzentfarbe</span><input id="accent" type="color" value="${s.accent}"></label>
+    <label class="field"><span>Theme</span><select id="theme"><option value="system" ${s.theme==='system'?'selected':''}>System (automatisch)</option><option value="light" ${s.theme==='light'?'selected':''}>Hell</option><option value="dark" ${s.theme==='dark'?'selected':''}>Dunkel</option></select></label>
+    <label class="field"><span>Farbvorlage</span><select id="colorPreset" onchange="applyColorPreset(this.value)">${[['green','Grün'],['blue','Blau'],['violet','Violett'],['orange','Orange'],['graphite','Graphit'],['custom','Eigene Farbe']].map(([v,l])=>`<option value="${v}" ${s.colorPreset===v?'selected':''}>${l}</option>`).join('')}</select></label>
+    <label class="field"><span>Akzentfarbe</span><input id="accent" type="color" value="${s.accent}" oninput="applyColorPreset('custom',this.value)"></label>
     <label class="field"><span>Dichte</span><select id="density"><option value="normal" ${s.density==='normal'?'selected':''}>Normal</option><option value="compact" ${s.density==='compact'?'selected':''}>Kompakt</option></select></label>
-    <label class="field"><span>Sprache</span><select id="language"><option value="de">Deutsch</option><option value="en">English</option></select></label>
+    <label class="field"><span>Sprache</span><select id="language"><option value="de" ${s.language==='de'?'selected':''}>Deutsch</option><option value="en" ${s.language==='en'?'selected':''}>English</option></select></label>
   </div>`;
   if(st.settingsTab==='offers')return `<div class="card formgrid">
     <label class="field"><span>MwSt. (%)</span><input id="vat" type="number" value="${s.vat}"></label>
@@ -402,7 +414,7 @@ function textareaField(label,id,value){
     const el=document.getElementById(k);
     if(el)s[k]=Number(el.value);
   });
-  ['theme','accent','density','language'].forEach(k=>{
+  ['theme','accent','density','language','colorPreset'].forEach(k=>{
     const el=document.getElementById(k);
     if(el)s[k]=el.value;
   });
@@ -557,11 +569,30 @@ window.onload=()=>setTimeout(()=>window.print(),400);
 </html>`);
   w.document.close()
 }
+function applyColorPreset(preset,color){
+  const accent=color||COLORS[preset]||db.settings.accent;
+  db.settings.colorPreset=preset;
+  db.settings.accent=accent;
+  const input=document.getElementById('accent');
+  if(input)input.value=accent;
+  document.documentElement.style.setProperty('--accent',accent);
+}
 function applyAppearance(){
   const s=db.settings;
-  document.documentElement.dataset.theme=s.theme||'light';
+  const mode=s.theme||'system';
+  const theme=mode==='system'&&(window.matchMedia?.('(prefers-color-scheme: dark)').matches)?'dark':mode==='system'?'light':mode;
+  document.documentElement.dataset.theme=theme;
+  document.documentElement.dataset.themeMode=mode;
   document.documentElement.dataset.density=s.density||'normal';
   document.documentElement.style.setProperty('--accent',s.accent||'#16a36a')
+}
+function localize(){
+  document.documentElement.lang=db.settings.language||'de';
+  if(db.settings.language!=='en')return;
+  const walk=document.createTreeWalker(document.getElementById('app'),NodeFilter.SHOW_TEXT);
+  const nodes=[];while(walk.nextNode())nodes.push(walk.currentNode);
+  nodes.forEach(node=>node.nodeValue=tr(node.nodeValue));
+  document.querySelectorAll('#app [placeholder]').forEach(el=>el.placeholder=tr(el.placeholder));
 }
 function render(){
   applyAppearance();
@@ -574,7 +605,8 @@ function render(){
   else if(st.page==='stats')c=stats();
   else if(st.page==='settings')c=settings();
   else c=home();
-  layout(c)
+  layout(c);
+  localize()
 }
 window.addEventListener('beforeunload',()=>{
   if(st.o&&st.page==='new')persist()
@@ -583,7 +615,7 @@ Object.assign(window,{
   go,newOffer,saveCustomer,analyze,photos,back,
   chg,addItem,del,openOffer,filterOffers,
   catalogChange,addCatalog,removeCatalog,
-  settingsTab,saveSettings,exportData,importData,
+  settingsTab,saveSettings,applyColorPreset,exportData,importData,
   printOffer,markOpen,persist
 });
 render();
