@@ -63,6 +63,7 @@ function parse(t){
     add('Demontage');add('Entsorgung Altgerät');add('Heizungsanlage');add('Montage Heizungsanlage');add('Inbetriebnahme')
   }
   if(/wartung/i.test(t))add('Wartung Heizungsanlage');
+  if(/heizkörper|radiator/i.test(t))add('Heizkörper',['heizkörper','radiator']);
   if(/störung|kaputt|fehler|problem/i.test(t)){add('Anfahrt');add('Fehlerdiagnose')}
   if(/waschbecken|waschtisch/i.test(t))add('Waschtisch');
   if(/wc|toilette/i.test(t))add('Toilette');
@@ -694,3 +695,4 @@ Object.assign(window,{
   printOffer,markOpen,persist
 });
 render();
+
