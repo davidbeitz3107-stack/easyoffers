@@ -537,112 +537,24 @@ function importData(){
   input.click()
 }
 function printOffer(){
-  const o=st.o;
-  const n=net(o);
-  const g=gross(o);
+  const o=st.o,s=db.settings,n=net(o),g=gross(o),offerNo=`${s.offerPrefix||'ANG-'}${o.no}`;
+  const issued=new Date(o.created||Date.now()),validUntil=new Date(issued);validUntil.setDate(validUntil.getDate()+Number(o.validity||s.offerValidity||14));
+  const dateFormat={day:'2-digit',month:'2-digit',year:'numeric'};
   const w=window.open('','_blank');
-  if(!w){
-    toast('Popup blockiert – bitte Popups erlauben');
-    return
-  }
-  const s=db.settings;
+  if(!w){toast('Popup blockiert – bitte Popups erlauben');return}
   w.document.write(`<!doctype html>
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<title>Angebot #${esc(o.no)} – ${esc(s.company)}</title>
+<html lang="${esc(s.language||'de')}"><head><meta charset="utf-8"><title>Angebot ${esc(offerNo)} – ${esc(s.company)}</title>
 <style>
-body{font-family:Arial,sans-serif;color:#111;margin:0;background:#fff}
-.page{max-width:850px;margin:40px auto;padding:30px}
-.head{display:flex;justify-content:space-between;gap:30px;border-bottom:2px solid #111;padding-bottom:25px}
-.logo{max-width:180px;max-height:70px;object-fit:contain}
-h1{font-size:30px;margin:35px 0 10px}
-.meta{margin:25px 0}
-table{width:100%;border-collapse:collapse;margin-top:30px}
-th,td{padding:12px 8px;border-bottom:1px solid #ddd;text-align:left}
-.right{text-align:right}
-.total{margin-left:auto;width:320px;margin-top:25px}
-.line{display:flex;justify-content:space-between;padding:8px 0}
-.grand{font-size:20px;font-weight:700;border-top:2px solid #111;margin-top:5px;padding-top:12px}
-.footer{margin-top:50px;border-top:1px solid #ddd;padding-top:20px;font-size:13px}
-@media print{
- body{margin:0}
- .page{margin:0;max-width:none}
-}
-</style>
-</head>
-<body>
-<div class="page">
-<div class="head">
-<div>
-${s.logo?`<img class="logo" src="${s.logo}">`:''}
-<h2>${esc(s.company)}</h2>
-<div>${esc(s.address).replace(/\n/g,'<br>')}</div>
-<div>${esc(s.email)} · ${esc(s.phone)}</div>
-${s.website?`<div>${esc(s.website)}</div>`:''}
-</div>
-<div>
-<strong>ANGEBOT</strong><br>
-Nr. ${esc(o.no)}<br>
-Datum: ${new Date(o.created).toLocaleDateString('de-DE')}
-</div>
-</div>
-
-<h1>${esc(o.title||'SHK-Angebot')}</h1>
-
-<div class="meta">
-<strong>Für:</strong><br>
-${esc(o.customer.name)}<br>
-${esc(o.customer.address).replace(/\n/g,'<br>')}<br>
-${esc(o.customer.email)}<br>
-${esc(o.customer.phone)}
-</div>
-
-${o.request?`<p><strong>Ihre Anfrage:</strong><br>${esc(o.request).replace(/\n/g,'<br>')}</p>`:''}
-
-<table>
-<thead>
-<tr>
-<th>Position</th>
-<th>Menge</th>
-<th>Einzelpreis netto</th>
-<th class="right">Gesamt netto</th>
-</tr>
-</thead>
-<tbody>
-${o.items.map(x=>`
-<tr>
-<td>${esc(x.name)}</td>
-<td>${x.qty} ${esc(x.unit)}</td>
-<td>${eur(x.price)}</td>
-<td class="right">${eur(x.qty*x.price)}</td>
-</tr>`).join('')}
-</tbody>
-</table>
-
-<div class="total">
-<div class="line"><span>Netto</span><strong>${eur(n)}</strong></div>
-<div class="line"><span>MwSt. ${o.vat}%</span><strong>${eur(n*o.vat/100)}</strong></div>
-<div class="line grand"><span>Gesamt</span><strong>${eur(g)}</strong></div>
-</div>
-
-<p style="margin-top:35px">
-Dieses Angebot ist ${o.validity} Tage gültig.
-</p>
-
-<div class="footer">
-${esc(s.offerFooter).replace(/\n/g,'<br>')}
-${s.offerTerms?`<br><br><strong>Bedingungen:</strong><br>${esc(s.offerTerms).replace(/\n/g,'<br>')}`:''}
-${s.bank?`<br><br>${esc(s.bank).replace(/\n/g,'<br>')}`:''}
-${s.taxNo?`<br>Steuernummer: ${esc(s.taxNo)}`:''}
-${s.vatId?`<br>USt-IdNr.: ${esc(s.vatId)}`:''}
-</div>
-</div>
-<script>
-window.onload=()=>setTimeout(()=>window.print(),400);
-<\/script>
-</body>
-</html>`);
+@page{size:A4;margin:15mm}*{box-sizing:border-box}body{font:13px/1.55 Arial,Helvetica,sans-serif;color:#172033;margin:0;background:#fff}.page{max-width:800px;margin:0 auto}.header{display:flex;justify-content:space-between;gap:35px;border-bottom:3px solid #172033;padding-bottom:24px}.logo{display:block;max-width:185px;max-height:68px;object-fit:contain;margin-bottom:12px}.company{font-weight:800;font-size:18px}.muted{color:#637083}.offerBox{text-align:right;min-width:185px}.offerBox strong{display:block;font-size:26px;letter-spacing:.06em}.offerNo{font-size:16px;font-weight:800;margin:4px 0 12px}.addressRow{display:flex;justify-content:space-between;gap:30px;margin:32px 0 25px}.recipient{min-width:255px}.label{display:block;text-transform:uppercase;letter-spacing:.08em;font-size:10px;font-weight:800;color:#637083;margin-bottom:6px}.title{font-size:25px;line-height:1.2;margin:22px 0 10px}.intro{margin:0 0 25px;color:#334155}.request{background:#f5f7fa;border-left:3px solid #172033;padding:11px 14px;margin:20px 0 24px;color:#334155}table{width:100%;border-collapse:collapse;margin-top:18px}th{padding:10px 8px;text-align:left;background:#172033;color:#fff;font-size:11px;letter-spacing:.04em}td{padding:12px 8px;border-bottom:1px solid #dde3eb;vertical-align:top}.right{text-align:right}.summary{width:320px;margin:26px 0 0 auto}.summary div{display:flex;justify-content:space-between;padding:7px 0}.summary .grand{border-top:2px solid #172033;margin-top:4px;padding-top:12px;font-size:18px;font-weight:800}.conditions{margin-top:38px;border-top:1px solid #dde3eb;padding-top:18px}.conditions p{margin:7px 0}.footer{display:flex;justify-content:space-between;gap:24px;margin-top:38px;padding-top:14px;border-top:1px solid #dde3eb;font-size:10px;color:#637083}.footer div:last-child{text-align:right}@media print{body{font-size:12px}.page{max-width:none}.header{break-inside:avoid}tr{break-inside:avoid}}
+</style></head><body><main class="page">
+<header class="header"><div>${s.logo?`<img class="logo" src="${esc(s.logo)}">`:''}<div class="company">${esc(s.company)}</div><div class="muted">${esc(s.address).replace(/\n/g,'<br>')}<br>${esc(s.email)}${s.phone?` · ${esc(s.phone)}`:''}${s.website?`<br>${esc(s.website)}`:''}</div></div><div class="offerBox"><strong>ANGEBOT</strong><div class="offerNo">${esc(offerNo)}</div><div><span class="muted">Datum</span><br>${issued.toLocaleDateString(s.language==='en'?'en-GB':'de-DE',dateFormat)}</div></div></header>
+<section class="addressRow"><div class="recipient"><span class="label">An</span><b>${esc(o.customer.name)}</b><br>${esc(o.customer.address).replace(/\n/g,'<br>')}<br>${esc(o.customer.email)}${o.customer.phone?`<br>${esc(o.customer.phone)}`:''}</div><div><span class="label">Angebotsdetails</span>Gültig bis: ${validUntil.toLocaleDateString(s.language==='en'?'en-GB':'de-DE',dateFormat)}<br>Zahlungsziel: ${Number(s.paymentTerm||14)} Tage</div></section>
+<h1 class="title">${esc(o.title||'SHK-Angebot')}</h1><p class="intro">Vielen Dank für Ihre Anfrage. Gern unterbreiten wir Ihnen folgendes Angebot.</p>${o.request?`<div class="request"><b>Ihre Anfrage</b><br>${esc(o.request).replace(/\n/g,'<br>')}</div>`:''}
+<table><thead><tr><th>Position</th><th>Menge</th><th class="right">Einzelpreis netto</th><th class="right">Gesamt netto</th></tr></thead><tbody>${o.items.map((x,i)=>`<tr><td><span class="muted">${String(i+1).padStart(2,'0')}</span> &nbsp;${esc(x.name)}</td><td>${x.qty} ${esc(x.unit)}</td><td class="right">${eur(x.price)}</td><td class="right">${eur(x.qty*x.price)}</td></tr>`).join('')}</tbody></table>
+<section class="summary"><div><span>Netto</span><b>${eur(n)}</b></div><div><span>MwSt. ${o.vat}%</span><b>${eur(n*o.vat/100)}</b></div><div class="grand"><span>Gesamtbetrag</span><b>${eur(g)}</b></div></section>
+<section class="conditions"><p>Dieses Angebot ist ${Number(o.validity||s.offerValidity||14)} Tage gültig.</p><p>${esc(s.offerFooter||'').replace(/\n/g,'<br>')}</p>${s.offerTerms?`<p><b>Hinweise & Bedingungen</b><br>${esc(s.offerTerms).replace(/\n/g,'<br>')}</p>`:''}</section>
+<footer class="footer"><div>${esc(s.company)}${s.taxNo?` · Steuernummer: ${esc(s.taxNo)}`:''}${s.vatId?` · USt-IdNr.: ${esc(s.vatId)}`:''}</div><div>${s.bank?esc(s.bank).replace(/\n/g,' · '):''}</div></footer>
+</main><script>window.onload=()=>setTimeout(()=>window.print(),500);<\/script></body></html>`);
   w.document.close()
 }
 function applyColorPreset(preset,color){
