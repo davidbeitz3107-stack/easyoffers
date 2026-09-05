@@ -6,6 +6,7 @@ const uid=()=>crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math
 const COLORS={green:'#16a36a',blue:'#2563eb',violet:'#7c3aed',orange:'#ea580c',graphite:'#334155'};
 const EN={
   'Angebot':'Offer','Datum:':'Date:','Ihre Anfrage:':'Your request:','Einzelpreis netto':'Unit price net','Gesamt netto':'Total net','Dieses Angebot ist':'This offer is valid for','Tage gültig.':'days.','Steuernummer:':'Tax number:','USt-IdNr.:':'VAT ID:',
+  'Umsatzentwicklung':'Revenue development','Letzte 6 Monate':'Last 6 months','Angebotsvolumen':'Offer volume','Gesamter Nettowert aller Angebote.':'Total net value of all offers.','Abschlussquote':'Win rate','Von allen Angeboten angenommen.':'Accepted out of all offers.','Pipeline':'Pipeline','Wert nach Angebotsstatus.':'Value by offer status.','Noch keine Daten für das Diagramm.':'No data for the chart yet.','Dieses Monats':'This month','Durchschnitt':'Average','Aufträge gewonnen':'Orders won',
   'SHK-Angebote':'Plumbing, heating & HVAC offers','Übersicht':'Overview','Neues Angebot':'New offer','Angebote':'Offers','Kunden':'Customers','Preiskatalog':'Price catalog','Statistik':'Analytics','Einstellungen':'Settings','Vom Kundenkontakt zum Angebot.':'From customer request to offer.',
   'Deine Angebote.':'Your offers.','Schneller fertig.':'Done faster.','Kundenanfrage rein. Leistungen prüfen. Angebot raus.':'Customer request in. Review services. Send offer.','Neues Angebot':'New offer','Von der Anfrage zur sauberen Kalkulation.':'From request to reliable calculation.','EasyOffer schlägt Leistungen aus deiner eigenen Preisliste vor. Du prüfst, änderst und versendest.':'EasyOffer suggests services from your own price list. You review, edit and send.','Angebot starten →':'Start offer →','Kunde':'Customer','Anfrage':'Request','Analyse':'Analysis','Positionen':'Line items','Fertig':'Done','Letzte Angebote':'Recent offers','Schnell wieder öffnen.':'Open again quickly.','Alle →':'All →','Noch kein Angebot':'No offers yet','Starte mit einer Kundenanfrage.':'Start with a customer request.','Erstes Angebot erstellen':'Create first offer',
   'Entwurf':'Draft','Offen':'Open','Angenommen':'Accepted','Abgelehnt':'Rejected','Abgelaufen':'Expired','Unbenannter Kunde':'Unnamed customer','Für wen ist das Angebot?':'Who is this offer for?','Was möchte der Kunde?':'What does the customer need?','EasyOffer analysiert.':'EasyOffer is analyzing.','Prüfen & kalkulieren.':'Review & calculate.','Fertig.':'Done.','Kundendaten eingeben.':'Enter customer details.','Anfrage so einfügen, wie sie eingegangen ist.':'Paste the request as it was received.','Vorschläge aus deinem Katalog prüfen.':'Review suggestions from your catalog.','Preise, Mengen und Marge kontrollieren.':'Check prices, quantities and margin.','Alles prüfen und als PDF ausgeben.':'Review everything and export as PDF.','← Übersicht':'← Overview','Speichern':'Save','ANGEBOT ERSTELLEN':'CREATE OFFER','Kundenname *':'Customer name *','E-Mail':'Email','Telefon':'Phone','Adresse':'Address','Weiter →':'Continue →','← Zurück':'← Back','Anfrage analysieren ✦':'Analyze request ✦','Baustellenfotos':'Site photos','Fotos können später von der echten KI analysiert werden.':'Photos can be analyzed by real AI later.','Analyse bereit':'Analysis ready','passende Positionen aus deinem Katalog wurden vorgeschlagen.':'matching line items from your catalog were suggested.','Dies ist aktuell eine lokale Demo-Analyse. Vor Versand technische Details prüfen.':'This is currently a local demo analysis. Review technical details before sending.','Vorgeschlagene Positionen':'Suggested line items','Vorschläge prüfen →':'Review suggestions →','Position hinzufügen':'Add line item','Neue Position':'New line item','Netto':'Net','MwSt.':'VAT','Gesamt':'Total','Deckungsbeitrag':'Gross profit','Marge:':'Margin:','Angebot erstellen →':'Create offer →','ANGEBOT':'OFFER','An:':'To:','Sieht gut aus.':'Looks good.','Prüfe alles noch einmal. Danach kannst du das Angebot als PDF ausgeben.':'Review everything once more. Then export the offer as a PDF.','GEWINN':'PROFIT','PDF / Drucken':'PDF / Print','Als offen speichern':'Save as open','Zu meinen Angeboten':'My offers',
@@ -316,29 +317,41 @@ function stats(){
   const volume=db.offers.reduce((a,o)=>a+net(o),0);
   const profitTotal=db.offers.reduce((a,o)=>a+profit(o),0);
   const avg=total?volume/total:0;
-  return `<div class="top">
-    <div>
-      <span class="eyebrow">AUSWERTUNG</span>
-      <h1>Deine Zahlen.</h1>
-      <p class="lead">Ein schneller Überblick über deine Angebote.</p>
-    </div>
+  const winRate=total?Math.round(accepted.length/total*100):0;
+  const now=new Date();
+  const months=Array.from({length:6},(_,i)=>{
+    const d=new Date(now.getFullYear(),now.getMonth()-5+i,1);
+    const month=d.toLocaleDateString(db.settings.language==='en'?'en-US':'de-DE',{month:'short'}).replace('.','');
+    const value=db.offers.filter(o=>{const x=new Date(o.created);return x.getFullYear()===d.getFullYear()&&x.getMonth()===d.getMonth()}).reduce((sum,o)=>sum+net(o),0);
+    return {month,value};
+  });
+  const maxMonth=Math.max(1,...months.map(m=>m.value));
+  const pipeline=['entwurf','offen','angenommen','abgelehnt'].map(status=>{
+    const offers=db.offers.filter(o=>o.status===status);
+    return {status,count:offers.length,value:offers.reduce((sum,o)=>sum+net(o),0)};
+  });
+  const maxPipeline=Math.max(1,...pipeline.map(p=>p.value));
+  return `<div class="top analyticsTop">
+    <div><span class="eyebrow">AUSWERTUNG</span><h1>Deine Zahlen.</h1><p class="lead">Großer Überblick über Umsatz, Pipeline und Abschlussrate.</p></div>
     <button class="ghost" onclick="exportData()">Daten exportieren</button>
   </div>
-  <div class="metricGrid">
-    <div class="metric card"><small>ANGEBOTE</small><strong>${total}</strong><span>Gesamt</span></div>
-    <div class="metric card"><small>VOLUMEN</small><strong>${eur(volume)}</strong><span>Netto</span></div>
-    <div class="metric card"><small>ANGENOMMEN</small><strong>${accepted.length}</strong><span>Aufträge</span></div>
-    <div class="metric card"><small>Ø ANGEBOT</small><strong>${eur(avg)}</strong><span>Netto</span></div>
-    <div class="metric card"><small>GEWINN</small><strong>${eur(profitTotal)}</strong><span>Deckungsbeitrag</span></div>
-  </div>
-  <div class="card sectionCard">
-    <h2>Status</h2>
-    ${['entwurf','offen','angenommen','abgelehnt'].map(s=>{
-      const n=db.offers.filter(o=>o.status===s).length;
-      const pct=total?Math.round(n/total*100):0;
-      return `<div class="barRow"><span>${statusLabel(s)}</span><div class="bar"><i style="width:${pct}%"></i></div><b>${n}</b></div>`
-    }).join('')}
-  </div>`
+  <section class="analyticsSummary">
+    <div class="analysisHero card"><span class="eyebrow">ANGEBOTSVOLUMEN</span><strong>${eur(volume)}</strong><p>Gesamter Nettowert aller Angebote.</p><div class="analysisHeroMeta"><span>${total} Angebote</span><span>${eur(avg)} Durchschnitt</span></div></div>
+    <div class="metric card"><small>ABSCHLUSSQUOTE</small><strong>${winRate}%</strong><span>Von allen Angeboten angenommen.</span></div>
+    <div class="metric card"><small>AUFTRÄGE GEWONNEN</small><strong>${accepted.length}</strong><span>${eur(accepted.reduce((sum,o)=>sum+net(o),0))} netto</span></div>
+    <div class="metric card"><small>DECKUNGSBEITRAG</small><strong>${eur(profitTotal)}</strong><span>Über alle Angebote</span></div>
+  </section>
+  <section class="analyticsGrid">
+    <div class="card chartCard">
+      <div class="chartHead"><div><span class="eyebrow">LETZTE 6 MONATE</span><h2>Umsatzentwicklung</h2></div><b>${eur(volume)}</b></div>
+      ${volume?`<div class="revenueChart">${months.map(m=>`<div class="chartColumn"><div class="chartValue">${m.value?eur(m.value):''}</div><i style="height:${Math.max(7,Math.round(m.value/maxMonth*100))}%"></i><span>${m.month}</span></div>`).join('')}</div>`:`<div class="chartEmpty">Noch keine Daten für das Diagramm.</div>`}
+    </div>
+    <div class="card pipelineCard">
+      <div class="chartHead"><div><span class="eyebrow">VERTRIEB</span><h2>Pipeline</h2></div><b>${total}</b></div>
+      <p class="lead smallLead">Wert nach Angebotsstatus.</p>
+      <div class="pipelineRows">${pipeline.map(p=>`<div class="pipelineRow"><div><b>${statusLabel(p.status)}</b><small>${p.count} Angebot${p.count===1?'':'e'}</small></div><div class="pipelineTrack"><i class="${p.status}" style="width:${Math.round(p.value/maxPipeline*100)}%"></i></div><strong>${eur(p.value)}</strong></div>`).join('')}</div>
+    </div>
+  </section>`
 }
 function settings(){
   const s=db.settings;
