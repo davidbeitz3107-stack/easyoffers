@@ -7,6 +7,7 @@ const COLORS={green:'#16a36a',blue:'#2563eb',violet:'#7c3aed',orange:'#ea580c',g
 const EN={
   'Angebot':'Offer','Datum:':'Date:','Ihre Anfrage:':'Your request:','Einzelpreis netto':'Unit price net','Gesamt netto':'Total net','Dieses Angebot ist':'This offer is valid for','Tage gültig.':'days.','Steuernummer:':'Tax number:','USt-IdNr.:':'VAT ID:',
   'Umsatzentwicklung':'Revenue development','Letzte 6 Monate':'Last 6 months','Angebotsvolumen':'Offer volume','Gesamter Nettowert aller Angebote.':'Total net value of all offers.','Abschlussquote':'Win rate','Von allen Angeboten angenommen.':'Accepted out of all offers.','Pipeline':'Pipeline','Wert nach Angebotsstatus.':'Value by offer status.','Noch keine Daten für das Diagramm.':'No data for the chart yet.','Dieses Monats':'This month','Durchschnitt':'Average','Aufträge gewonnen':'Orders won',
+  'Angebot bearbeiten':'Edit offer','Katalog importieren':'Import catalog','Katalog exportieren':'Export catalog','CSV oder JSON importieren':'Import CSV or JSON','Artikel wurden importiert bzw. aktualisiert.':'Items were imported or updated.','Keine gültigen Artikel gefunden.':'No valid items found.','Die Datei konnte nicht gelesen werden.':'The file could not be read.','Katalog exportiert':'Catalog exported',
   'SHK-Angebote':'Plumbing, heating & HVAC offers','Übersicht':'Overview','Neues Angebot':'New offer','Angebote':'Offers','Kunden':'Customers','Preiskatalog':'Price catalog','Statistik':'Analytics','Einstellungen':'Settings','Vom Kundenkontakt zum Angebot.':'From customer request to offer.',
   'Deine Angebote.':'Your offers.','Schneller fertig.':'Done faster.','Kundenanfrage rein. Leistungen prüfen. Angebot raus.':'Customer request in. Review services. Send offer.','Neues Angebot':'New offer','Von der Anfrage zur sauberen Kalkulation.':'From request to reliable calculation.','EasyOffer schlägt Leistungen aus deiner eigenen Preisliste vor. Du prüfst, änderst und versendest.':'EasyOffer suggests services from your own price list. You review, edit and send.','Angebot starten →':'Start offer →','Kunde':'Customer','Anfrage':'Request','Analyse':'Analysis','Positionen':'Line items','Fertig':'Done','Letzte Angebote':'Recent offers','Schnell wieder öffnen.':'Open again quickly.','Alle →':'All →','Noch kein Angebot':'No offers yet','Starte mit einer Kundenanfrage.':'Start with a customer request.','Erstes Angebot erstellen':'Create first offer',
   'Entwurf':'Draft','Offen':'Open','Angenommen':'Accepted','Abgelehnt':'Rejected','Abgelaufen':'Expired','Unbenannter Kunde':'Unnamed customer','Für wen ist das Angebot?':'Who is this offer for?','Was möchte der Kunde?':'What does the customer need?','EasyOffer analysiert.':'EasyOffer is analyzing.','Prüfen & kalkulieren.':'Review & calculate.','Fertig.':'Done.','Kundendaten eingeben.':'Enter customer details.','Anfrage so einfügen, wie sie eingegangen ist.':'Paste the request as it was received.','Vorschläge aus deinem Katalog prüfen.':'Review suggestions from your catalog.','Preise, Mengen und Marge kontrollieren.':'Check prices, quantities and margin.','Alles prüfen und als PDF ausgeben.':'Review everything and export as PDF.','← Übersicht':'← Overview','Speichern':'Save','ANGEBOT ERSTELLEN':'CREATE OFFER','Kundenname *':'Customer name *','E-Mail':'Email','Telefon':'Phone','Adresse':'Address','Weiter →':'Continue →','← Zurück':'← Back','Anfrage analysieren ✦':'Analyze request ✦','Baustellenfotos':'Site photos','Fotos können später von der echten KI analysiert werden.':'Photos can be analyzed by real AI later.','Analyse bereit':'Analysis ready','passende Positionen aus deinem Katalog wurden vorgeschlagen.':'matching line items from your catalog were suggested.','Dies ist aktuell eine lokale Demo-Analyse. Vor Versand technische Details prüfen.':'This is currently a local demo analysis. Review technical details before sending.','Vorgeschlagene Positionen':'Suggested line items','Vorschläge prüfen →':'Review suggestions →','Position hinzufügen':'Add line item','Neue Position':'New line item','Netto':'Net','MwSt.':'VAT','Gesamt':'Total','Deckungsbeitrag':'Gross profit','Marge:':'Margin:','Angebot erstellen →':'Create offer →','ANGEBOT':'OFFER','An:':'To:','Sieht gut aus.':'Looks good.','Prüfe alles noch einmal. Danach kannst du das Angebot als PDF ausgeben.':'Review everything once more. Then export the offer as a PDF.','GEWINN':'PROFIT','PDF / Drucken':'PDF / Print','Als offen speichern':'Save as open','Zu meinen Angeboten':'My offers',
@@ -169,6 +170,7 @@ function finish(o){
           <div><small>MARGE</small><b>${n?Math.round(p/n*100):0}%</b></div>
         </div>
         <button class="primary" onclick="persist();printOffer()">▣ PDF / Drucken</button>
+        <button class="ghost" style="width:100%;margin-top:10px" onclick="st.step=4;render()">Angebot bearbeiten</button>
         <button class="ghost" style="width:100%;margin-top:10px" onclick="markOpen()">Als offen speichern</button>
         <button class="ghost" style="width:100%;margin-top:10px" onclick="go('offers')">Zu meinen Angeboten</button>
       </div>
@@ -277,7 +279,7 @@ function catalogPage(){
       <h1>Deine Preise.</h1>
       <p class="lead">Eigene Leistungen und Verkaufspreise verwalten.</p>
     </div>
-    <button class="primary" onclick="addCatalog()">＋ Position</button>
+    <div class="toolbar"><button class="ghost" onclick="importCatalog()">⇧ Katalog importieren</button><button class="ghost" onclick="exportCatalog()">⇩ Katalog exportieren</button><button class="primary" onclick="addCatalog()">＋ Position</button></div>
   </div>
   <div class="card">
     <div class="catalogHead">
@@ -310,6 +312,36 @@ function removeCatalog(i){
   db.catalog.splice(i,1);
   save();
   render()
+}
+function csvCell(value){return `"${String(value??'').replace(/"/g,'""')}"`}
+function exportCatalog(){
+  const rows=[['Artikel','Bezeichnung','Einheit','VK netto','EK'],...db.catalog.map(x=>[x.article,x.name,x.unit,x.price,x.cost])];
+  const blob=new Blob([rows.map(row=>row.map(csvCell).join(';')).join('\n')],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='easyoffer-preiskatalog.csv';a.click();URL.revokeObjectURL(url);toast('Katalog exportiert')
+}
+function splitCatalogLine(line,delimiter){
+  const cells=[];let value='',quoted=false;
+  for(let i=0;i<line.length;i++){const c=line[i];if(c==='"'){if(quoted&&line[i+1]==='"'){value+='"';i++}else quoted=!quoted}else if(c===delimiter&&!quoted){cells.push(value.trim());value=''}else value+=c}
+  cells.push(value.trim());return cells
+}
+function catalogNumber(value){
+  let n=String(value??'').replace(/[^0-9,.-]/g,'');
+  if(n.includes(',')&&n.includes('.'))n=n.lastIndexOf(',')>n.lastIndexOf('.')?n.replace(/\./g,'').replace(',','.'):n.replace(/,/g,'');
+  else if(n.includes(','))n=n.replace(',','.');
+  return Number(n)||0
+}
+function importCatalog(){
+  const input=document.createElement('input');input.type='file';input.accept='.csv,.txt,.json,text/csv,application/json';
+  input.onchange=()=>{const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{
+    try{
+      let entries=[];
+      if(file.name.toLowerCase().endsWith('.json')){const raw=JSON.parse(reader.result);entries=Array.isArray(raw)?raw:(raw.catalog||[])}
+      else{const lines=String(reader.result).replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean);if(lines.length<2)throw Error('empty');const delimiter=lines[0].includes(';')?';':lines[0].includes('\t')?'\t':',';const head=splitCatalogLine(lines[0],delimiter).map(x=>x.toLowerCase().replace(/[^a-z0-9äöüß]/g,''));const col=(...names)=>head.findIndex(x=>names.includes(x));const article=col('artikel','artikelnr','artikelnummer','articleno','sku'),name=col('bezeichnung','name','artikelbezeichnung','description'),unit=col('einheit','unit'),price=col('vknetto','verkaufspreis','preis','price'),cost=col('ek','einkaufspreis','cost');entries=lines.slice(1).map(line=>{const cells=splitCatalogLine(line,delimiter);return {article:cells[article<0?0:article],name:cells[name<0?1:name],unit:cells[unit<0?2:unit],price:cells[price<0?3:price],cost:cells[cost<0?4:cost]}})}
+      const items=entries.map(x=>({id:uid(),article:x.article||x.articleNo||'',name:x.name||x.bezeichnung||'',unit:x.unit||x.einheit||'Stk.',price:catalogNumber(x.price??x.vk),cost:catalogNumber(x.cost??x.ek)})).filter(x=>x.name);
+      if(!items.length)throw Error('no items');items.forEach(item=>{const old=item.article&&db.catalog.find(x=>x.article===item.article);old?Object.assign(old,item,{id:old.id}):db.catalog.push(item)});save();render();toast(`${items.length} Artikel wurden importiert bzw. aktualisiert.`)
+    }catch(error){toast('Die Datei konnte nicht gelesen werden.')}
+  };reader.readAsText(file,'utf-8')};input.click()
 }
 function stats(){
   const total=db.offers.length;
@@ -627,7 +659,7 @@ window.addEventListener('beforeunload',()=>{
 Object.assign(window,{
   go,newOffer,saveCustomer,analyze,photos,back,
   chg,addItem,del,openOffer,filterOffers,
-  catalogChange,addCatalog,removeCatalog,
+  catalogChange,addCatalog,removeCatalog,importCatalog,exportCatalog,
   settingsTab,saveSettings,applyColorPreset,exportData,importData,
   printOffer,markOpen,persist
 });
