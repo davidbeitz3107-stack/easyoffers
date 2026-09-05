@@ -7,7 +7,7 @@ const COLORS={green:'#16a36a',blue:'#2563eb',violet:'#7c3aed',orange:'#ea580c',g
 const EN={
   'Angebot':'Offer','Datum:':'Date:','Ihre Anfrage:':'Your request:','Einzelpreis netto':'Unit price net','Gesamt netto':'Total net','Dieses Angebot ist':'This offer is valid for','Tage gültig.':'days.','Steuernummer:':'Tax number:','USt-IdNr.:':'VAT ID:',
   'Umsatzentwicklung':'Revenue development','Letzte 6 Monate':'Last 6 months','Angebotsvolumen':'Offer volume','Gesamter Nettowert aller Angebote.':'Total net value of all offers.','Abschlussquote':'Win rate','Von allen Angeboten angenommen.':'Accepted out of all offers.','Pipeline':'Pipeline','Wert nach Angebotsstatus.':'Value by offer status.','Noch keine Daten für das Diagramm.':'No data for the chart yet.','Dieses Monats':'This month','Durchschnitt':'Average','Aufträge gewonnen':'Orders won',
-  'Angebot bearbeiten':'Edit offer','Katalog importieren':'Import catalog','Katalog exportieren':'Export catalog','CSV oder JSON importieren':'Import CSV or JSON','Artikel wurden importiert bzw. aktualisiert.':'Items were imported or updated.','Keine gültigen Artikel gefunden.':'No valid items found.','Die Datei konnte nicht gelesen werden.':'The file could not be read.','Katalog exportiert':'Catalog exported',
+  'Angebot bearbeiten':'Edit offer','Katalog importieren':'Import catalog','Katalog exportieren':'Export catalog','CSV oder JSON importieren':'Import CSV or JSON','Artikel wurden importiert bzw. aktualisiert.':'Items were imported or updated.','Keine gültigen Artikel gefunden.':'No valid items found.','Die Datei konnte nicht gelesen werden.':'The file could not be read.','Katalog exportiert':'Catalog exported','Bestehenden Kunden auswählen':'Select existing customer','Neuer Kunde':'New customer','Bitte Preis prüfen':'Please check price','Status ändern':'Change status','Duplizieren':'Duplicate','Kopie':'Copy','Angebot dupliziert':'Offer duplicated','Status gespeichert':'Status saved',
   'SHK-Angebote':'Plumbing, heating & HVAC offers','Übersicht':'Overview','Neues Angebot':'New offer','Angebote':'Offers','Kunden':'Customers','Preiskatalog':'Price catalog','Statistik':'Analytics','Einstellungen':'Settings','Vom Kundenkontakt zum Angebot.':'From customer request to offer.',
   'Deine Angebote.':'Your offers.','Schneller fertig.':'Done faster.','Kundenanfrage rein. Leistungen prüfen. Angebot raus.':'Customer request in. Review services. Send offer.','Neues Angebot':'New offer','Von der Anfrage zur sauberen Kalkulation.':'From request to reliable calculation.','EasyOffer schlägt Leistungen aus deiner eigenen Preisliste vor. Du prüfst, änderst und versendest.':'EasyOffer suggests services from your own price list. You review, edit and send.','Angebot starten →':'Start offer →','Kunde':'Customer','Anfrage':'Request','Analyse':'Analysis','Positionen':'Line items','Fertig':'Done','Letzte Angebote':'Recent offers','Schnell wieder öffnen.':'Open again quickly.','Alle →':'All →','Noch kein Angebot':'No offers yet','Starte mit einer Kundenanfrage.':'Start with a customer request.','Erstes Angebot erstellen':'Create first offer',
   'Entwurf':'Draft','Offen':'Open','Angenommen':'Accepted','Abgelehnt':'Rejected','Abgelaufen':'Expired','Unbenannter Kunde':'Unnamed customer','Für wen ist das Angebot?':'Who is this offer for?','Was möchte der Kunde?':'What does the customer need?','EasyOffer analysiert.':'EasyOffer is analyzing.','Prüfen & kalkulieren.':'Review & calculate.','Fertig.':'Done.','Kundendaten eingeben.':'Enter customer details.','Anfrage so einfügen, wie sie eingegangen ist.':'Paste the request as it was received.','Vorschläge aus deinem Katalog prüfen.':'Review suggestions from your catalog.','Preise, Mengen und Marge kontrollieren.':'Check prices, quantities and margin.','Alles prüfen und als PDF ausgeben.':'Review everything and export as PDF.','← Übersicht':'← Overview','Speichern':'Save','ANGEBOT ERSTELLEN':'CREATE OFFER','Kundenname *':'Customer name *','E-Mail':'Email','Telefon':'Phone','Adresse':'Address','Weiter →':'Continue →','← Zurück':'← Back','Anfrage analysieren ✦':'Analyze request ✦','Baustellenfotos':'Site photos','Fotos können später von der echten KI analysiert werden.':'Photos can be analyzed by real AI later.','Analyse bereit':'Analysis ready','passende Positionen aus deinem Katalog wurden vorgeschlagen.':'matching line items from your catalog were suggested.','Dies ist aktuell eine lokale Demo-Analyse. Vor Versand technische Details prüfen.':'This is currently a local demo analysis. Review technical details before sending.','Vorgeschlagene Positionen':'Suggested line items','Vorschläge prüfen →':'Review suggestions →','Position hinzufügen':'Add line item','Neue Position':'New line item','Netto':'Net','MwSt.':'VAT','Gesamt':'Total','Deckungsbeitrag':'Gross profit','Marge:':'Margin:','Angebot erstellen →':'Create offer →','ANGEBOT':'OFFER','An:':'To:','Sieht gut aus.':'Looks good.','Prüfe alles noch einmal. Danach kannst du das Angebot als PDF ausgeben.':'Review everything once more. Then export the offer as a PDF.','GEWINN':'PROFIT','PDF / Drucken':'PDF / Print','Als offen speichern':'Save as open','Zu meinen Angeboten':'My offers',
@@ -37,17 +37,30 @@ function newOffer(){st.o={id:uid(),no:db.settings.next++,customer:{name:'',email
 function progress(){return `<div class="progress">${['Kunde','Anfrage','Analyse','Positionen','Fertig'].map((x,i)=>`<div class="pstep ${i+1===st.step?'current':''} ${i+1<st.step?'done':''}"><i>${i+1<st.step?'✓':i+1}</i><span>${x}</span></div>`).join('')}</div>`}
 function wizard(){const o=st.o;const bodies=[customer,request,analysis,items,finish];return `<div class="wizardTop"><button class="back" onclick="go('home')">← Übersicht</button><b>Angebot #${o.no}</b><button class="ghost" onclick="persist();toast('Gespeichert')">Speichern</button></div><div class="wizard"><div class="wizardIntro"><span class="eyebrow">ANGEBOT ERSTELLEN</span><h1>${['Für wen ist das Angebot?','Was möchte der Kunde?','EasyOffer analysiert.','Prüfen & kalkulieren.','Fertig.'][st.step-1]}</h1><p class="lead">${['Kundendaten eingeben.','Anfrage so einfügen, wie sie eingegangen ist.','Vorschläge aus deinem Katalog prüfen.','Preise, Mengen und Marge kontrollieren.','Alles prüfen und als PDF ausgeben.'][st.step-1]}</p></div>${progress()}${bodies[st.step-1](o)}</div>`}
 function field(l,id,v,p){return `<label class="field"><span>${l}</span><input id="${id}" value="${esc(v)}" placeholder="${p||''}"></label>`}
-function customer(o){return `<div class="card formgrid">${field('Kundenname *','name',o.customer.name,'Familie Müller')}${field('E-Mail','email',o.customer.email,'kunde@email.de')}${field('Telefon','phone',o.customer.phone,'0561 ...')}${field('Adresse','address',o.customer.address,'Straße, PLZ Ort')}</div><div class="actions"><span></span><button class="primary" onclick="saveCustomer()">Weiter →</button></div>`}
+function customer(o){
+  const customers=[...new Map(db.offers.filter(x=>x.customer?.name).map(x=>[`${x.customer.email||''}|${x.customer.name}`,x.customer])).values()];
+  const picker=customers.length?`<div class="card" style="margin-bottom:16px"><label class="field"><span>Bestehenden Kunden auswählen</span><select onchange="selectExistingCustomer(this.value)"><option value="">Neuer Kunde</option>${customers.map((c,i)=>`<option value="${i}">${esc(c.name)}${c.email?` (${esc(c.email)})`:''}</option>`).join('')}</select></label><input id="existingCustomers" type="hidden" value="${esc(JSON.stringify(customers))}"></div>`:'';
+  return `${picker}<div class="card formgrid">${field('Kundenname *','name',o.customer.name,'Familie Müller')}${field('E-Mail','email',o.customer.email,'kunde@email.de')}${field('Telefon','phone',o.customer.phone,'0561 ...')}${field('Adresse','address',o.customer.address,'Straße, PLZ Ort')}</div><div class="actions"><span></span><button class="primary" onclick="saveCustomer()">Weiter →</button></div>`
+}
+function selectExistingCustomer(index){
+  if(index==='')return;
+  try{const customers=JSON.parse($('#existingCustomers').value);st.o.customer={...st.o.customer,...customers[Number(index)]};render()}catch(e){toast('Kunde konnte nicht geladen werden')}
+}
 function request(o){return `<div class="card"><textarea id="req" class="request" placeholder="z. B. Kunde möchte die alte Gastherme austauschen. Eine neue Wärmepumpe soll eingebaut werden.">${esc(o.request)}</textarea><div class="upload"><b>📸 Baustellenfotos</b><br><small>Fotos können später von der echten KI analysiert werden.</small><br><input type="file" accept="image/*" multiple onchange="photos(event)"><div class="photos">${st.photos.map(x=>`<img src="${x}">`).join('')}</div></div></div><div class="actions"><button class="ghost" onclick="back()">← Zurück</button><button class="primary" onclick="analyze()">Anfrage analysieren ✦</button></div>`}
 function photos(e){[...e.target.files].slice(0,5).forEach(f=>{const r=new FileReader();r.onload=()=>{st.photos.push(r.result);render()};r.readAsDataURL(f)})}
-function analysis(o){return `<div class="card"><div class="aiBox"><b>✦ Analyse bereit</b><p><strong>${esc(o.title)}</strong></p><p>${o.items.length} passende Positionen aus deinem Katalog wurden vorgeschlagen.</p><small>Dies ist aktuell eine lokale Demo-Analyse. Vor Versand technische Details prüfen.</small></div><div class="card" style="margin-top:12px"><b>Vorgeschlagene Positionen</b>${o.items.map(x=>`<div class="row" style="cursor:default"><span>${x.qty} ${esc(x.unit)}</span><div>${esc(x.name)}<br><small>${eur(x.price)} netto</small></div></div>`).join('')}</div><div class="actions"><button class="ghost" onclick="back()">← Anfrage</button><button class="primary" onclick="st.step=4;render()">Vorschläge prüfen →</button></div></div>`}
-function find(n){return db.catalog.find(x=>x.name===n)||{name:n,unit:'Stk.',price:0,cost:0}}
+function analysis(o){return `<div class="card"><div class="aiBox"><b>✦ Analyse bereit</b><p><strong>${esc(o.title)}</strong></p><p>${o.items.length} passende Positionen aus deinem Katalog wurden vorgeschlagen.</p><small>Preise stammen ausschließlich aus deinem eigenen Katalog.</small></div>${o.missingCatalogItems?.length?`<div class="aiBox" style="background:#fff7e6;border-color:#f3d39b"><b>Bitte Preis prüfen</b><p>Kein passender Katalogartikel gefunden: ${o.missingCatalogItems.map(esc).join(', ')}.</p><small>Füge den Artikel zuerst im Preiskatalog hinzu oder ergänze ihn später manuell.</small></div>`:''}<div class="card" style="margin-top:12px"><b>Vorgeschlagene Positionen</b>${o.items.map(x=>`<div class="row" style="cursor:default"><span>${x.qty} ${esc(x.unit)}</span><div>${esc(x.name)}<br><small>${eur(x.price)} netto</small></div></div>`).join('')||'<p class="lead">Keine Katalogposition erkannt.</p>'}</div><div class="actions"><button class="ghost" onclick="back()">← Anfrage</button><button class="primary" onclick="st.step=4;render()">Vorschläge prüfen →</button></div></div>`}
+function find(n){return db.catalog.find(x=>x.name.trim().toLowerCase()===String(n).trim().toLowerCase())||null}
+function detectedQuantity(text,terms){
+  const words=terms.map(x=>x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|');
+  const match=text.match(new RegExp(`(?:^|\\s)(\\d+)\\s*(?:x|stück|stk\\.?)?\\s*(?:${words})`,'i'))||text.match(new RegExp(`(?:${words})[^0-9]{0,18}(\\d+)\\s*(?:x|stück|stk\\.?)`,'i'));
+  return match?Math.max(1,Number(match[1])||1):1
+}
 function parse(t){
-  const a=[],add=n=>{if(!a.some(x=>x.name===n)){const f=find(n);a.push({...f,qty:1})}};
+  const a=[],missing=[],add=(n,terms=[n])=>{if(!a.some(x=>x.name===n)){const f=find(n);if(f)a.push({...f,qty:detectedQuantity(t,terms)});else missing.push(n)}};
   if(/wärmepumpe/i.test(t)){
-    ['Demontage','Entsorgung Altgerät','Wärmepumpe','Montage Heizungsanlage','Hydraulischer Abgleich','Inbetriebnahme'].forEach(add)
+    add('Demontage');add('Entsorgung Altgerät');add('Wärmepumpe',['wärmepumpe','wp','luftwärmepumpe']);add('Montage Heizungsanlage');add('Hydraulischer Abgleich');add('Inbetriebnahme')
   }else if(/gastherme|heizung|heizungsanlage/i.test(t)){
-    ['Demontage','Entsorgung Altgerät','Heizungsanlage','Montage Heizungsanlage','Inbetriebnahme'].forEach(add)
+    add('Demontage');add('Entsorgung Altgerät');add('Heizungsanlage');add('Montage Heizungsanlage');add('Inbetriebnahme')
   }
   if(/wartung/i.test(t))add('Wartung Heizungsanlage');
   if(/störung|kaputt|fehler|problem/i.test(t)){add('Anfahrt');add('Fehlerdiagnose')}
@@ -56,8 +69,8 @@ function parse(t){
   if(/armatur/i.test(t))add('Armatur');
   if(/klima/i.test(t)){add('Klimagerät Split');add('Montage Klimagerät')}
   if(/rohr|leitung/i.test(t))add('Rohrleitung');
-  if(!a.length)add('Montage / Arbeitszeit');
-  return a
+  if(!a.length)add('Montage / Arbeitszeit',['montage','arbeitszeit','einbau']);
+  return {items:a,missing:[...new Set(missing)]}
 }
 function analyze(){
   const o=st.o;
@@ -72,7 +85,9 @@ function analyze(){
     :/wartung/i.test(o.request)
     ?'Wartung Heizungsanlage'
     :'SHK-Arbeiten';
-  o.items=parse(o.request);
+  const result=parse(o.request);
+  o.items=result.items;
+  o.missingCatalogItems=result.missing;
   st.step=3;
   render()
 }
@@ -119,7 +134,7 @@ function del(i){
   render()
 }
 function finish(o){
-  const n=net(o),g=gross(o),p=profit(o);
+  const n=net(o),g=gross(o),p=profit(o),saved=db.offers.some(x=>x.id===o.id);
   return `<div class="preview">
     <div class="paper">
       <div class="paperHead">
@@ -169,8 +184,10 @@ function finish(o){
           <div><small>GEWINN</small><b>${eur(p)}</b></div>
           <div><small>MARGE</small><b>${n?Math.round(p/n*100):0}%</b></div>
         </div>
+        ${saved?`<label class="field" style="margin:12px 0"><span>Status ändern</span><select onchange="setOfferStatus(this.value)">${['entwurf','offen','angenommen','abgelehnt'].map(status=>`<option value="${status}" ${o.status===status?'selected':''}>${statusLabel(status)}</option>`).join('')}</select></label>`:''}
         <button class="primary" onclick="persist();printOffer()">▣ PDF / Drucken</button>
         <button class="ghost" style="width:100%;margin-top:10px" onclick="st.step=4;render()">Angebot bearbeiten</button>
+        ${saved?`<button class="ghost" style="width:100%;margin-top:10px" onclick="duplicateCurrentOffer()">Duplizieren</button>`:''}
         <button class="ghost" style="width:100%;margin-top:10px" onclick="markOpen()">Als offen speichern</button>
         <button class="ghost" style="width:100%;margin-top:10px" onclick="go('offers')">Zu meinen Angeboten</button>
       </div>
@@ -198,6 +215,19 @@ function markOpen(){
   persist();
   toast('Angebot gespeichert');
   go('offers')
+}
+function setOfferStatus(status){
+  st.o.status=status;
+  persist();
+  toast('Status gespeichert');
+  render()
+}
+function duplicateCurrentOffer(){
+  st.o={...JSON.parse(JSON.stringify(st.o)),id:uid(),no:db.settings.next++,status:'entwurf',created:new Date().toISOString(),title:`${st.o.title||'SHK-Angebot'} – Kopie`};
+  st.step=4;
+  save();
+  toast('Angebot dupliziert');
+  render()
 }
 function openOffer(i){
   const x=db.offers.find(x=>x.id===i);
@@ -657,8 +687,8 @@ window.addEventListener('beforeunload',()=>{
   if(st.o&&st.page==='new')persist()
 });
 Object.assign(window,{
-  go,newOffer,saveCustomer,analyze,photos,back,
-  chg,addItem,del,openOffer,filterOffers,
+  go,newOffer,saveCustomer,selectExistingCustomer,analyze,photos,back,
+  chg,addItem,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,
   catalogChange,addCatalog,removeCatalog,importCatalog,exportCatalog,
   settingsTab,saveSettings,applyColorPreset,exportData,importData,
   printOffer,markOpen,persist
