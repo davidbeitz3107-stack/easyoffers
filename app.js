@@ -33,7 +33,7 @@ function go(p){st.page=p;render()}
 function home(){const won=db.offers.filter(o=>o.status==='angenommen');return `<div class="top"><div><span class="eyebrow">EASYOFFER FÜR HANDWERK & SERVICE</span><h1>Deine Angebote.<br><em>Schneller fertig.</em></h1><p class="lead">Kundenanfrage rein. Leistungen prüfen. Angebot raus.</p></div><button class="primary big" onclick="newOffer()">＋ Neues Angebot</button></div><div class="hero"><div class="heroCard"><div class="spark">✦ DIGITALER ANGEBOTSASSISTENT</div><h2>Von der Anfrage zur sauberen Kalkulation.</h2><p>EasyOffer schlägt Leistungen aus deiner eigenen Preisliste vor. Du prüfst, änderst und versendest.</p><button class="primary" onclick="newOffer()">Angebot starten →</button><div class="flow"><span>01 Kunde</span><span>02 Anfrage</span><span>03 Analyse</span><span>04 Kalkulation</span><span>05 Angebot</span></div></div><div class="stats"><div class="stat"><small>ANGEBOTE</small><strong>${db.offers.length}</strong><span>gesamt</span></div><div class="stat"><small>GEWONNEN</small><strong>${eur(won.reduce((a,o)=>a+net(o),0))}</strong><span>Auftragswert netto</span></div><div class="stat"><small>ARTIKEL</small><strong>${db.catalog.length}</strong><span>im Katalog</span></div></div></div><section class="section"><div class="sectionHead"><div><h2>Letzte Angebote</h2><p class="lead">Schnell wieder öffnen.</p></div><button class="ghost" onclick="go('offers')">Alle →</button></div><div class="card rows">${db.offers.length?db.offers.slice(-6).reverse().map(row).join(''):`<div class="empty"><h3>Noch kein Angebot</h3><p>Starte mit einer Kundenanfrage.</p><button class="primary" onclick="newOffer()">Erstes Angebot erstellen</button></div>`}</div></section>`}
 function statusLabel(s){return ({entwurf:'Entwurf',offen:'Offen',angenommen:'Angenommen',abgelehnt:'Abgelehnt',abgelaufen:'Abgelaufen'})[s]||s}
 function row(o){return `<div class="row" onclick="openOffer('${o.id}')"><b>#${o.no}</b><div><b>${esc(o.customer.name||'Unbenannter Kunde')}</b><br><span>${esc(o.title)}${o.reference?` · Ref. ${esc(o.reference)}`:''}</span></div><span class="badge ${o.status==='angenommen'?'open':''}">${statusLabel(o.status)}</span><strong>${eur(net(o))}</strong><b>›</b></div>`}
-function newOffer(){st.o={id:uid(),no:db.settings.next++,reference:'',customer:{name:'',email:'',phone:'',address:''},request:'',title:'',items:[],notes:'',status:'entwurf',vat:db.settings.vat||19,validity:db.settings.offerValidity||14,followUp:''};st.photos=[];st.page='new';st.step=1;save();render()}
+function newOffer(){st.o={id:uid(),no:db.settings.next++,reference:'',customer:{name:'',email:'',phone:'',address:''},request:'',title:db.settings.offerTitle||'Angebot',items:[],notes:'',status:'entwurf',vat:db.settings.vat||19,validity:db.settings.offerValidity||14,followUp:''};st.photos=[];st.page='new';st.step=1;save();render()}
 function progress(){return `<div class="progress">${['Kunde','Anfrage','Analyse','Positionen','Fertig'].map((x,i)=>`<div class="pstep ${i+1===st.step?'current':''} ${i+1<st.step?'done':''}"><i>${i+1<st.step?'✓':i+1}</i><span>${x}</span></div>`).join('')}</div>`}
 function wizard(){const o=st.o;const bodies=[customer,request,analysis,items,finish];return `<div class="wizardTop"><button class="back" onclick="go('home')">← Übersicht</button><b>Angebot #${o.no}</b><button class="ghost" onclick="persist();toast('Gespeichert')">Speichern</button></div><div class="wizard"><div class="wizardIntro"><span class="eyebrow">ANGEBOT ERSTELLEN</span><h1>${['Für wen ist das Angebot?','Was möchte der Kunde?','EasyOffer analysiert.','Prüfen & kalkulieren.','Fertig.'][st.step-1]}</h1><p class="lead">${['Kundendaten eingeben.','Anfrage so einfügen, wie sie eingegangen ist.','Vorschläge aus deinem Katalog prüfen.','Preise, Mengen und Marge kontrollieren.','Alles prüfen und als PDF ausgeben.'][st.step-1]}</p></div>${progress()}${bodies[st.step-1](o)}</div>`}
 function field(l,id,v,p){return `<label class="field"><span>${l}</span><input id="${id}" value="${esc(v)}" placeholder="${p||''}"></label>`}
@@ -316,7 +316,7 @@ function catalogPage(){
     </div>
     <div class="toolbar"><button class="ghost" onclick="importCatalog()">⇧ Katalog importieren</button><button class="ghost" onclick="exportCatalog()">⇩ Katalog exportieren</button><button class="primary" onclick="addCatalog()">＋ Position</button></div>
   </div>
-  <div class="card catalogTools"><div class="catalogSearch"><input value="${esc(st.catalogSearch)}" oninput="filterCatalog(this.value,st.catalogCategory)" placeholder="⌕ Artikel, Nummer oder Kategorie suchen"></div><select onchange="filterCatalog(st.catalogSearch,this.value)">${categories.map(c=>`<option value="${esc(c)}" ${st.catalogCategory===c?'selected':''}>${c==='alle'?'Alle Kategorien':esc(c)}</option>`).join('')}</select><span class="catalogCount">${visible.length} von ${db.catalog.length} Positionen</span></div>
+  <div class="card catalogTools"><div class="catalogSearch"><input value="${esc(st.catalogSearch)}" oninput="filterCatalog(this.value,st.catalogCategory,true)" placeholder="⌕ Artikel, Nummer oder Kategorie suchen"></div><select onchange="filterCatalog(st.catalogSearch,this.value)">${categories.map(c=>`<option value="${esc(c)}" ${st.catalogCategory===c?'selected':''}>${c==='alle'?'Alle Kategorien':esc(c)}</option>`).join('')}</select><span class="catalogCount">${visible.length} von ${db.catalog.length} Positionen</span></div>
   <div class="card">
     <div class="catalogHead">
       <span>Artikel</span><span>Bezeichnung</span><span>Kategorie</span><span>Einheit</span><span>VK netto</span><span>EK</span><span>Marge</span><span></span>
@@ -336,7 +336,7 @@ function catalogPage(){
     </div>
   </div>`
 }
-function filterCatalog(search,category){st.catalogSearch=search;st.catalogCategory=category;render()}
+function filterCatalog(search,category,keepFocus=false){st.catalogSearch=search;st.catalogCategory=category;render();if(keepFocus)requestAnimationFrame(()=>{const input=document.querySelector('.catalogTools input');if(input){input.focus();input.setSelectionRange(search.length,search.length)}})}
 function catalogChange(i,k,v){
   db.catalog[i][k]=['price','cost'].includes(k)?Number(v):v;
   save()
@@ -426,7 +426,7 @@ function stats(){
 }
 function settings(){
   const s=db.settings;
-  const tabs=[['company','Unternehmen'],['design','Design'],['offers','Angebote'],['email','E-Mail'],['ai','KI'],['notifications','Benachrichtigungen']];
+  const tabs=[['company','Unternehmen'],['design','Design'],['offers','Angebote'],['email','E-Mail'],['ai','KI'],['notifications','Benachrichtigungen'],['data','Daten & Sicherheit']];
   return `<div class="top">
     <div>
       <span class="eyebrow">EINSTELLUNGEN</span>
@@ -464,11 +464,13 @@ function settingsContent(){
     <label class="field"><span>Sprache</span><select id="language"><option value="de" ${s.language==='de'?'selected':''}>Deutsch</option><option value="en" ${s.language==='en'?'selected':''}>English</option></select></label>
   </div>`;
   if(st.settingsTab==='offers')return `<div class="card formgrid">
+    ${field('Standard-Titel für Angebote','offerTitle',s.offerTitle||'Angebot','z. B. Angebot – Modernisierung')}
     <label class="field"><span>MwSt. (%)</span><input id="vat" type="number" value="${s.vat}"></label>
     <label class="field"><span>Angebotsnummer Präfix</span><input id="offerPrefix" value="${esc(s.offerPrefix)}"></label>
     <label class="field"><span>Nächste Angebotsnummer</span><input id="offerNext" type="number" value="${s.offerNext}"></label>
     <label class="field"><span>Gültigkeit (Tage)</span><input id="offerValidity" type="number" value="${s.offerValidity}"></label>
     <label class="field"><span>Zahlungsziel (Tage)</span><input id="paymentTerm" type="number" value="${s.paymentTerm}"></label>
+    ${textareaField('Einleitung im PDF','offerIntro',s.offerIntro||'Vielen Dank für Ihre Anfrage. Gern unterbreiten wir Ihnen folgendes Angebot.')}
     ${textareaField('Footer','offerFooter',s.offerFooter)}
     ${textareaField('Bedingungen','offerTerms',s.offerTerms)}
   </div>`;
@@ -481,6 +483,7 @@ function settingsContent(){
     <label class="toggle"><input id="aiSuggestions" type="checkbox" ${s.aiSuggestions?'checked':''}><span>KI-Vorschläge aktivieren</span></label>
     <div class="aiBox"><b>✦ Aktueller KI-Modus</b><p>EasyOffer nutzt momentan eine lokale Erkennung für typische Kundenanfragen. Eine echte API-Anbindung kann später ergänzt werden.</p></div>
   </div>`;
+  if(st.settingsTab==='data')return `<div class="card dataSettings"><h2>Deine Daten sichern</h2><p class="lead">Aktuell liegen deine Daten nur in diesem Browser. Speichere regelmäßig ein Backup, bevor wir später die Cloud-Anmeldung ergänzen.</p><div class="toolbar"><button class="primary" onclick="exportData()">⇩ Backup herunterladen</button><button class="ghost" onclick="importData()">⇧ Backup wiederherstellen</button></div><div class="aiBox"><b>Datenschutz-Hinweis</b><p>Die aktuelle MVP-Version sendet keine Angebots- oder Kundendaten an einen Server. Für die spätere Verkaufsversion ergänzen wir Login, Cloud-Speicher und ein DSGVO-Konzept.</p></div></div>`;
   return `<div class="card">
     <label class="toggle"><input id="notifications" type="checkbox" ${s.notifications?'checked':''}><span>Benachrichtigungen aktivieren</span></label>
     <label class="toggle"><input id="autoFollowups" type="checkbox" ${s.autoFollowups?'checked':''}><span>Automatische Follow-ups vorbereiten</span></label>
@@ -490,7 +493,7 @@ function textareaField(label,id,value){
   return `<label class="field full"><span>${label}</span><textarea id="${id}">${esc(value||'')}</textarea></label>`
 }function saveSettings(){
   const s=db.settings;
-  ['company','owner','address','email','phone','website','taxNo','vatId','bank','logo','offerPrefix','offerFooter','offerTerms','emailSubject','emailText','emailSignature'].forEach(k=>{
+  ['company','owner','address','email','phone','website','taxNo','vatId','bank','logo','offerPrefix','offerTitle','offerIntro','offerFooter','offerTerms','emailSubject','emailText','emailSignature'].forEach(k=>{
     const el=document.getElementById(k);
     if(el)s[k]=el.value;
   });
@@ -557,7 +560,7 @@ function printOffer(){
 </style></head><body><main class="page">
 <header class="header"><div>${s.logo?`<img class="logo" src="${esc(s.logo)}">`:''}<div class="company">${esc(s.company)}</div><div class="muted">${esc(s.address).replace(/\n/g,'<br>')}<br>${esc(s.email)}${s.phone?` · ${esc(s.phone)}`:''}${s.website?`<br>${esc(s.website)}`:''}</div></div><div class="offerBox"><strong>ANGEBOT</strong><div class="offerNo">${esc(offerNo)}</div><div><span class="muted">Datum</span><br>${issued.toLocaleDateString(s.language==='en'?'en-GB':'de-DE',dateFormat)}</div></div></header>
 <section class="addressRow"><div class="recipient"><span class="label">An</span><b>${esc(o.customer.name)}</b><br>${esc(o.customer.address).replace(/\n/g,'<br>')}<br>${esc(o.customer.email)}${o.customer.phone?`<br>${esc(o.customer.phone)}`:''}</div><div><span class="label">Angebotsdetails</span>${o.reference?`Ihre Referenz: ${esc(o.reference)}<br>`:''}Gültig bis: ${validUntil.toLocaleDateString(s.language==='en'?'en-GB':'de-DE',dateFormat)}<br>Zahlungsziel: ${Number(s.paymentTerm||14)} Tage</div></section>
-<h1 class="title">${esc(o.title||'Angebot')}</h1><p class="intro">Vielen Dank für Ihre Anfrage. Gern unterbreiten wir Ihnen folgendes Angebot.</p>${o.request?`<div class="request"><b>Ihre Anfrage</b><br>${esc(o.request).replace(/\n/g,'<br>')}</div>`:''}
+<h1 class="title">${esc(o.title||s.offerTitle||'Angebot')}</h1><p class="intro">${esc(s.offerIntro||'Vielen Dank für Ihre Anfrage. Gern unterbreiten wir Ihnen folgendes Angebot.').replace(/\n/g,'<br>')}</p>${o.request?`<div class="request"><b>Ihre Anfrage</b><br>${esc(o.request).replace(/\n/g,'<br>')}</div>`:''}
 <table><thead><tr><th>Position</th><th>Menge</th><th class="right">Einzelpreis netto</th><th class="right">Gesamt netto</th></tr></thead><tbody>${o.items.map((x,i)=>`<tr><td><span class="muted">${String(i+1).padStart(2,'0')}</span> &nbsp;${esc(x.name)}</td><td>${x.qty} ${esc(x.unit)}</td><td class="right">${eur(x.price)}</td><td class="right">${eur(x.qty*x.price)}</td></tr>`).join('')}</tbody></table>
 <section class="summary"><div><span>Netto</span><b>${eur(n)}</b></div><div><span>MwSt. ${o.vat}%</span><b>${eur(n*o.vat/100)}</b></div><div class="grand"><span>Gesamtbetrag</span><b>${eur(g)}</b></div></section>
 <section class="conditions"><p>Dieses Angebot ist ${Number(o.validity||s.offerValidity||14)} Tage gültig.</p><p>${esc(s.offerFooter||'').replace(/\n/g,'<br>')}</p>${s.offerTerms?`<p><b>Hinweise & Bedingungen</b><br>${esc(s.offerTerms).replace(/\n/g,'<br>')}</p>`:''}</section>
