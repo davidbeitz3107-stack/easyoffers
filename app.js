@@ -185,7 +185,7 @@ function finish(o){
           <div><small>GEWINN</small><b>${eur(p)}</b></div>
           <div><small>MARGE</small><b>${n?Math.round(p/n*100):0}%</b></div>
         </div>
-        ${saved?`<label class="field" style="margin:12px 0"><span>Status ändern</span><select onchange="setOfferStatus(this.value)">${['entwurf','offen','angenommen','abgelehnt'].map(status=>`<option value="${status}" ${o.status===status?'selected':''}>${statusLabel(status)}</option>`).join('')}</select></label>`:''}
+        ${saved?`<label class="field" style="margin:12px 0"><span>Status ändern</span><select onchange="setOfferStatus(this.value)">${['entwurf','offen','angenommen','abgelehnt'].map(status=>`<option value="${status}" ${o.status===status?'selected':''}>${statusLabel(status)}</option>`).join('')}</select></label><div class="followUpBox"><b>◷ Angebotsnachverfolgung</b><span>Erstellt automatisch einen orangefarbenen Eintrag im Kalender.</span><input id="followUpDate" type="date" value="${esc(o.followUp||'')}"><button class="ghost" onclick="planFollowUp()">Nachfassen planen</button>${o.followUp?`<button class="textButton" onclick="clearFollowUp()">Nachverfolgung entfernen</button>`:''}</div>`:''}
         <button class="primary" onclick="persist();printOffer()">▣ PDF / Drucken</button>
         <button class="ghost" style="width:100%;margin-top:10px" onclick="st.step=4;render()">Angebot bearbeiten</button>
         ${saved?`<button class="ghost" style="width:100%;margin-top:10px" onclick="duplicateCurrentOffer()">Duplizieren</button>`:''}
@@ -220,10 +220,13 @@ function markOpen(){
 }
 function setOfferStatus(status){
   st.o.status=status;
+  if(['angenommen','abgelehnt'].includes(status)){st.o.followUp='';db.appointments=(db.appointments||[]).filter(a=>!(a.offerId===st.o.id&&a.kind==='followup'))}
   persist();
   toast('Status gespeichert');
   render()
 }
+function planFollowUp(){const date=$('#followUpDate')?.value;if(!date)return toast('Bitte ein Datum auswählen');st.o.followUp=date;persist();db.appointments=(db.appointments||[]).filter(a=>!(a.offerId===st.o.id&&a.kind==='followup'));db.appointments.push({id:uid(),date,title:`Nachfassen: ${(db.settings.offerPrefix||'ANG-')+st.o.no}`,note:`${st.o.customer.name||'Kunde'} · ${st.o.title||'Angebot'}`,color:'orange',offerId:st.o.id,kind:'followup'});save();toast('Nachverfolgung im Kalender geplant');render()}
+function clearFollowUp(){st.o.followUp='';db.appointments=(db.appointments||[]).filter(a=>!(a.offerId===st.o.id&&a.kind==='followup'));persist();save();toast('Nachverfolgung entfernt');render()}
 function duplicateCurrentOffer(){
   st.o={...JSON.parse(JSON.stringify(st.o)),id:uid(),no:db.settings.next++,status:'entwurf',created:new Date().toISOString(),title:`${st.o.title||'Angebot'} – Kopie`};
   st.step=4;
@@ -627,7 +630,7 @@ window.addEventListener('beforeunload',()=>{
 });
 Object.assign(window,{
   go,newOffer,saveCustomer,selectExistingCustomer,analyze,photos,back,
-  chg,addItem,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,
+  chg,addItem,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,planFollowUp,clearFollowUp,
   moveCalendar,addAppointment,removeAppointment,
   catalogChange,addCatalog,removeCatalog,importCatalog,exportCatalog,filterCatalog,
   settingsTab,saveSettings,applyColorPreset,exportData,importData,
