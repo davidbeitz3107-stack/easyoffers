@@ -21,7 +21,7 @@ const defaults=[
 ];
 function normalize(x){const d={offers:[],settings:{company:'Dein Betrieb',owner:'',address:'',email:'',phone:'',website:'',taxNo:'',vatId:'',bank:'',logo:'',language:'de',theme:'system',accent:'#16a36a',colorPreset:'green',density:'normal',currency:'EUR',vat:19,offerValidity:14,paymentTerm:14,offerPrefix:'ANG-',offerNext:1001,offerFooter:'Vielen Dank für Ihre Anfrage.',offerTerms:'',emailSubject:'Ihr Angebot von {firma} – #{nummer}',emailText:'Guten Tag {kunde},\n\nhier erhalten Sie unser Angebot #{nummer}.\n\nViele Grüße\n{firma}',emailSignature:'',autoFollowups:true,notifications:true,aiSuggestions:true,next:1001},catalog:defaults.map(a=>({id:uid(),article:a[0],name:a[1],unit:a[2],price:a[3],cost:a[4]}))}; if(!x)return d; x.settings={...d.settings,...(x.settings||{})}; if(x.settings.company==='Dein SHK-Betrieb')x.settings.company='Dein Betrieb'; x.settings.colorPreset=x.settings.colorPreset||Object.keys(COLORS).find(k=>COLORS[k]===x.settings.accent)||'custom'; x.settings.next=Number(x.settings.next)||1001; x.settings.offerNext=Number(x.settings.offerNext)||x.settings.next; x.catalog=(x.catalog||d.catalog).map(a=>({...a,id:a.id||uid(),article:a.article||'',unit:a.unit||'Stk.',price:+a.price||0,cost:+a.cost||0})); x.offers=(x.offers||[]).map(o=>({...o,id:o.id||uid(),no:o.no||x.settings.next++,customer:{name:'',email:'',phone:'',address:'',...(o.customer||{})},items:(o.items||[]).map(i=>({...i,qty:+i.qty||1,price:+i.price||0,cost:+i.cost||0})),status:o.status||'entwurf',vat:+o.vat||19,created:o.created||new Date().toISOString(),followUp:o.followUp||'',notes:o.notes||'',request:o.request||'',title:o.title||'Angebot'})); x.settings.next=Math.max(x.settings.next||1001,...x.offers.map(o=>(+o.no||0)+1)); return x;}
 let db=normalize(JSON.parse(localStorage.getItem(K)||localStorage.getItem('easyoffer_v21')||'null')); localStorage.setItem(K,JSON.stringify(db));
-let st={page:'home',step:1,o:null,photos:[],settingsTab:'company'};
+let st={page:'home',step:1,o:null,photos:[],settingsTab:'company',catalogSearch:'',catalogCategory:'alle'};
 const save=()=>localStorage.setItem(K,JSON.stringify(db));
 const net=o=>(o.items||[]).reduce((a,x)=>a+(+x.qty||0)*(+x.price||0),0);
 const cost=o=>(o.items||[]).reduce((a,x)=>a+(+x.qty||0)*(+x.cost||0),0);
@@ -305,6 +305,9 @@ function customers(){
     </div>`).join(''):`<div class="empty"><h3>Noch keine Kunden</h3><p>Deine Kunden werden automatisch aus Angeboten übernommen.</p></div>`}</div>`
 }
 function catalogPage(){
+  const categories=['alle',...new Set(db.catalog.map(x=>x.category||'Allgemein').filter(Boolean).sort((a,b)=>a.localeCompare(b,'de')))];
+  const query=st.catalogSearch.trim().toLowerCase();
+  const visible=db.catalog.map((x,i)=>({...x,_i:i})).filter(x=>(st.catalogCategory==='alle'||(x.category||'Allgemein')===st.catalogCategory)&&(!query||[x.article,x.name,x.category,x.unit].join(' ').toLowerCase().includes(query)));
   return `<div class="top">
     <div>
       <span class="eyebrow">PREISKATALOG</span>
@@ -313,29 +316,33 @@ function catalogPage(){
     </div>
     <div class="toolbar"><button class="ghost" onclick="importCatalog()">⇧ Katalog importieren</button><button class="ghost" onclick="exportCatalog()">⇩ Katalog exportieren</button><button class="primary" onclick="addCatalog()">＋ Position</button></div>
   </div>
+  <div class="card catalogTools"><div class="catalogSearch"><input value="${esc(st.catalogSearch)}" oninput="filterCatalog(this.value,st.catalogCategory)" placeholder="⌕ Artikel, Nummer oder Kategorie suchen"></div><select onchange="filterCatalog(st.catalogSearch,this.value)">${categories.map(c=>`<option value="${esc(c)}" ${st.catalogCategory===c?'selected':''}>${c==='alle'?'Alle Kategorien':esc(c)}</option>`).join('')}</select><span class="catalogCount">${visible.length} von ${db.catalog.length} Positionen</span></div>
   <div class="card">
     <div class="catalogHead">
-      <span>Artikel</span><span>Bezeichnung</span><span>Einheit</span><span>VK netto</span><span>EK</span><span></span>
+      <span>Artikel</span><span>Bezeichnung</span><span>Kategorie</span><span>Einheit</span><span>VK netto</span><span>EK</span><span>Marge</span><span></span>
     </div>
     <div class="catalogRows">
-      ${db.catalog.map((x,i)=>`
+      ${visible.map(x=>`
         <div class="catalogRow">
-          <input value="${esc(x.article)}" onchange="catalogChange(${i},'article',this.value)">
-          <input value="${esc(x.name)}" onchange="catalogChange(${i},'name',this.value)">
-          <input value="${esc(x.unit)}" onchange="catalogChange(${i},'unit',this.value)">
-          <input type="number" min="0" step="0.01" value="${x.price}" onchange="catalogChange(${i},'price',this.value)">
-          <input type="number" min="0" step="0.01" value="${x.cost}" onchange="catalogChange(${i},'cost',this.value)">
-          <button class="ghost" onclick="removeCatalog(${i})">×</button>
-        </div>`).join('')}
+          <input value="${esc(x.article)}" onchange="catalogChange(${x._i},'article',this.value)">
+          <input value="${esc(x.name)}" onchange="catalogChange(${x._i},'name',this.value)">
+          <input value="${esc(x.category||'Allgemein')}" onchange="catalogChange(${x._i},'category',this.value)" placeholder="z. B. Material">
+          <input value="${esc(x.unit)}" onchange="catalogChange(${x._i},'unit',this.value)">
+          <input type="number" min="0" step="0.01" value="${x.price}" onchange="catalogChange(${x._i},'price',this.value)">
+          <input type="number" min="0" step="0.01" value="${x.cost}" onchange="catalogChange(${x._i},'cost',this.value)">
+          <span class="catalogMargin">${x.price?Math.round((x.price-x.cost)/x.price*100):0}%</span>
+          <button class="ghost deleteCatalog" title="Position löschen" onclick="removeCatalog(${x._i})">×</button>
+        </div>`).join('')||`<div class="empty compactEmpty"><h3>Keine Positionen gefunden</h3><p>Ändere die Suche oder lege eine neue Position an.</p></div>`}
     </div>
   </div>`
 }
+function filterCatalog(search,category){st.catalogSearch=search;st.catalogCategory=category;render()}
 function catalogChange(i,k,v){
   db.catalog[i][k]=['price','cost'].includes(k)?Number(v):v;
   save()
 }
 function addCatalog(){
-  db.catalog.push({id:uid(),article:'',name:'Neue Leistung',unit:'Stk.',price:0,cost:0});
+  db.catalog.push({id:uid(),article:'',name:'Neue Leistung',category:'Allgemein',unit:'Stk.',price:0,cost:0});
   save();
   render()
 }
@@ -347,7 +354,7 @@ function removeCatalog(i){
 }
 function csvCell(value){return `"${String(value??'').replace(/"/g,'""')}"`}
 function exportCatalog(){
-  const rows=[['Artikel','Bezeichnung','Einheit','VK netto','EK'],...db.catalog.map(x=>[x.article,x.name,x.unit,x.price,x.cost])];
+  const rows=[['Artikel','Bezeichnung','Kategorie','Einheit','VK netto','EK'],...db.catalog.map(x=>[x.article,x.name,x.category||'Allgemein',x.unit,x.price,x.cost])];
   const blob=new Blob([rows.map(row=>row.map(csvCell).join(';')).join('\n')],{type:'text/csv;charset=utf-8'});
   const url=URL.createObjectURL(blob),a=document.createElement('a');
   a.href=url;a.download='easyoffer-preiskatalog.csv';a.click();URL.revokeObjectURL(url);toast('Katalog exportiert')
@@ -369,8 +376,8 @@ function importCatalog(){
     try{
       let entries=[];
       if(file.name.toLowerCase().endsWith('.json')){const raw=JSON.parse(reader.result);entries=Array.isArray(raw)?raw:(raw.catalog||[])}
-      else{const lines=String(reader.result).replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean);if(lines.length<2)throw Error('empty');const delimiter=lines[0].includes(';')?';':lines[0].includes('\t')?'\t':',';const head=splitCatalogLine(lines[0],delimiter).map(x=>x.toLowerCase().replace(/[^a-z0-9äöüß]/g,''));const col=(...names)=>head.findIndex(x=>names.includes(x));const article=col('artikel','artikelnr','artikelnummer','articleno','sku'),name=col('bezeichnung','name','artikelbezeichnung','description'),unit=col('einheit','unit'),price=col('vknetto','verkaufspreis','preis','price'),cost=col('ek','einkaufspreis','cost');entries=lines.slice(1).map(line=>{const cells=splitCatalogLine(line,delimiter);return {article:cells[article<0?0:article],name:cells[name<0?1:name],unit:cells[unit<0?2:unit],price:cells[price<0?3:price],cost:cells[cost<0?4:cost]}})}
-      const items=entries.map(x=>({id:uid(),article:x.article||x.articleNo||'',name:x.name||x.bezeichnung||'',unit:x.unit||x.einheit||'Stk.',price:catalogNumber(x.price??x.vk),cost:catalogNumber(x.cost??x.ek)})).filter(x=>x.name);
+      else{const lines=String(reader.result).replace(/^\uFEFF/,'').split(/\r?\n/).filter(Boolean);if(lines.length<2)throw Error('empty');const delimiter=lines[0].includes(';')?';':lines[0].includes('\t')?'\t':',';const head=splitCatalogLine(lines[0],delimiter).map(x=>x.toLowerCase().replace(/[^a-z0-9äöüß]/g,''));const col=(...names)=>head.findIndex(x=>names.includes(x));const article=col('artikel','artikelnr','artikelnummer','articleno','sku'),name=col('bezeichnung','name','artikelbezeichnung','description'),category=col('kategorie','category','gruppe'),unit=col('einheit','unit'),price=col('vknetto','verkaufspreis','preis','price'),cost=col('ek','einkaufspreis','cost');entries=lines.slice(1).map(line=>{const cells=splitCatalogLine(line,delimiter);return {article:cells[article<0?0:article],name:cells[name<0?1:name],category:cells[category],unit:cells[unit<0?2:unit],price:cells[price<0?3:price],cost:cells[cost<0?4:cost]}})}
+      const items=entries.map(x=>({id:uid(),article:x.article||x.articleNo||'',name:x.name||x.bezeichnung||'',category:x.category||x.kategorie||'Allgemein',unit:x.unit||x.einheit||'Stk.',price:catalogNumber(x.price??x.vk),cost:catalogNumber(x.cost??x.ek)})).filter(x=>x.name);
       if(!items.length)throw Error('no items');items.forEach(item=>{const old=item.article&&db.catalog.find(x=>x.article===item.article);old?Object.assign(old,item,{id:old.id}):db.catalog.push(item)});save();render();toast(`${items.length} Artikel wurden importiert bzw. aktualisiert.`)
     }catch(error){toast('Die Datei konnte nicht gelesen werden.')}
   };reader.readAsText(file,'utf-8')};input.click()
@@ -603,9 +610,8 @@ window.addEventListener('beforeunload',()=>{
 Object.assign(window,{
   go,newOffer,saveCustomer,selectExistingCustomer,analyze,photos,back,
   chg,addItem,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,
-  catalogChange,addCatalog,removeCatalog,importCatalog,exportCatalog,
+  catalogChange,addCatalog,removeCatalog,importCatalog,exportCatalog,filterCatalog,
   settingsTab,saveSettings,applyColorPreset,exportData,importData,
   printOffer,markOpen,persist
 });
 render();
-
