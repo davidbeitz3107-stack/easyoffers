@@ -336,7 +336,7 @@ function catalogPage(){
     </div>
   </div>`
 }
-function filterCatalog(search,category,keepFocus=false){st.catalogSearch=search;st.catalogCategory=category;render();if(keepFocus)requestAnimationFrame(()=>{const input=document.querySelector('.catalogTools input');if(input){input.focus();input.setSelectionRange(search.length,search.length)}})}
+function filterCatalog(search,category,keepFocus=false){st.catalogSearch=search;st.catalogCategory=category;render();if(keepFocus)setTimeout(()=>{const input=document.querySelector('.catalogTools input');if(input){input.focus();input.setSelectionRange(search.length,search.length)}},0)}
 function catalogChange(i,k,v){
   db.catalog[i][k]=['price','cost'].includes(k)?Number(v):v;
   save()
