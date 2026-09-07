@@ -306,7 +306,7 @@ function offers(){
     <button class="primary" onclick="newOffer()">＋ Neues Angebot</button>
   </div>
   ${offerInsights()}
-  <div class="toolbar">
+  <div class="toolbar" style="flex-wrap:wrap">
     <input id="q" placeholder="⌕ Kunde oder Nummer suchen" oninput="filterOffers()">
     <select id="f" onchange="filterOffers()">
       <option value="all">Alle Status</option>
@@ -315,21 +315,47 @@ function offers(){
       <option value="angenommen">Angenommen</option>
       <option value="abgelehnt">Abgelehnt</option>
     </select>
+    <select id="period" onchange="filterOffers()" aria-label="Zeitraum">
+      <option value="all">Alle Zeiträume</option>
+      <option value="month">Dieser Monat</option>
+      <option value="30days">Letzte 30 Tage</option>
+      <option value="year">Dieses Jahr</option>
+      <option value="followup">Nachfassen geplant</option>
+      <option value="expiring">Läuft bald ab</option>
+      <option value="expired">Abgelaufen</option>
+    </select>
+    <select id="sort" onchange="filterOffers()" aria-label="Sortierung">
+      <option value="newest">Neueste zuerst</option>
+      <option value="oldest">Älteste zuerst</option>
+      <option value="valueHigh">Höchster Wert</option>
+      <option value="valueLow">Niedrigster Wert</option>
+      <option value="validity">Gültigkeit endet zuerst</option>
+    </select>
+    <span id="offerCount" style="color:var(--muted);align-self:center;font-size:13px;font-weight:700">${db.offers.length} von ${db.offers.length} Angeboten</span>
   </div>
   <div id="offerRows" class="card rows">${offerRows(db.offers)}</div>`
 }
-function offerRows(arr){
+function offerRows(arr,reverse=true){
   if(!arr.length)return `<div class="empty"><h3>Keine Angebote gefunden</h3><p>Erstelle dein erstes Angebot.</p></div>`;
-  return arr.slice().reverse().map(row).join('')
+  return (reverse?arr.slice().reverse():arr).map(row).join('')
 }
 function filterOffers(){
   const q=($('#q')?.value||'').toLowerCase();
   const f=$('#f')?.value||'all';
+  const period=$('#period')?.value||'all';
+  const sort=$('#sort')?.value||'newest';
+  const today=new Date();today.setHours(0,0,0,0);
+  const monthStart=new Date(today.getFullYear(),today.getMonth(),1);
+  const thirtyDays=new Date(today);thirtyDays.setDate(thirtyDays.getDate()-30);
   const a=db.offers.filter(o=>{
     const text=`${o.no} ${o.reference||''} ${o.customer.name} ${o.customer.email} ${o.title}`.toLowerCase();
-    return (!q||text.includes(q))&&(f==='all'||o.status===f)
+    const created=new Date(o.created||0),valid=offerValidUntil(o),days=Math.ceil((valid-today)/86400000);
+    const periodMatch=period==='all'||(period==='month'&&created>=monthStart)||(period==='30days'&&created>=thirtyDays)||(period==='year'&&created.getFullYear()===today.getFullYear())||(period==='followup'&&!!o.followUp)||(period==='expiring'&&!['angenommen','abgelehnt'].includes(o.status)&&days>=0&&days<=7)||(period==='expired'&&!['angenommen','abgelehnt'].includes(o.status)&&days<0);
+    return (!q||text.includes(q))&&(f==='all'||o.status===f)&&periodMatch
   });
-  $('#offerRows').innerHTML=offerRows(a)
+  a.sort((left,right)=>sort==='oldest'?new Date(left.created)-new Date(right.created):sort==='valueHigh'?net(right)-net(left):sort==='valueLow'?net(left)-net(right):sort==='validity'?offerValidUntil(left)-offerValidUntil(right):new Date(right.created)-new Date(left.created));
+  $('#offerRows').innerHTML=offerRows(a,false);
+  const count=$('#offerCount');if(count)count.textContent=`${a.length} von ${db.offers.length} Angeboten`
 }
 function isoDate(year,month,day){return `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`}
 function calendarPage(){
