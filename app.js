@@ -22,12 +22,14 @@ const tr=text=>db?.settings?.language==='en'?Object.entries(EN).sort((a,b)=>b[0]
 const defaults=[
  ['SHK-001','Gas-Brennwerttherme','Stk.',4800,3200],['SHK-002','Wärmepumpe','Stk.',8200,5600],['SHK-003','Heizkörper','Stk.',390,210],['SHK-004','Waschtisch','Stk.',690,390],['SHK-005','Toilette','Stk.',620,330],['SHK-006','Montage / Arbeitszeit','Std.',78,42],['SHK-007','Demontage','Stk.',250,120],['SHK-008','Anfahrt','pa.',85,20]
 ];
-function normalize(x){const d={offers:[],customers:[],settings:{company:'Dein Betrieb',owner:'',address:'',email:'',phone:'',website:'',taxNo:'',vatId:'',bank:'',logo:'',language:'de',theme:'system',accent:'#16a36a',colorPreset:'green',density:'normal',currency:'EUR',vat:19,offerValidity:14,paymentTerm:14,offerPrefix:'ANG-',offerNext:1001,customerNext:1001,offerFooter:'Vielen Dank für Ihre Anfrage.',offerTerms:'',emailSubject:'Ihr Angebot von {firma} – #{nummer}',emailText:'Guten Tag {kunde},\n\nhier erhalten Sie unser Angebot #{nummer}.\n\nViele Grüße\n{firma}',emailSignature:'',autoFollowups:true,notifications:true,aiSuggestions:true,next:1001},catalog:defaults.map(a=>({id:uid(),article:a[0],name:a[1],unit:a[2],price:a[3],cost:a[4]}))};if(!x)return d;x.settings={...d.settings,...(x.settings||{})};if(x.settings.company==='Dein SHK-Betrieb')x.settings.company='Dein Betrieb';x.settings.colorPreset=x.settings.colorPreset||Object.keys(COLORS).find(k=>COLORS[k]===x.settings.accent)||'custom';x.settings.next=Number(x.settings.next)||1001;x.settings.offerNext=Number(x.settings.offerNext)||x.settings.next;x.settings.customerNext=Number(x.settings.customerNext)||1001;x.catalog=(x.catalog||d.catalog).map(a=>({...a,id:a.id||uid(),article:a.article||'',unit:a.unit||'Stk.',price:+a.price||0,cost:+a.cost||0}));x.customers=(Array.isArray(x.customers)?x.customers:[]).map(c=>({id:c.id||uid(),no:Number(c.no)||0,name:c.name||'',company:c.company||'',contact:c.contact||'',email:c.email||'',phone:c.phone||'',address:c.address||'',notes:c.notes||'',created:c.created||new Date().toISOString()}));x.offers=(x.offers||[]).map(o=>({...o,id:o.id||uid(),no:o.no||x.settings.next++,customerId:o.customerId||'',customer:{name:'',email:'',phone:'',address:'',...(o.customer||{})},items:(o.items||[]).map(i=>({...i,qty:+i.qty||1,price:+i.price||0,cost:+i.cost||0})),status:o.status||'entwurf',vat:+o.vat||19,created:o.created||new Date().toISOString(),followUp:o.followUp||'',notes:o.notes||'',request:o.request||'',title:o.title||'Angebot',emailPreparedAt:o.emailPreparedAt||'',sentAt:o.sentAt||''}));const customerKey=c=>String(c.email||c.name||'').trim().toLowerCase();let nextCustomer=Math.max(x.settings.customerNext||1001,...x.customers.map(c=>(+c.no||0)+1));x.customers.forEach(c=>{if(!c.no)c.no=nextCustomer++});x.offers.forEach(o=>{let customer=x.customers.find(c=>c.id===o.customerId)||x.customers.find(c=>customerKey(c)&&customerKey(c)===customerKey(o.customer));if(!customer&&customerKey(o.customer)){customer={id:uid(),no:nextCustomer++,name:o.customer.name||'',company:'',contact:'',email:o.customer.email||'',phone:o.customer.phone||'',address:o.customer.address||'',notes:'',created:o.created};x.customers.push(customer)}if(customer)o.customerId=customer.id});x.settings.customerNext=nextCustomer;x.settings.next=Math.max(x.settings.next||1001,...x.offers.map(o=>(+o.no||0)+1));return x;}
+function normalize(x){const d={offers:[],customers:[],settings:{company:'Dein Betrieb',owner:'',address:'',email:'',phone:'',website:'',taxNo:'',vatId:'',bank:'',logo:'',language:'de',theme:'system',accent:'#16a36a',colorPreset:'green',density:'normal',currency:'EUR',vat:19,offerValidity:14,paymentTerm:14,offerPrefix:'ANG-',offerNext:1001,customerNext:1001,offerFooter:'Vielen Dank für Ihre Anfrage.',offerTerms:'',emailSubject:'Ihr Angebot von {firma} – #{nummer}',emailText:'Guten Tag {kunde},\n\nhier erhalten Sie unser Angebot #{nummer}.\n\nViele Grüße\n{firma}',emailSignature:'',autoFollowups:true,notifications:true,aiSuggestions:true,next:1001},catalog:defaults.map(a=>({id:uid(),article:a[0],name:a[1],unit:a[2],price:a[3],cost:a[4]}))};if(!x)return d;x.settings={...d.settings,...(x.settings||{})};if(!['EUR','USD','GBP'].includes(x.settings.currency))x.settings.currency='EUR';if(x.settings.company==='Dein SHK-Betrieb')x.settings.company='Dein Betrieb';x.settings.colorPreset=x.settings.colorPreset||Object.keys(COLORS).find(k=>COLORS[k]===x.settings.accent)||'custom';x.settings.next=Number(x.settings.next)||1001;x.settings.offerNext=Number(x.settings.offerNext)||x.settings.next;x.settings.customerNext=Number(x.settings.customerNext)||1001;x.catalog=(x.catalog||d.catalog).map(a=>({...a,id:a.id||uid(),article:a.article||'',unit:a.unit||'Stk.',price:+a.price||0,cost:+a.cost||0}));x.customers=(Array.isArray(x.customers)?x.customers:[]).map(c=>({id:c.id||uid(),no:Number(c.no)||0,name:c.name||'',company:c.company||'',contact:c.contact||'',email:c.email||'',phone:c.phone||'',address:c.address||'',notes:c.notes||'',created:c.created||new Date().toISOString()}));x.offers=(x.offers||[]).map(o=>({...o,id:o.id||uid(),no:o.no||x.settings.next++,customerId:o.customerId||'',customer:{name:'',email:'',phone:'',address:'',...(o.customer||{})},items:(o.items||[]).map(i=>({...i,qty:+i.qty||1,price:+i.price||0,cost:+i.cost||0})),status:o.status||'entwurf',vat:+o.vat||19,discountType:o.discountType==='amount'?'amount':'percent',discount:Math.max(0,+o.discount||0),created:o.created||new Date().toISOString(),followUp:o.followUp||'',notes:o.notes||'',request:o.request||'',title:o.title||'Angebot',emailPreparedAt:o.emailPreparedAt||'',sentAt:o.sentAt||''}));const customerKey=c=>String(c.email||c.name||'').trim().toLowerCase();let nextCustomer=Math.max(x.settings.customerNext||1001,...x.customers.map(c=>(+c.no||0)+1));x.customers.forEach(c=>{if(!c.no)c.no=nextCustomer++});x.offers.forEach(o=>{let customer=x.customers.find(c=>c.id===o.customerId)||x.customers.find(c=>customerKey(c)&&customerKey(c)===customerKey(o.customer));if(!customer&&customerKey(o.customer)){customer={id:uid(),no:nextCustomer++,name:o.customer.name||'',company:'',contact:'',email:o.customer.email||'',phone:o.customer.phone||'',address:o.customer.address||'',notes:'',created:o.created};x.customers.push(customer)}if(customer)o.customerId=customer.id});x.settings.customerNext=nextCustomer;x.settings.next=Math.max(x.settings.next||1001,...x.offers.map(o=>(+o.no||0)+1));return x;}
 let db=normalize(JSON.parse(localStorage.getItem(K)||localStorage.getItem('easyoffer_v21')||'null')); db.appointments=Array.isArray(db.appointments)?db.appointments:[]; localStorage.setItem(K,JSON.stringify(db));
 let st={page:'home',step:1,o:null,photos:[],settingsTab:'company',catalogSearch:'',catalogCategory:'alle',catalogImport:null,customerSearch:'',customerEditId:'',calendarMonth:new Date().getMonth(),calendarYear:new Date().getFullYear(),onboardingStep:1};
 function updateCloudStatus(){const el=document.getElementById('cloudStatus');if(el)el.textContent=cloud.status==='saving'?'Speichert …':cloud.status==='error'?'Speichern fehlgeschlagen':'Cloud gespeichert ✓'}
 function save(){localStorage.setItem(K,JSON.stringify(db));if(cloud.ready&&cloud.client&&cloud.user){cloud.status='saving';updateCloudStatus();clearTimeout(cloud.syncTimer);cloud.syncTimer=setTimeout(syncCloud,450)}}
-const net=o=>(o.items||[]).reduce((a,x)=>a+(+x.qty||0)*(+x.price||0),0);
+const subtotal=o=>(o.items||[]).reduce((a,x)=>a+(+x.qty||0)*(+x.price||0),0);
+const discountAmount=o=>{const total=subtotal(o),value=Math.max(0,+o.discount||0);return Math.min(total,o.discountType==='amount'?value:total*Math.min(value,100)/100)};
+const net=o=>subtotal(o)-discountAmount(o);
 const cost=o=>(o.items||[]).reduce((a,x)=>a+(+x.qty||0)*(+x.cost||0),0);
 const gross=o=>net(o)*(1+(+o.vat||0)/100); const profit=o=>net(o)-cost(o);
 function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.append(d);setTimeout(()=>d.remove(),1800)}
@@ -58,7 +60,7 @@ function offerValidUntil(o){const date=new Date(o.created||Date.now());date.setD
 function dateText(value){return new Date(value).toLocaleDateString(db.settings.language==='en'?'en-GB':'de-DE',{day:'2-digit',month:'2-digit',year:'numeric'})}
 function offerDeadline(o){const until=offerValidUntil(o),today=new Date();today.setHours(0,0,0,0);const days=Math.ceil((until-today)/86400000),active=!['angenommen','abgelehnt'].includes(o.status);const follow=o.followUp?` · Nachfassen: ${dateText(o.followUp)}`:'';const sent=o.sentAt?` · Versendet: ${dateText(o.sentAt)}`:'';if(active&&days<0)return `<small class="deadline overdue">Abgelaufen am ${dateText(until)}${follow}${sent}</small>`;if(active&&days<=7)return `<small class="deadline soon">Gültig bis ${dateText(until)}${follow}${sent}</small>`;return `<small>Gültig bis ${dateText(until)}${follow}${sent}</small>`}
 function row(o){return `<div class="row" onclick="openOffer('${o.id}')"><b>#${o.no}</b><div><b>${esc(o.customer.name||'Unbenannter Kunde')}</b><br><span>${esc(o.title)}${o.reference?` · Ref. ${esc(o.reference)}`:''}</span><br>${offerDeadline(o)}</div><span class="badge ${o.status==='angenommen'?'open':''}">${statusLabel(o.status)}</span><strong>${eur(net(o))}</strong><b>›</b></div>`}
-function newOffer(customerId=''){const master=db.customers.find(c=>c.id===customerId);st.o={id:uid(),no:db.settings.next++,reference:'',customerId:master?.id||'',customer:master?{name:master.name,email:master.email,phone:master.phone,address:master.address}:{name:'',email:'',phone:'',address:''},request:'',title:db.settings.offerTitle||'Angebot',items:[],notes:'',status:'entwurf',vat:db.settings.vat||19,validity:db.settings.offerValidity||14,followUp:''};st.photos=[];st.page='new';st.step=1;save();render()}
+function newOffer(customerId=''){const master=db.customers.find(c=>c.id===customerId);st.o={id:uid(),no:db.settings.next++,reference:'',customerId:master?.id||'',customer:master?{name:master.name,email:master.email,phone:master.phone,address:master.address}:{name:'',email:'',phone:'',address:''},request:'',title:db.settings.offerTitle||'Angebot',items:[],notes:'',status:'entwurf',vat:db.settings.vat||19,discountType:'percent',discount:0,validity:db.settings.offerValidity||14,followUp:''};st.photos=[];st.page='new';st.step=1;save();render()}
 function progress(){return `<div class="progress">${['Kunde','Anfrage','Analyse','Positionen','Fertig'].map((x,i)=>`<div class="pstep ${i+1===st.step?'current':''} ${i+1<st.step?'done':''}"><i>${i+1<st.step?'✓':i+1}</i><span>${x}</span></div>`).join('')}</div>`}
 function wizard(){const o=st.o;const bodies=[customer,request,analysis,items,finish];return `<div class="wizardTop"><button class="back" onclick="go('home')">← Übersicht</button><b>Angebot #${o.no}</b><button class="ghost" onclick="persist();toast('Gespeichert')">Speichern</button></div><div class="wizard"><div class="wizardIntro"><span class="eyebrow">ANGEBOT ERSTELLEN</span><h1>${['Für wen ist das Angebot?','Was möchte der Kunde?','EasyOffer analysiert.','Prüfen & kalkulieren.','Fertig.'][st.step-1]}</h1><p class="lead">${['Kundendaten eingeben.','Anfrage so einfügen, wie sie eingegangen ist.','Vorschläge aus deinem Katalog prüfen.','Preise, Mengen und Marge kontrollieren.','Alles prüfen und als PDF ausgeben.'][st.step-1]}</p></div>${progress()}${bodies[st.step-1](o)}</div>`}
 function field(l,id,v,p){return `<label class="field"><span>${l}</span><input id="${id}" value="${esc(v)}" placeholder="${p||''}"></label>`}
@@ -128,7 +130,14 @@ function items(o){
         </div>`).join('')}
     </div>
     <button class="ghost" style="margin-top:14px" onclick="addItem()">＋ Position hinzufügen</button>
+    <div class="discountEditor" style="display:grid;grid-template-columns:1fr 145px 120px;gap:10px;align-items:end;margin-top:20px;padding:15px;border:1px solid #cceedd;background:#f3fbf7;border-radius:13px">
+      <div><b>Rabatt</b><small>Wird vor der MwSt. vom Angebot abgezogen.</small></div>
+      <select style="width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff" onchange="chgDiscount('type',this.value)"><option value="percent" ${o.discountType!=='amount'?'selected':''}>Prozent (%)</option><option value="amount" ${o.discountType==='amount'?'selected':''}>Fester Betrag</option></select>
+      <input style="width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;background:#fff" type="number" min="0" step="0.01" value="${o.discount||0}" onchange="chgDiscount('value',this.value)" aria-label="Rabattwert">
+    </div>
     <div class="totals">
+      <div class="totalLine"><span>Positionen</span><b>${eur(subtotal(o))}</b></div>
+      ${discountAmount(o)?`<div class="totalLine discountLine"><span>Rabatt${o.discountType==='percent'?` (${o.discount}%)`:''}</span><b>− ${eur(discountAmount(o))}</b></div>`:''}
       <div class="totalLine"><span>Netto</span><b>${eur(net(o))}</b></div>
       <div class="totalLine"><span>MwSt. ${o.vat}%</span><b>${eur(net(o)*o.vat/100)}</b></div>
       <div class="totalLine grand"><span>Gesamt</span><b>${eur(gross(o))}</b></div>
@@ -146,6 +155,11 @@ function items(o){
 }
 function chg(i,k,v){
   st.o.items[i][k]=['qty','price','cost'].includes(k)?Number(v):v;
+  render()
+}
+function chgDiscount(k,v){
+  if(k==='type')st.o.discountType=v==='amount'?'amount':'percent';
+  else st.o.discount=Math.max(0,Number(v)||0);
   render()
 }
 function addItem(){
@@ -187,6 +201,8 @@ function finish(o){
           </tr>`).join('')}
       </table>
       <div class="totals">
+        <div class="totalLine"><span>Positionen</span><b>${eur(subtotal(o))}</b></div>
+        ${discountAmount(o)?`<div class="totalLine discountLine"><span>Rabatt${o.discountType==='percent'?` (${o.discount}%)`:''}</span><b>− ${eur(discountAmount(o))}</b></div>`:''}
         <div class="totalLine"><span>Netto</span><b>${eur(n)}</b></div>
         <div class="totalLine"><span>MwSt. ${o.vat}%</span><b>${eur(n*o.vat/100)}</b></div>
         <div class="totalLine grand"><span>Gesamt</span><b>${eur(g)}</b></div>
@@ -495,6 +511,7 @@ function settingsContent(){
   </div>`;
   if(st.settingsTab==='offers')return `<div class="card formgrid">
     ${field('Standard-Titel für Angebote','offerTitle',s.offerTitle||'Angebot','z. B. Angebot – Modernisierung')}
+    <label class="field"><span>Währung</span><select id="currency"><option value="EUR" ${s.currency==='EUR'?'selected':''}>Euro (€)</option><option value="USD" ${s.currency==='USD'?'selected':''}>US-Dollar ($)</option><option value="GBP" ${s.currency==='GBP'?'selected':''}>Britisches Pfund (£)</option></select><small>Preise werden nicht umgerechnet – es ändert sich nur die angezeigte Angebotswährung.</small></label>
     <label class="field"><span>MwSt. (%)</span><input id="vat" type="number" value="${s.vat}"></label>
     <label class="field"><span>Angebotsnummer Präfix</span><input id="offerPrefix" value="${esc(s.offerPrefix)}"></label>
     <label class="field"><span>Nächste Angebotsnummer</span><input id="offerNext" type="number" value="${s.offerNext}"></label>
@@ -531,7 +548,7 @@ function textareaField(label,id,value){
     const el=document.getElementById(k);
     if(el)s[k]=Number(el.value);
   });
-  ['theme','accent','density','language','colorPreset'].forEach(k=>{
+  ['theme','accent','density','language','currency','colorPreset'].forEach(k=>{
     const el=document.getElementById(k);
     if(el)s[k]=el.value;
   });
@@ -594,7 +611,7 @@ function printOffer(){
 <section class="addressRow"><div class="recipient"><span class="label">An</span><b>${esc(o.customer.name)}</b><br>${esc(o.customer.address).replace(/\n/g,'<br>')}<br>${esc(o.customer.email)}${o.customer.phone?`<br>${esc(o.customer.phone)}`:''}</div><div><span class="label">Angebotsdetails</span>${o.reference?`Ihre Referenz: ${esc(o.reference)}<br>`:''}Gültig bis: ${validUntil.toLocaleDateString(s.language==='en'?'en-GB':'de-DE',dateFormat)}<br>Zahlungsziel: ${Number(s.paymentTerm||14)} Tage</div></section>
 <h1 class="title">${esc(o.title||s.offerTitle||'Angebot')}</h1><p class="intro">${esc(s.offerIntro||'Vielen Dank für Ihre Anfrage. Gern unterbreiten wir Ihnen folgendes Angebot.').replace(/\n/g,'<br>')}</p>${o.request?`<div class="request"><b>Ihre Anfrage</b><br>${esc(o.request).replace(/\n/g,'<br>')}</div>`:''}
 <table><thead><tr><th>Position</th><th>Menge</th><th class="right">Einzelpreis netto</th><th class="right">Gesamt netto</th></tr></thead><tbody>${o.items.map((x,i)=>`<tr><td><span class="muted">${String(i+1).padStart(2,'0')}</span> &nbsp;${esc(x.name)}</td><td>${x.qty} ${esc(x.unit)}</td><td class="right">${eur(x.price)}</td><td class="right">${eur(x.qty*x.price)}</td></tr>`).join('')}</tbody></table>
-<section class="summary"><div><span>Netto</span><b>${eur(n)}</b></div><div><span>MwSt. ${o.vat}%</span><b>${eur(n*o.vat/100)}</b></div><div class="grand"><span>Gesamtbetrag</span><b>${eur(g)}</b></div></section>
+<section class="summary"><div><span>Positionen</span><b>${eur(subtotal(o))}</b></div>${discountAmount(o)?`<div><span>Rabatt${o.discountType==='percent'?` (${o.discount}%)`:''}</span><b>− ${eur(discountAmount(o))}</b></div>`:''}<div><span>Netto</span><b>${eur(n)}</b></div><div><span>MwSt. ${o.vat}%</span><b>${eur(n*o.vat/100)}</b></div><div class="grand"><span>Gesamtbetrag</span><b>${eur(g)}</b></div></section>
 <section class="conditions"><p>Dieses Angebot ist ${Number(o.validity||s.offerValidity||14)} Tage gültig.</p><p>${esc(s.offerFooter||'').replace(/\n/g,'<br>')}</p>${s.offerTerms?`<p><b>Hinweise & Bedingungen</b><br>${esc(s.offerTerms).replace(/\n/g,'<br>')}</p>`:''}</section>
 <footer class="footer"><div>${esc(s.company)}${s.taxNo?` · Steuernummer: ${esc(s.taxNo)}`:''}${s.vatId?` · USt-IdNr.: ${esc(s.vatId)}`:''}</div><div>${s.bank?esc(s.bank).replace(/\n/g,' · '):''}</div></footer>
 </main><script>window.onload=()=>setTimeout(()=>window.print(),500);<\/script></body></html>`);
@@ -648,7 +665,7 @@ window.addEventListener('beforeunload',()=>{
 });
 Object.assign(window,{
   go,newOffer,saveCustomer,selectExistingCustomer,analyze,photos,back,newCustomer,openCustomer,filterCustomers,saveCustomerProfile,
-  chg,addItem,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,planFollowUp,clearFollowUp,prepareEmail,markOfferSent,
+  chg,chgDiscount,addItem,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,planFollowUp,clearFollowUp,prepareEmail,markOfferSent,
   moveCalendar,addAppointment,removeAppointment,
   catalogChange,addCatalog,removeCatalog,importCatalog,exportCatalog,filterCatalog,changeCatalogImportMap,cancelCatalogImport,confirmCatalogImport,
   settingsTab,saveSettings,applyColorPreset,exportData,importData,
