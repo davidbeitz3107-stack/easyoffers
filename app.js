@@ -24,7 +24,7 @@ const defaults=[
 ];
 function normalize(x){const d={offers:[],customers:[],settings:{company:'Dein Betrieb',owner:'',address:'',email:'',phone:'',website:'',taxNo:'',vatId:'',bank:'',logo:'',language:'de',theme:'system',accent:'#16a36a',colorPreset:'green',density:'normal',currency:'EUR',vat:19,offerValidity:14,paymentTerm:14,offerPrefix:'ANG-',offerNext:1001,customerNext:1001,offerFooter:'Vielen Dank für Ihre Anfrage.',offerTerms:'',emailSubject:'Ihr Angebot von {firma} – #{nummer}',emailText:'Guten Tag {kunde},\n\nhier erhalten Sie unser Angebot #{nummer}.\n\nViele Grüße\n{firma}',emailSignature:'',autoFollowups:true,notifications:true,aiSuggestions:true,next:1001},catalog:defaults.map(a=>({id:uid(),article:a[0],name:a[1],unit:a[2],price:a[3],cost:a[4]}))};if(!x)return d;x.settings={...d.settings,...(x.settings||{})};if(!['EUR','USD','GBP'].includes(x.settings.currency))x.settings.currency='EUR';if(x.settings.company==='Dein SHK-Betrieb')x.settings.company='Dein Betrieb';x.settings.colorPreset=x.settings.colorPreset||Object.keys(COLORS).find(k=>COLORS[k]===x.settings.accent)||'custom';x.settings.next=Number(x.settings.next)||1001;x.settings.offerNext=Number(x.settings.offerNext)||x.settings.next;x.settings.customerNext=Number(x.settings.customerNext)||1001;x.catalog=(x.catalog||d.catalog).map(a=>({...a,id:a.id||uid(),article:a.article||'',unit:a.unit||'Stk.',price:+a.price||0,cost:+a.cost||0}));x.customers=(Array.isArray(x.customers)?x.customers:[]).map(c=>({id:c.id||uid(),no:Number(c.no)||0,name:c.name||'',company:c.company||'',contact:c.contact||'',email:c.email||'',phone:c.phone||'',address:c.address||'',notes:c.notes||'',created:c.created||new Date().toISOString()}));x.offers=(x.offers||[]).map(o=>({...o,id:o.id||uid(),no:o.no||x.settings.next++,customerId:o.customerId||'',customer:{name:'',email:'',phone:'',address:'',...(o.customer||{})},items:(o.items||[]).map(i=>({...i,qty:+i.qty||1,price:+i.price||0,cost:+i.cost||0})),status:o.status||'entwurf',vat:+o.vat||19,discountType:o.discountType==='amount'?'amount':'percent',discount:Math.max(0,+o.discount||0),created:o.created||new Date().toISOString(),followUp:o.followUp||'',notes:o.notes||'',request:o.request||'',title:o.title||'Angebot',emailPreparedAt:o.emailPreparedAt||'',sentAt:o.sentAt||''}));const customerKey=c=>String(c.email||c.name||'').trim().toLowerCase();let nextCustomer=Math.max(x.settings.customerNext||1001,...x.customers.map(c=>(+c.no||0)+1));x.customers.forEach(c=>{if(!c.no)c.no=nextCustomer++});x.offers.forEach(o=>{let customer=x.customers.find(c=>c.id===o.customerId)||x.customers.find(c=>customerKey(c)&&customerKey(c)===customerKey(o.customer));if(!customer&&customerKey(o.customer)){customer={id:uid(),no:nextCustomer++,name:o.customer.name||'',company:'',contact:'',email:o.customer.email||'',phone:o.customer.phone||'',address:o.customer.address||'',notes:'',created:o.created};x.customers.push(customer)}if(customer)o.customerId=customer.id});x.settings.customerNext=nextCustomer;x.settings.next=Math.max(x.settings.next||1001,...x.offers.map(o=>(+o.no||0)+1));return x;}
 let db=normalize(JSON.parse(localStorage.getItem(K)||localStorage.getItem('easyoffer_v21')||'null')); db.appointments=Array.isArray(db.appointments)?db.appointments:[]; localStorage.setItem(K,JSON.stringify(db));
-let st={page:'home',step:1,o:null,photos:[],settingsTab:'company',catalogSearch:'',catalogCategory:'alle',catalogImport:null,customerSearch:'',customerEditId:'',calendarMonth:new Date().getMonth(),calendarYear:new Date().getFullYear(),onboardingStep:1};
+let st={page:'home',step:1,o:null,photos:[],settingsTab:'company',catalogSearch:'',catalogCategory:'alle',catalogImport:null,customerSearch:'',customerEditId:'',statsMode:'net',calendarMonth:new Date().getMonth(),calendarYear:new Date().getFullYear(),onboardingStep:1};
 function updateCloudStatus(){const el=document.getElementById('cloudStatus');if(el)el.textContent=cloud.status==='saving'?'Speichert …':cloud.status==='error'?'Speichern fehlgeschlagen':'Cloud gespeichert ✓'}
 function save(){localStorage.setItem(K,JSON.stringify(db));if(cloud.ready&&cloud.client&&cloud.user){cloud.status='saving';updateCloudStatus();clearTimeout(cloud.syncTimer);cloud.syncTimer=setTimeout(syncCloud,450)}}
 const subtotal=o=>(o.items||[]).reduce((a,x)=>a+(+x.qty||0)*(+x.price||0),0);
@@ -428,9 +428,12 @@ async function readCatalogImport(file){try{if(file.size>10*1024*1024)throw Error
 function importCatalog(){const input=document.createElement('input');input.type='file';input.accept='.csv,.txt,.json,.xlsx,.xls,text/csv,application/json,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel';input.onchange=()=>{const file=input.files?.[0];if(file)readCatalogImport(file)};input.click()}
 function confirmCatalogImport(){const data=st.catalogImport;if(!data)return;const items=data.rows.map(row=>catalogImportItem(row,data.mapping)).filter(item=>item.name);if(!items.length)return toast('Bitte zuerst die Spalte „Bezeichnung“ zuordnen.');let added=0,updated=0;items.forEach(item=>{const article=item.article.toLowerCase();const old=article?db.catalog.find(x=>String(x.article||'').toLowerCase()===article):db.catalog.find(x=>String(x.name||'').toLowerCase()===item.name.toLowerCase()&&String(x.unit||'').toLowerCase()===item.unit.toLowerCase());if(old){Object.assign(old,item,{id:old.id});updated++}else{db.catalog.push(item);added++}});st.catalogImport=null;st.page='catalog';save();render();toast(`${added} neu · ${updated} aktualisiert`)}
 function stats(){
+  const isGross=st.statsMode==='gross';
+  const amount=offer=>isGross?gross(offer):net(offer);
+  const modeLabel=isGross?'Bruttowert':'Nettowert';
   const total=db.offers.length;
   const accepted=db.offers.filter(o=>o.status==='angenommen');
-  const volume=db.offers.reduce((a,o)=>a+net(o),0);
+  const volume=db.offers.reduce((a,o)=>a+amount(o),0);
   const profitTotal=db.offers.reduce((a,o)=>a+profit(o),0);
   const avg=total?volume/total:0;
   const winRate=total?Math.round(accepted.length/total*100):0;
@@ -438,25 +441,39 @@ function stats(){
   const months=Array.from({length:6},(_,i)=>{
     const d=new Date(now.getFullYear(),now.getMonth()-5+i,1);
     const month=d.toLocaleDateString(db.settings.language==='en'?'en-US':'de-DE',{month:'short'}).replace('.','');
-    const value=db.offers.filter(o=>{const x=new Date(o.created);return x.getFullYear()===d.getFullYear()&&x.getMonth()===d.getMonth()}).reduce((sum,o)=>sum+net(o),0);
+    const value=db.offers.filter(o=>{const x=new Date(o.created);return x.getFullYear()===d.getFullYear()&&x.getMonth()===d.getMonth()}).reduce((sum,o)=>sum+amount(o),0);
     return {month,value};
   });
   const maxMonth=Math.max(1,...months.map(m=>m.value));
   const pipeline=['entwurf','offen','angenommen','abgelehnt'].map(status=>{
     const offers=db.offers.filter(o=>o.status===status);
-    return {status,count:offers.length,value:offers.reduce((sum,o)=>sum+net(o),0)};
+    return {status,count:offers.length,value:offers.reduce((sum,o)=>sum+amount(o),0)};
   });
   const maxPipeline=Math.max(1,...pipeline.map(p=>p.value));
+  const open=db.offers.filter(o=>o.status==='offen');
+  const drafts=db.offers.filter(o=>o.status==='entwurf');
+  const declined=db.offers.filter(o=>o.status==='abgelehnt');
+  const active=db.offers.filter(o=>!['angenommen','abgelehnt'].includes(o.status));
+  const expired=active.filter(o=>offerValidUntil(o)<new Date()).length;
+  const topItems=Object.values(db.offers.flatMap(o=>o.items||[]).reduce((all,item)=>{const name=item.name||'Unbenannte Position';all[name]=all[name]||{name,qty:0};all[name].qty+=(+item.qty||0);return all},{})).sort((a,b)=>b.qty-a.qty);
+  const topItem=topItems[0];
   return `<div class="top analyticsTop">
     <div><span class="eyebrow">AUSWERTUNG</span><h1>Deine Zahlen.</h1><p class="lead">Großer Überblick über Umsatz, Pipeline und Abschlussrate.</p></div>
-    <button class="ghost" onclick="exportData()">Daten exportieren</button>
+    <div class="toolbar"><div class="statsSwitch" style="display:flex;border:1px solid var(--line);border-radius:11px;overflow:hidden;background:#fff"><button class="${!isGross?'primary':'ghost'}" style="border-radius:0;padding:10px 13px" onclick="setStatsMode('net')">Netto</button><button class="${isGross?'primary':'ghost'}" style="border-radius:0;padding:10px 13px" onclick="setStatsMode('gross')">Brutto</button></div><button class="ghost" onclick="exportData()">Daten exportieren</button></div>
   </div>
   <section class="analyticsSummary">
-    <div class="analysisHero card"><span class="eyebrow">ANGEBOTSVOLUMEN</span><strong>${eur(volume)}</strong><p>Gesamter Nettowert aller Angebote.</p><div class="analysisHeroMeta"><span>${total} Angebote</span><span>${eur(avg)} Durchschnitt</span></div></div>
+    <div class="analysisHero card"><span class="eyebrow">ANGEBOTSVOLUMEN · ${modeLabel.toUpperCase()}</span><strong>${eur(volume)}</strong><p>Gesamter ${modeLabel.toLowerCase()} aller Angebote.</p><div class="analysisHeroMeta"><span>${total} Angebote</span><span>${eur(avg)} Durchschnitt</span></div></div>
     <div class="metric card"><small>ABSCHLUSSQUOTE</small><strong>${winRate}%</strong><span>Von allen Angeboten angenommen.</span></div>
-    <div class="metric card"><small>AUFTRÄGE GEWONNEN</small><strong>${accepted.length}</strong><span>${eur(accepted.reduce((sum,o)=>sum+net(o),0))} netto</span></div>
-    <div class="metric card"><small>DECKUNGSBEITRAG</small><strong>${eur(profitTotal)}</strong><span>Über alle Angebote</span></div>
+    <div class="metric card"><small>AUFTRÄGE GEWONNEN</small><strong>${accepted.length}</strong><span>${eur(accepted.reduce((sum,o)=>sum+amount(o),0))} ${modeLabel.toLowerCase()}</span></div>
+    <div class="metric card"><small>DECKUNGSBEITRAG</small><strong>${eur(profitTotal)}</strong><span>Immer netto · über alle Angebote</span></div>
   </section>
+  <section class="section"><div class="sectionHead"><div><span class="eyebrow">DETAILS</span><h2>Was gerade wichtig ist.</h2></div></div><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(165px,1fr));gap:12px;margin-top:14px">
+    <div class="metric card"><small>OFFENE PIPELINE</small><strong>${eur(open.reduce((sum,o)=>sum+amount(o),0))}</strong><span>${open.length} offene Angebote</span></div>
+    <div class="metric card"><small>ENTWÜRFE</small><strong>${drafts.length}</strong><span>${eur(drafts.reduce((sum,o)=>sum+amount(o),0))} ${modeLabel.toLowerCase()}</span></div>
+    <div class="metric card"><small>ABGELEHNT</small><strong>${declined.length}</strong><span>${total?Math.round(declined.length/total*100):0}% aller Angebote</span></div>
+    <div class="metric card"><small>GÜLTIGKEIT PRÜFEN</small><strong>${expired}</strong><span>${expired===1?'Angebot ist abgelaufen':'Angebote sind abgelaufen'}</span></div>
+    <div class="metric card"><small>HÄUFIGSTE POSITION</small><strong style="font-size:18px">${esc(topItem?.name||'–')}</strong><span>${topItem?`${topItem.qty} × angeboten`:'Noch keine Positionen'}</span></div>
+  </div></section>
   <section class="analyticsGrid">
     <div class="card chartCard">
       <div class="chartHead"><div><span class="eyebrow">LETZTE 6 MONATE</span><h2>Umsatzentwicklung</h2></div><b>${eur(volume)}</b></div>
@@ -464,11 +481,12 @@ function stats(){
     </div>
     <div class="card pipelineCard">
       <div class="chartHead"><div><span class="eyebrow">VERTRIEB</span><h2>Pipeline</h2></div><b>${total}</b></div>
-      <p class="lead smallLead">Wert nach Angebotsstatus.</p>
+      <p class="lead smallLead">${modeLabel} nach Angebotsstatus.</p>
       <div class="pipelineRows">${pipeline.map(p=>`<div class="pipelineRow"><div><b>${statusLabel(p.status)}</b><small>${p.count} Angebot${p.count===1?'':'e'}</small></div><div class="pipelineTrack"><i class="${p.status}" style="width:${Math.round(p.value/maxPipeline*100)}%"></i></div><strong>${eur(p.value)}</strong></div>`).join('')}</div>
     </div>
   </section>`
 }
+function setStatsMode(mode){st.statsMode=mode==='gross'?'gross':'net';render()}
 function settings(){
   const s=db.settings;
   const tabs=[['company','Unternehmen'],['team','Team'],['design','Design'],['offers','Angebote'],['email','E-Mail'],['ai','KI'],['notifications','Benachrichtigungen'],['data','Daten & Sicherheit']];
@@ -668,7 +686,7 @@ Object.assign(window,{
   chg,chgDiscount,addItem,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,planFollowUp,clearFollowUp,prepareEmail,markOfferSent,
   moveCalendar,addAppointment,removeAppointment,
   catalogChange,addCatalog,removeCatalog,importCatalog,exportCatalog,filterCatalog,changeCatalogImportMap,cancelCatalogImport,confirmCatalogImport,
-  settingsTab,saveSettings,applyColorPreset,exportData,importData,
+  settingsTab,saveSettings,applyColorPreset,setStatsMode,exportData,importData,
   printOffer,markOpen,persist,authScreen,submitAuth,signOut,resetScreen,sendReset,passwordUpdateScreen,updatePassword,createInvite,copyInvite,onboardingBack,onboardingNext
 });
 bootApp();
