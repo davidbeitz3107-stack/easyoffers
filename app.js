@@ -26,6 +26,7 @@ function normalize(x){const d={offers:[],customers:[],settings:{company:'Dein Be
 let db=normalize(JSON.parse(localStorage.getItem(K)||localStorage.getItem('easyoffer_v21')||'null')); db.appointments=Array.isArray(db.appointments)?db.appointments:[]; localStorage.setItem(K,JSON.stringify(db));
 if(db.settings.offerFooter==='Vielen Dank für Ihre Anfrage.')db.settings.offerFooter='Vielen Dank für Ihr Interesse.';
 if(db.settings.offerIntro==='Vielen Dank für Ihre Anfrage. Gern unterbreiten wir Ihnen folgendes Angebot.')db.settings.offerIntro='Vielen Dank für Ihr Interesse. Gern unterbreiten wir Ihnen folgendes Angebot.';
+db.offers.forEach(offer=>{if(offer.title==='Dienstleistungen')offer.title='Angebot'});
 let st={page:'home',step:1,o:null,photos:[],settingsTab:'company',catalogSearch:'',catalogCategory:'alle',catalogImport:null,customerSearch:'',customerEditId:'',statsMode:'net',calendarMonth:new Date().getMonth(),calendarYear:new Date().getFullYear(),onboardingStep:1};
 function updateCloudStatus(){const el=document.getElementById('cloudStatus');if(el)el.textContent=cloud.status==='saving'?'Speichert …':cloud.status==='error'?'Speichern fehlgeschlagen':'Cloud gespeichert ✓'}
 function save(){localStorage.setItem(K,JSON.stringify(db));if(cloud.ready&&cloud.client&&cloud.user){cloud.status='saving';updateCloudStatus();clearTimeout(cloud.syncTimer);cloud.syncTimer=setTimeout(syncCloud,450)}}
@@ -111,7 +112,7 @@ function analyze(){
     ?'Sanitärarbeiten'
     :/wartung/i.test(o.request)
     ?'Wartung Heizungsanlage'
-    :'Dienstleistungen';
+    :'Angebot';
   const result=parse(o.request);
   o.items=result.items;
   o.missingCatalogItems=result.missing;
