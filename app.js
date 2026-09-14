@@ -613,7 +613,7 @@ function settingsContent(){
     ${field('Steuernummer','taxNo',s.taxNo,'123/456/78901')}
     ${field('USt-IdNr.','vatId',s.vatId,'DE123456789')}
     ${field('Bankverbindung','bank',s.bank,'IBAN ...')}
-    ${field('Logo URL','logo',s.logo,'https://...')}
+    <div class="wide logoSettings"><label class="field"><span>Firmenlogo</span><input id="logo" type="url" value="${esc(s.logo)}" placeholder="Bild-URL einfügen, z. B. https://…/logo.png"><small>Du kannst eine Bild-URL einfügen oder eine PNG-, JPG- oder WEBP-Datei hochladen.</small></label><div class="logoActions"><label class="ghost logoUpload">Bilddatei auswählen<input type="file" accept="image/png,image/jpeg,image/webp" onchange="uploadLogo(event)"></label>${s.logo?`<button class="textButton" onclick="removeLogo()">Logo entfernen</button>`:''}</div>${s.logo?`<div class="logoPreview"><img src="${esc(s.logo)}" alt="Logo-Vorschau" onerror="this.closest('.logoPreview').classList.add('logoBroken')"><span><b>Logo-Vorschau</b><small>So erscheint dein Logo im Angebot und im PDF.</small></span></div>`:`<small class="logoHint">Noch kein Logo hinterlegt.</small>`}</div>
   </div>`;
   if(st.settingsTab==='team')return `<div class="card teamCard"><span class="eyebrow">BETRIEB & MITARBEITER</span><h2>${esc(cloud.workspace?.name||s.company||'Mein Betrieb')}</h2><p class="lead">${cloud.workspace?.role==='owner'?'Du bist Inhaber. Erstelle einen sicheren Einladungslink für Mitarbeiter.':'Du arbeitest als Mitarbeiter in diesem Betrieb.'}</p>${cloud.workspace?.role==='owner'?`<div class="inviteForm"><label class="field"><span>E-Mail des Mitarbeiters</span><input id="inviteEmail" type="email" placeholder="mitarbeiter@betrieb.de"></label><button class="primary" onclick="createInvite()">Einladung erstellen</button></div>${cloud.inviteLink?`<div class="inviteLink"><b>Einladungslink bereit</b><input readonly value="${esc(cloud.inviteLink)}"><button class="ghost" onclick="copyInvite()">Link kopieren</button><small>Sende diesen Link an den Mitarbeiter. Der Link ist nur für diese E-Mail gültig.</small></div>`:''}`:`<div class="aiBox"><b>Gemeinsame Betriebsdaten</b><p>Angebote, Kunden, Katalog und Kalender werden mit deinem Betrieb geteilt.</p></div>`}</div>`;
   if(st.settingsTab==='design')return `<div class="card formgrid">
@@ -656,7 +656,34 @@ function settingsContent(){
 }
 function textareaField(label,id,value){
   return `<label class="field full"><span>${label}</span><textarea id="${id}">${esc(value||'')}</textarea></label>`
-}async function saveSettings(){
+}
+function uploadLogo(event){
+  const file=event.target.files?.[0];
+  if(!file)return;
+  if(!['image/png','image/jpeg','image/webp'].includes(file.type))return toast('Bitte PNG, JPG oder WEBP auswählen.');
+  if(file.size>5*1024*1024)return toast('Die Bilddatei darf höchstens 5 MB groß sein.');
+  const reader=new FileReader();
+  reader.onerror=()=>toast('Die Bilddatei konnte nicht gelesen werden.');
+  reader.onload=()=>{
+    const image=new Image();
+    image.onerror=()=>toast('Die Bilddatei ist ungültig.');
+    image.onload=()=>{
+      const scale=Math.min(1,600/image.width,300/image.height);
+      const canvas=document.createElement('canvas');
+      canvas.width=Math.max(1,Math.round(image.width*scale));
+      canvas.height=Math.max(1,Math.round(image.height*scale));
+      canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
+      const dataUrl=canvas.toDataURL('image/png');
+      if(dataUrl.length>650000)return toast('Das Logo ist noch zu groß. Bitte ein kleineres Bild auswählen.');
+      db.settings.logo=dataUrl;
+      save();render();toast('Logo hochgeladen und gespeichert.');
+    };
+    image.src=String(reader.result||'');
+  };
+  reader.readAsDataURL(file);
+}
+function removeLogo(){db.settings.logo='';save();render();toast('Logo entfernt.');}
+async function saveSettings(){
   const s=db.settings;
   ['company','owner','address','email','phone','website','taxNo','vatId','bank','logo','offerPrefix','offerTitle','offerIntro','offerFooter','offerTerms','emailSubject','emailText','emailSignature'].forEach(k=>{
     const el=document.getElementById(k);
@@ -761,6 +788,7 @@ function applyAppearance(){
     :root[data-theme="dark"] .catalogTools,:root[data-theme="dark"] .calendarDay,:root[data-theme="dark"] .calendarForm{background:#172033!important;border-color:#2b394d!important}
     :root[data-theme="dark"] .calendarDay.mutedDay{background:#121c2b!important}:root[data-theme="dark"] .calendarWeek{color:#aeb9c9}
     :root[data-theme="dark"] .calendarItem{border-color:#34445b}:root[data-theme="dark"] .paper{background:#fff;color:#172033}
+    .logoSettings{display:grid;gap:11px}.logoSettings .field small,.logoHint{display:block;color:var(--muted);font-size:12px;margin-top:5px}.logoActions{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.logoUpload{display:inline-flex;align-items:center}.logoUpload input{display:none}.logoPreview{display:flex;align-items:center;gap:14px;border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg)}.logoPreview img{width:130px;height:58px;object-fit:contain;object-position:left center;background:#fff;border-radius:7px;padding:5px}.logoPreview span{display:grid;gap:4px}.logoPreview small{color:var(--muted)}.logoPreview.logoBroken img{display:none}.logoPreview.logoBroken:before{content:'⚠';font-size:22px}.logoPreview.logoBroken:after{content:'Die Bild-URL konnte nicht geladen werden. Nutze eine öffentliche Bild-URL oder lade eine Datei hoch.';color:#9a5b00;font-size:12px}
     .templateGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px;margin-top:13px}.templateCard{position:relative;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);padding:14px;text-align:left;display:grid;gap:5px;min-height:156px}.templateCard:hover{border-color:var(--accent);transform:translateY(-1px)}.templateCard.selected{background:var(--accent);color:#fff;border-color:var(--accent)}.templateCard b{font-size:15px}.templateCard small{color:var(--muted);line-height:1.35}.templateCard.selected small,.templateCard.selected .templateCategory{color:#e9fff2}.templateCard em{font-style:normal;font-size:11px;font-weight:800;color:var(--accent2);margin-top:auto}.templateCard.selected em{color:#e9fff2}.templateIcon{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:#edf8f1;color:var(--accent2);font-weight:900}.templateCard.selected .templateIcon{background:#ffffff26;color:#fff}.templateCategory{font-size:10px;font-weight:900;letter-spacing:.08em;color:var(--accent2);text-transform:uppercase}.templateSelected{margin-top:12px;padding:11px 13px;border-radius:11px;background:#f0fbf5;color:var(--accent2);font-size:13px}.analysisNotice.question{background:#f2f7ff;border-color:#bdd2f2}.analysisNotice.question ol{margin:10px 0 14px;padding-left:21px;font-weight:700;line-height:1.65}.analysisNotice.question textarea{min-height:92px}.refineBtn{margin:12px 0 8px}
     :root[data-theme="dark"] .templateCard{background:#111b2a;border-color:#34445b;color:#f3f6fb}:root[data-theme="dark"] .templateCard small{color:#aeb9c9}:root[data-theme="dark"] .templateSelected{background:#10261e;color:#9be8ba}:root[data-theme="dark"] .analysisNotice.question{background:#142544;border-color:#355b95}
     :root[data-density="compact"] main{padding:20px}:root[data-density="compact"] .card{padding:16px}:root[data-density="compact"] .row{padding:10px 8px}:root[data-density="compact"] .side{gap:16px}:root[data-density="compact"] .section{margin-top:20px}
@@ -808,7 +836,7 @@ Object.assign(window,{
   chg,chgDiscount,addItem,filterOfferCatalog,setOfferCatalogCategory,addCatalogToOffer,del,saveOfferNotes,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,planFollowUp,quickFollowUp,clearFollowUp,prepareEmail,markOfferSent,
   moveCalendar,addAppointment,removeAppointment,
   catalogChange,toggleCatalogFavorite,toggleCatalogFavorites,addCatalog,removeCatalog,importCatalog,exportCatalog,filterCatalog,changeCatalogImportMap,cancelCatalogImport,confirmCatalogImport,
-  settingsTab,saveSettings,applyColorPreset,previewAppearance,setStatsMode,exportData,importData,
+  settingsTab,saveSettings,uploadLogo,removeLogo,applyColorPreset,previewAppearance,setStatsMode,exportData,importData,
   printOffer,markOpen,persist,authScreen,submitAuth,signOut,resetScreen,sendReset,passwordUpdateScreen,updatePassword,createInvite,copyInvite,onboardingBack,onboardingNext
 });
 bootApp();
