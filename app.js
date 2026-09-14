@@ -28,7 +28,7 @@ const SYSTEM_TEMPLATES=[
   {id:'system-radiator',name:'Heizkörper tauschen',title:'Angebot – Heizkörper',description:'Heizkörper, Demontage, Montage und Anfahrt aus deinem Katalog.',terms:['heizkörper','demontage','montage','anfahrt']},
   {id:'system-heatpump',name:'Wärmepumpe',title:'Angebot – Wärmepumpe',description:'Wärmepumpe, Montage, Inbetriebnahme und Anfahrt aus deinem Katalog.',terms:['wärmepumpe','demontage','montage','inbetriebnahme','anfahrt']}
 ];
-function normalize(x){const d={offers:[],customers:[],settings:{company:'Dein Betrieb',owner:'',address:'',email:'',phone:'',website:'',taxNo:'',vatId:'',bank:'',logo:'',language:'de',theme:'system',accent:'#16a36a',colorPreset:'green',density:'normal',currency:'EUR',vat:19,offerValidity:14,paymentTerm:14,offerPrefix:'ANG-',offerNext:1001,customerNext:1001,offerFooter:'Vielen Dank für Ihre Anfrage.',offerTerms:'',emailSubject:'Ihr Angebot von {firma} – #{nummer}',emailText:'Guten Tag {kunde},\n\nhier erhalten Sie unser Angebot #{nummer}.\n\nViele Grüße\n{firma}',emailSignature:'',autoFollowups:true,notifications:true,aiSuggestions:true,next:1001},catalog:defaults.map(a=>({id:uid(),article:a[0],name:a[1],unit:a[2],price:a[3],cost:a[4]}))};if(!x)return d;x.settings={...d.settings,...(x.settings||{})};if(!['EUR','USD','GBP'].includes(x.settings.currency))x.settings.currency='EUR';if(x.settings.company==='Dein SHK-Betrieb')x.settings.company='Dein Betrieb';x.settings.colorPreset=x.settings.colorPreset||Object.keys(COLORS).find(k=>COLORS[k]===x.settings.accent)||'custom';x.settings.next=Number(x.settings.next)||1001;x.settings.offerNext=Number(x.settings.offerNext)||x.settings.next;x.settings.customerNext=Number(x.settings.customerNext)||1001;x.catalog=(x.catalog||d.catalog).map(a=>({...a,id:a.id||uid(),article:a.article||'',unit:a.unit||'Stk.',price:+a.price||0,cost:+a.cost||0}));x.customers=(Array.isArray(x.customers)?x.customers:[]).map(c=>({id:c.id||uid(),no:Number(c.no)||0,name:c.name||'',company:c.company||'',contact:c.contact||'',email:c.email||'',phone:c.phone||'',address:c.address||'',notes:c.notes||'',created:c.created||new Date().toISOString()}));x.offers=(x.offers||[]).map(o=>({...o,id:o.id||uid(),no:o.no||x.settings.next++,customerId:o.customerId||'',customer:{name:'',email:'',phone:'',address:'',...(o.customer||{})},items:(o.items||[]).map(i=>({...i,qty:+i.qty||1,price:+i.price||0,cost:+i.cost||0})),status:o.status||'entwurf',vat:+o.vat||19,discountType:o.discountType==='amount'?'amount':'percent',discount:Math.max(0,+o.discount||0),created:o.created||new Date().toISOString(),followUp:o.followUp||'',notes:o.notes||'',request:o.request||'',title:o.title||'Angebot',emailPreparedAt:o.emailPreparedAt||'',sentAt:o.sentAt||''}));const customerKey=c=>String(c.email||c.name||'').trim().toLowerCase();let nextCustomer=Math.max(x.settings.customerNext||1001,...x.customers.map(c=>(+c.no||0)+1));x.customers.forEach(c=>{if(!c.no)c.no=nextCustomer++});x.offers.forEach(o=>{let customer=x.customers.find(c=>c.id===o.customerId)||x.customers.find(c=>customerKey(c)&&customerKey(c)===customerKey(o.customer));if(!customer&&customerKey(o.customer)){customer={id:uid(),no:nextCustomer++,name:o.customer.name||'',company:'',contact:'',email:o.customer.email||'',phone:o.customer.phone||'',address:o.customer.address||'',notes:'',created:o.created};x.customers.push(customer)}if(customer)o.customerId=customer.id});x.settings.customerNext=nextCustomer;x.settings.next=Math.max(x.settings.next||1001,...x.offers.map(o=>(+o.no||0)+1));return x;}
+function normalize(x){const d={offers:[],customers:[],settings:{company:'Dein Betrieb',owner:'',address:'',email:'',phone:'',website:'',taxNo:'',vatId:'',bank:'',logo:'',language:'de',theme:'system',accent:'#16a36a',colorPreset:'green',density:'normal',currency:'EUR',vat:19,offerValidity:14,paymentTerm:14,offerPrefix:'ANG-',offerNext:1001,customerNext:1001,offerFooter:'Vielen Dank für Ihre Anfrage.',offerTerms:'',emailSubject:'Ihr Angebot von {firma} – #{nummer}',emailText:'Guten Tag {kunde},\n\nhier erhalten Sie unser Angebot #{nummer}.\n\nViele Grüße\n{firma}',emailSignature:'',autoFollowups:true,notifications:true,aiSuggestions:true,aiMode:'local',next:1001},catalog:defaults.map(a=>({id:uid(),article:a[0],name:a[1],unit:a[2],price:a[3],cost:a[4]}))};if(!x)return d;x.settings={...d.settings,...(x.settings||{})};if(!['EUR','USD','GBP'].includes(x.settings.currency))x.settings.currency='EUR';if(x.settings.company==='Dein SHK-Betrieb')x.settings.company='Dein Betrieb';x.settings.colorPreset=x.settings.colorPreset||Object.keys(COLORS).find(k=>COLORS[k]===x.settings.accent)||'custom';x.settings.next=Number(x.settings.next)||1001;x.settings.offerNext=Number(x.settings.offerNext)||x.settings.next;x.settings.customerNext=Number(x.settings.customerNext)||1001;x.catalog=(x.catalog||d.catalog).map(a=>({...a,id:a.id||uid(),article:a.article||'',unit:a.unit||'Stk.',price:+a.price||0,cost:+a.cost||0}));x.customers=(Array.isArray(x.customers)?x.customers:[]).map(c=>({id:c.id||uid(),no:Number(c.no)||0,name:c.name||'',company:c.company||'',contact:c.contact||'',email:c.email||'',phone:c.phone||'',address:c.address||'',notes:c.notes||'',created:c.created||new Date().toISOString()}));x.offers=(x.offers||[]).map(o=>({...o,id:o.id||uid(),no:o.no||x.settings.next++,customerId:o.customerId||'',customer:{name:'',email:'',phone:'',address:'',...(o.customer||{})},items:(o.items||[]).map(i=>({...i,qty:+i.qty||1,price:+i.price||0,cost:+i.cost||0})),status:o.status||'entwurf',vat:+o.vat||19,discountType:o.discountType==='amount'?'amount':'percent',discount:Math.max(0,+o.discount||0),created:o.created||new Date().toISOString(),followUp:o.followUp||'',notes:o.notes||'',request:o.request||'',title:o.title||'Angebot',emailPreparedAt:o.emailPreparedAt||'',sentAt:o.sentAt||''}));const customerKey=c=>String(c.email||c.name||'').trim().toLowerCase();let nextCustomer=Math.max(x.settings.customerNext||1001,...x.customers.map(c=>(+c.no||0)+1));x.customers.forEach(c=>{if(!c.no)c.no=nextCustomer++});x.offers.forEach(o=>{let customer=x.customers.find(c=>c.id===o.customerId)||x.customers.find(c=>customerKey(c)&&customerKey(c)===customerKey(o.customer));if(!customer&&customerKey(o.customer)){customer={id:uid(),no:nextCustomer++,name:o.customer.name||'',company:'',contact:'',email:o.customer.email||'',phone:o.customer.phone||'',address:o.customer.address||'',notes:'',created:o.created};x.customers.push(customer)}if(customer)o.customerId=customer.id});x.settings.customerNext=nextCustomer;x.settings.next=Math.max(x.settings.next||1001,...x.offers.map(o=>(+o.no||0)+1));return x;}
 let db=normalize(JSON.parse(localStorage.getItem(K)||localStorage.getItem('easyoffer_v21')||'null')); db.appointments=Array.isArray(db.appointments)?db.appointments:[]; localStorage.setItem(K,JSON.stringify(db));
 if(db.settings.offerFooter==='Vielen Dank für Ihre Anfrage.')db.settings.offerFooter='Vielen Dank für Ihr Interesse.';
 if(db.settings.offerIntro==='Vielen Dank für Ihre Anfrage. Gern unterbreiten wir Ihnen folgendes Angebot.')db.settings.offerIntro='Vielen Dank für Ihr Interesse. Gern unterbreiten wir Ihnen folgendes Angebot.';
@@ -115,10 +115,7 @@ function parse(t){
   if(!a.length)add('Montage / Arbeitszeit',['montage','arbeitszeit','einbau']);
   return {items:a,missing:[...new Set(missing)]}
 }
-function analyze(){
-  const o=st.o;
-  o.request=$('#req').value.trim();
-  if(!o.request)return toast('Bitte Anfrage eingeben');
+function analyzeLocal(o){
   o.title=/wärmepumpe/i.test(o.request)
     ?'Heizungsmodernisierung – Wärmepumpe'
     :/klima/i.test(o.request)
@@ -131,6 +128,25 @@ function analyze(){
   const result=parse(o.request);
   o.items=result.items;
   o.missingCatalogItems=result.missing;
+  o.aiSource='local'
+}
+async function analyzeCloud(o){
+  if(!cloud.client||!cloud.user)throw Error('Nicht angemeldet');
+  const catalog=db.catalog.map(item=>({id:item.id,article:item.article||'',name:item.name||'',category:item.category||'',unit:item.unit||''}));
+  const {data,error}=await cloud.client.functions.invoke('analyze-offer-request',{body:{request:o.request,catalog}});
+  if(error)throw error;
+  if(!data||!Array.isArray(data.positions))throw Error('Ungültige KI-Antwort');
+  const selected=data.positions.map(position=>{const item=db.catalog.find(catalogItem=>catalogItem.id===position.catalogId);return item?{catalogId:item.id,name:item.name,qty:Math.max(1,Number(position.quantity)||1),unit:item.unit,price:+item.price||0,cost:+item.cost||0}:null}).filter(Boolean);
+  o.title=String(data.title||'Angebot').slice(0,120);
+  o.items=selected;
+  o.missingCatalogItems=Array.isArray(data.unmatched)?data.unmatched.slice(0,12).map(value=>String(value).slice(0,100)):[];
+  o.aiSource='cloud'
+}
+async function analyze(){
+  const o=st.o;
+  o.request=$('#req').value.trim();
+  if(!o.request)return toast('Bitte Anfrage eingeben');
+  if(db.settings.aiMode==='cloud'){try{toast('KI analysiert deine Anfrage …');await analyzeCloud(o)}catch(error){console.warn('KI-Analyse fehlgeschlagen',error);toast('KI nicht erreichbar – lokale Analyse verwendet');analyzeLocal(o)}}else analyzeLocal(o);
   st.step=3;
   render()
 }
@@ -607,9 +623,10 @@ function settingsContent(){
     ${textareaField('E-Mail Text','emailText',s.emailText)}
     ${textareaField('Signatur','emailSignature',s.emailSignature)}
   </div>`;
-  if(st.settingsTab==='ai')return `<div class="card">
-    <label class="toggle"><input id="aiSuggestions" type="checkbox" ${s.aiSuggestions?'checked':''}><span>KI-Vorschläge aktivieren</span></label>
-    <div class="aiBox"><b>✦ Aktueller KI-Modus</b><p>EasyOffer nutzt momentan eine lokale Erkennung für typische Kundenanfragen. Eine echte API-Anbindung kann später ergänzt werden.</p></div>
+  if(st.settingsTab==='ai')return `<div class="card formgrid">
+    <label class="field"><span>Analysemethode</span><select id="aiMode"><option value="local" ${s.aiMode!=='cloud'?'selected':''}>Lokale Analyse (kostenlos)</option><option value="cloud" ${s.aiMode==='cloud'?'selected':''}>Echte KI über sicheres Backend</option></select><small>Die echte KI wird erst nach Einrichtung der Supabase-Funktion genutzt.</small></label>
+    <label class="toggle wide"><input id="aiSuggestions" type="checkbox" ${s.aiSuggestions?'checked':''}><span>KI-Vorschläge aktivieren</span></label>
+    <div class="aiBox wide"><b>✦ Sicherer KI-Modus</b><p>EasyOffer sendet bei echter KI nur Anfrage und Artikelbezeichnungen an das geschützte Backend. VK, EK und API-Schlüssel bleiben außerhalb der KI-Anfrage. Preise stammen weiterhin ausschließlich aus deinem Preiskatalog.</p></div>
   </div>`;
   if(st.settingsTab==='data')return `<div class="card dataSettings"><h2>Cloud-Backup & Daten sichern</h2><p class="lead">Deine Angebote, Kunden, Preise und Kalendereinträge werden automatisch in deinem EasyOffer-Arbeitsbereich in der Cloud gespeichert. Zusätzlich bleibt eine lokale Kopie in diesem Browser erhalten.</p><div class="toolbar"><button class="primary" onclick="exportData()">⇩ Backup herunterladen</button><button class="ghost" onclick="importData()">⇧ Backup wiederherstellen</button></div><div class="aiBox"><b>Datenschutz-Hinweis</b><p>Deine Betriebsdaten werden ausschließlich innerhalb deines angemeldeten EasyOffer-Arbeitsbereichs gespeichert und mit eingeladenen Teammitgliedern geteilt. Für die Verkaufsversion ergänzen wir ein vollständiges DSGVO-Konzept mit rechtlich geprüften Unterlagen.</p></div></div>`;
   return `<div class="card">
@@ -629,7 +646,7 @@ function textareaField(label,id,value){
     const el=document.getElementById(k);
     if(el)s[k]=Number(el.value);
   });
-  ['theme','accent','density','language','currency','colorPreset'].forEach(k=>{
+  ['theme','accent','density','language','currency','colorPreset','aiMode'].forEach(k=>{
     const el=document.getElementById(k);
     if(el)s[k]=el.value;
   });
