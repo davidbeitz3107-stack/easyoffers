@@ -698,8 +698,12 @@ function applyAppearance(){
     :root[data-theme="dark"]{--bg:#101827;--card:#172033;--ink:#f3f6fb;--muted:#aeb9c9;--line:#2b394d;--dark:#09111f;--shadow:0 12px 35px #00000030}
     :root[data-theme="dark"] .field input,:root[data-theme="dark"] .field textarea,:root[data-theme="dark"] .field select,:root[data-theme="dark"] .toolbar input,:root[data-theme="dark"] .toolbar select,:root[data-theme="dark"] .item input{background:#111b2a;color:#f3f6fb;border-color:#34445b}
     :root[data-theme="dark"] .ghost,:root[data-theme="dark"] .settingsTabs button{background:#172033;color:#f3f6fb;border-color:#34445b}
+    :root[data-theme="dark"] .card,:root[data-theme="dark"] .stat{background:#172033!important;color:#f3f6fb;border-color:#2b394d}
+    :root[data-theme="dark"] .card small,:root[data-theme="dark"] .card span,:root[data-theme="dark"] .stat span{color:#aeb9c9}
     :root[data-theme="dark"] .aiBox,:root[data-theme="dark"] .discountEditor{background:#10261e!important;border-color:#24533e!important}
-    :root[data-theme="dark"] .catalogTools,:root[data-theme="dark"] .paper{background:#172033}
+    :root[data-theme="dark"] .catalogTools,:root[data-theme="dark"] .calendarDay,:root[data-theme="dark"] .calendarForm{background:#172033!important;border-color:#2b394d!important}
+    :root[data-theme="dark"] .calendarDay.mutedDay{background:#121c2b!important}:root[data-theme="dark"] .calendarWeek{color:#aeb9c9}
+    :root[data-theme="dark"] .calendarItem{border-color:#34445b}:root[data-theme="dark"] .paper{background:#fff;color:#172033}
     :root[data-density="compact"] main{padding:20px}:root[data-density="compact"] .card{padding:16px}:root[data-density="compact"] .row{padding:10px 8px}:root[data-density="compact"] .side{gap:16px}:root[data-density="compact"] .section{margin-top:20px}
   `;document.head.append(style)}
   document.documentElement.dataset.theme=theme;
