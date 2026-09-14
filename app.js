@@ -27,7 +27,7 @@ let db=normalize(JSON.parse(localStorage.getItem(K)||localStorage.getItem('easyo
 if(db.settings.offerFooter==='Vielen Dank für Ihre Anfrage.')db.settings.offerFooter='Vielen Dank für Ihr Interesse.';
 if(db.settings.offerIntro==='Vielen Dank für Ihre Anfrage. Gern unterbreiten wir Ihnen folgendes Angebot.')db.settings.offerIntro='Vielen Dank für Ihr Interesse. Gern unterbreiten wir Ihnen folgendes Angebot.';
 db.offers.forEach(offer=>{if(offer.title==='Dienstleistungen')offer.title='Angebot'});
-let st={page:'home',step:1,o:null,photos:[],settingsTab:'company',catalogSearch:'',catalogCategory:'alle',catalogImport:null,customerSearch:'',customerEditId:'',statsMode:'net',calendarMonth:new Date().getMonth(),calendarYear:new Date().getFullYear(),onboardingStep:1};
+let st={page:'home',step:1,o:null,photos:[],settingsTab:'company',catalogSearch:'',catalogCategory:'alle',catalogImport:null,itemCatalogSearch:'',customerSearch:'',customerEditId:'',statsMode:'net',calendarMonth:new Date().getMonth(),calendarYear:new Date().getFullYear(),onboardingStep:1};
 function updateCloudStatus(){const el=document.getElementById('cloudStatus');if(el)el.textContent=cloud.status==='saving'?'Speichert …':cloud.status==='error'?'Speichern fehlgeschlagen':'Cloud gespeichert ✓'}
 function save(){localStorage.setItem(K,JSON.stringify(db));if(cloud.ready&&cloud.client&&cloud.user){cloud.status='saving';updateCloudStatus();clearTimeout(cloud.syncTimer);cloud.syncTimer=setTimeout(syncCloud,450)}}
 const subtotal=o=>(o.items||[]).reduce((a,x)=>a+(+x.qty||0)*(+x.price||0),0);
@@ -120,6 +120,9 @@ function analyze(){
   render()
 }
 function items(o){
+  const catalogQuery=st.itemCatalogSearch.trim().toLowerCase();
+  const catalogMatches=db.catalog.filter(item=>!catalogQuery||[item.article,item.name,item.category,item.unit].join(' ').toLowerCase().includes(catalogQuery));
+  const quickItems=(catalogQuery?catalogMatches:(db.catalog.filter(item=>item.favorite).length?db.catalog.filter(item=>item.favorite):db.catalog)).slice(0,8);
   return `<div class="card">
     <div class="items">
       ${o.items.map((x,i)=>`
@@ -131,6 +134,11 @@ function items(o){
           <input type="number" min="0" step="0.01" value="${x.cost||0}" onchange="chg(${i},'cost',this.value)">
           <button class="ghost" onclick="del(${i})">×</button>
         </div>`).join('')}
+    </div>
+    <div style="margin-top:20px;padding:15px;border:1px solid var(--line);border-radius:13px;background:#fafcff">
+      <div style="display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap"><div><b>Aus deinem Preiskatalog hinzufügen</b><small style="display:block;color:var(--muted);margin-top:3px">${catalogQuery?`${catalogMatches.length} passende Positionen`:'Favoriten und häufige Positionen'}</small></div><span style="color:var(--muted);font-size:12px">Klick übernimmt Preis und EK</span></div>
+      <input id="itemCatalogSearch" style="width:100%;margin-top:12px;border:1px solid var(--line);border-radius:9px;padding:11px;background:#fff" value="${esc(st.itemCatalogSearch)}" oninput="filterOfferCatalog(this.value)" placeholder="⌕ Artikel, Leistung oder Artikelnummer suchen">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:10px">${quickItems.map(item=>`<button class="ghost" style="text-align:left;padding:10px" onclick="addCatalogToOffer('${item.id}')"><b>${esc(item.name)}</b><small style="display:block;color:var(--muted);margin-top:3px">${esc(item.article||item.category||'Eigene Position')} · ${eur(item.price)} / ${esc(item.unit)}</small></button>`).join('')||'<span style="color:var(--muted);font-size:13px;padding:8px">Keine passende Position im Preiskatalog gefunden.</span>'}</div>
     </div>
     <button class="ghost" style="margin-top:14px" onclick="addItem()">＋ Position hinzufügen</button>
     <div class="discountEditor" style="display:grid;grid-template-columns:1fr 145px 120px;gap:10px;align-items:end;margin-top:20px;padding:15px;border:1px solid #cceedd;background:#f3fbf7;border-radius:13px">
@@ -169,6 +177,8 @@ function addItem(){
   st.o.items.push({name:'Neue Position',qty:1,unit:'Stk.',price:0,cost:0});
   render()
 }
+function filterOfferCatalog(value){st.itemCatalogSearch=value;render();setTimeout(()=>{const input=$('#itemCatalogSearch');if(input){input.focus();input.setSelectionRange(value.length,value.length)}},0)}
+function addCatalogToOffer(id){const catalogItem=db.catalog.find(item=>item.id===id);if(!catalogItem)return;const existing=st.o.items.find(item=>item.catalogId===id);if(existing)existing.qty=(+existing.qty||0)+1;else st.o.items.push({catalogId:id,name:catalogItem.name,qty:1,unit:catalogItem.unit,price:+catalogItem.price||0,cost:+catalogItem.cost||0});st.itemCatalogSearch='';render();toast(`${catalogItem.name} hinzugefügt`)}
 function del(i){
   st.o.items.splice(i,1);
   render()
@@ -394,7 +404,7 @@ function catalogPage(){
   <div class="card catalogTools"><div class="catalogSearch"><input value="${esc(st.catalogSearch)}" oninput="filterCatalog(this.value,st.catalogCategory,true)" placeholder="⌕ Artikel, Nummer oder Kategorie suchen"></div><select onchange="filterCatalog(st.catalogSearch,this.value)">${categories.map(c=>`<option value="${esc(c)}" ${st.catalogCategory===c?'selected':''}>${c==='alle'?'Alle Kategorien':esc(c)}</option>`).join('')}</select><span class="catalogCount">${visible.length} von ${db.catalog.length} Positionen</span></div>
   <div class="card">
     <div class="catalogHead">
-      <span>Artikel</span><span>Bezeichnung</span><span>Kategorie</span><span>Einheit</span><span>VK netto</span><span>EK</span><span>Marge</span><span></span>
+      <span>Artikel</span><span>Bezeichnung</span><span>Kategorie</span><span>Einheit</span><span>VK netto</span><span>EK</span><span>Marge</span><span>★</span>
     </div>
     <div class="catalogRows">
       ${visible.map(x=>`
@@ -406,7 +416,7 @@ function catalogPage(){
           <input type="number" min="0" step="0.01" value="${x.price}" onchange="catalogChange(${x._i},'price',this.value)">
           <input type="number" min="0" step="0.01" value="${x.cost}" onchange="catalogChange(${x._i},'cost',this.value)">
           <span class="catalogMargin">${x.price?Math.round((x.price-x.cost)/x.price*100):0}%</span>
-          <button class="ghost deleteCatalog" title="Position löschen" onclick="removeCatalog(${x._i})">×</button>
+          <div style="display:flex;gap:4px"><button class="ghost" style="padding:7px 8px" title="${x.favorite?'Favorit entfernen':'Als Favorit markieren'}" onclick="toggleCatalogFavorite(${x._i})">${x.favorite?'★':'☆'}</button><button class="ghost deleteCatalog" title="Position löschen" onclick="removeCatalog(${x._i})">×</button></div>
         </div>`).join('')||`<div class="empty compactEmpty"><h3>Keine Positionen gefunden</h3><p>Ändere die Suche oder lege eine neue Position an.</p></div>`}
     </div>
   </div>`
@@ -416,6 +426,7 @@ function catalogChange(i,k,v){
   db.catalog[i][k]=['price','cost'].includes(k)?Number(v):v;
   save()
 }
+function toggleCatalogFavorite(i){db.catalog[i].favorite=!db.catalog[i].favorite;save();render()}
 function addCatalog(){
   db.catalog.push({id:uid(),article:'',name:'Neue Leistung',category:'Allgemein',unit:'Stk.',price:0,cost:0});
   save();
@@ -713,9 +724,9 @@ window.addEventListener('beforeunload',()=>{
 });
 Object.assign(window,{
   go,newOffer,saveCustomer,selectExistingCustomer,analyze,photos,back,newCustomer,openCustomer,filterCustomers,saveCustomerProfile,
-  chg,chgDiscount,addItem,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,planFollowUp,clearFollowUp,prepareEmail,markOfferSent,
+  chg,chgDiscount,addItem,filterOfferCatalog,addCatalogToOffer,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,planFollowUp,clearFollowUp,prepareEmail,markOfferSent,
   moveCalendar,addAppointment,removeAppointment,
-  catalogChange,addCatalog,removeCatalog,importCatalog,exportCatalog,filterCatalog,changeCatalogImportMap,cancelCatalogImport,confirmCatalogImport,
+  catalogChange,toggleCatalogFavorite,addCatalog,removeCatalog,importCatalog,exportCatalog,filterCatalog,changeCatalogImportMap,cancelCatalogImport,confirmCatalogImport,
   settingsTab,saveSettings,applyColorPreset,setStatsMode,exportData,importData,
   printOffer,markOpen,persist,authScreen,submitAuth,signOut,resetScreen,sendReset,passwordUpdateScreen,updatePassword,createInvite,copyInvite,onboardingBack,onboardingNext
 });
