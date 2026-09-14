@@ -27,7 +27,7 @@ let db=normalize(JSON.parse(localStorage.getItem(K)||localStorage.getItem('easyo
 if(db.settings.offerFooter==='Vielen Dank für Ihre Anfrage.')db.settings.offerFooter='Vielen Dank für Ihr Interesse.';
 if(db.settings.offerIntro==='Vielen Dank für Ihre Anfrage. Gern unterbreiten wir Ihnen folgendes Angebot.')db.settings.offerIntro='Vielen Dank für Ihr Interesse. Gern unterbreiten wir Ihnen folgendes Angebot.';
 db.offers.forEach(offer=>{if(offer.title==='Dienstleistungen')offer.title='Angebot'});
-let st={page:'home',step:1,o:null,photos:[],settingsTab:'company',catalogSearch:'',catalogCategory:'alle',catalogImport:null,itemCatalogSearch:'',customerSearch:'',customerEditId:'',statsMode:'net',calendarMonth:new Date().getMonth(),calendarYear:new Date().getFullYear(),onboardingStep:1};
+let st={page:'home',step:1,o:null,photos:[],settingsTab:'company',catalogSearch:'',catalogCategory:'alle',catalogFavorites:false,catalogImport:null,itemCatalogSearch:'',itemCatalogCategory:'alle',customerSearch:'',customerEditId:'',statsMode:'net',calendarMonth:new Date().getMonth(),calendarYear:new Date().getFullYear(),onboardingStep:1};
 function updateCloudStatus(){const el=document.getElementById('cloudStatus');if(el)el.textContent=cloud.status==='saving'?'Speichert …':cloud.status==='error'?'Speichern fehlgeschlagen':'Cloud gespeichert ✓'}
 function save(){localStorage.setItem(K,JSON.stringify(db));if(cloud.ready&&cloud.client&&cloud.user){cloud.status='saving';updateCloudStatus();clearTimeout(cloud.syncTimer);cloud.syncTimer=setTimeout(syncCloud,450)}}
 const subtotal=o=>(o.items||[]).reduce((a,x)=>a+(+x.qty||0)*(+x.price||0),0);
@@ -121,8 +121,9 @@ function analyze(){
 }
 function items(o){
   const catalogQuery=st.itemCatalogSearch.trim().toLowerCase();
-  const catalogMatches=db.catalog.filter(item=>!catalogQuery||[item.article,item.name,item.category,item.unit].join(' ').toLowerCase().includes(catalogQuery));
-  const quickItems=(catalogQuery?catalogMatches:(db.catalog.filter(item=>item.favorite).length?db.catalog.filter(item=>item.favorite):db.catalog)).slice(0,8);
+  const offerCategories=['alle',...new Set(db.catalog.map(item=>item.category||'Allgemein').filter(Boolean).sort((a,b)=>a.localeCompare(b,'de')))];
+  const catalogMatches=db.catalog.filter(item=>(st.itemCatalogCategory==='alle'||(item.category||'Allgemein')===st.itemCatalogCategory)&&(!catalogQuery||[item.article,item.name,item.category,item.unit].join(' ').toLowerCase().includes(catalogQuery)));
+  const quickItems=(catalogQuery?catalogMatches:(catalogMatches.filter(item=>item.favorite).length?catalogMatches.filter(item=>item.favorite):catalogMatches)).slice(0,8);
   return `<div class="card">
     <div class="items">
       ${o.items.map((x,i)=>`
@@ -137,7 +138,7 @@ function items(o){
     </div>
     <div style="margin-top:20px;padding:15px;border:1px solid var(--line);border-radius:13px;background:#fafcff">
       <div style="display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap"><div><b>Aus deinem Preiskatalog hinzufügen</b><small style="display:block;color:var(--muted);margin-top:3px">${catalogQuery?`${catalogMatches.length} passende Positionen`:'Favoriten und häufige Positionen'}</small></div><span style="color:var(--muted);font-size:12px">Klick übernimmt Preis und EK</span></div>
-      <input id="itemCatalogSearch" style="width:100%;margin-top:12px;border:1px solid var(--line);border-radius:9px;padding:11px;background:#fff" value="${esc(st.itemCatalogSearch)}" oninput="filterOfferCatalog(this.value)" placeholder="⌕ Artikel, Leistung oder Artikelnummer suchen">
+      <div style="display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:8px;margin-top:12px"><input id="itemCatalogSearch" style="width:100%;border:1px solid var(--line);border-radius:9px;padding:11px;background:#fff" value="${esc(st.itemCatalogSearch)}" oninput="filterOfferCatalog(this.value)" placeholder="⌕ Artikel, Leistung oder Artikelnummer suchen"><select style="border:1px solid var(--line);border-radius:9px;padding:11px;background:#fff" onchange="setOfferCatalogCategory(this.value)">${offerCategories.map(category=>`<option value="${esc(category)}" ${st.itemCatalogCategory===category?'selected':''}>${category==='alle'?'Alle Kategorien':esc(category)}</option>`).join('')}</select></div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:10px">${quickItems.map(item=>`<button class="ghost" style="text-align:left;padding:10px" onclick="addCatalogToOffer('${item.id}')"><b>${esc(item.name)}</b><small style="display:block;color:var(--muted);margin-top:3px">${esc(item.article||item.category||'Eigene Position')} · ${eur(item.price)} / ${esc(item.unit)}</small></button>`).join('')||'<span style="color:var(--muted);font-size:13px;padding:8px">Keine passende Position im Preiskatalog gefunden.</span>'}</div>
     </div>
     <button class="ghost" style="margin-top:14px" onclick="addItem()">＋ Position hinzufügen</button>
@@ -178,6 +179,7 @@ function addItem(){
   render()
 }
 function filterOfferCatalog(value){st.itemCatalogSearch=value;render();setTimeout(()=>{const input=$('#itemCatalogSearch');if(input){input.focus();input.setSelectionRange(value.length,value.length)}},0)}
+function setOfferCatalogCategory(value){st.itemCatalogCategory=value;render()}
 function addCatalogToOffer(id){const catalogItem=db.catalog.find(item=>item.id===id);if(!catalogItem)return;const existing=st.o.items.find(item=>item.catalogId===id);if(existing)existing.qty=(+existing.qty||0)+1;else st.o.items.push({catalogId:id,name:catalogItem.name,qty:1,unit:catalogItem.unit,price:+catalogItem.price||0,cost:+catalogItem.cost||0});st.itemCatalogSearch='';render();toast(`${catalogItem.name} hinzugefügt`)}
 function del(i){
   st.o.items.splice(i,1);
@@ -392,7 +394,7 @@ function saveCustomerProfile(){const isNew=st.customerEditId==='new';const name=
 function catalogPage(){
   const categories=['alle',...new Set(db.catalog.map(x=>x.category||'Allgemein').filter(Boolean).sort((a,b)=>a.localeCompare(b,'de')))];
   const query=st.catalogSearch.trim().toLowerCase();
-  const visible=db.catalog.map((x,i)=>({...x,_i:i})).filter(x=>(st.catalogCategory==='alle'||(x.category||'Allgemein')===st.catalogCategory)&&(!query||[x.article,x.name,x.category,x.unit].join(' ').toLowerCase().includes(query)));
+  const visible=db.catalog.map((x,i)=>({...x,_i:i})).filter(x=>(!st.catalogFavorites||x.favorite)&&(st.catalogCategory==='alle'||(x.category||'Allgemein')===st.catalogCategory)&&(!query||[x.article,x.name,x.category,x.unit].join(' ').toLowerCase().includes(query)));
   return `<div class="top">
     <div>
       <span class="eyebrow">PREISKATALOG</span>
@@ -401,7 +403,7 @@ function catalogPage(){
     </div>
     <div class="toolbar"><button class="ghost" onclick="importCatalog()">⇧ Katalog importieren</button><button class="ghost" onclick="exportCatalog()">⇩ Katalog exportieren</button><button class="primary" onclick="addCatalog()">＋ Position</button></div>
   </div>
-  <div class="card catalogTools"><div class="catalogSearch"><input value="${esc(st.catalogSearch)}" oninput="filterCatalog(this.value,st.catalogCategory,true)" placeholder="⌕ Artikel, Nummer oder Kategorie suchen"></div><select onchange="filterCatalog(st.catalogSearch,this.value)">${categories.map(c=>`<option value="${esc(c)}" ${st.catalogCategory===c?'selected':''}>${c==='alle'?'Alle Kategorien':esc(c)}</option>`).join('')}</select><span class="catalogCount">${visible.length} von ${db.catalog.length} Positionen</span></div>
+  <div class="card catalogTools"><div class="catalogSearch"><input value="${esc(st.catalogSearch)}" oninput="filterCatalog(this.value,st.catalogCategory,true)" placeholder="⌕ Artikel, Nummer oder Kategorie suchen"></div><select onchange="filterCatalog(st.catalogSearch,this.value)">${categories.map(c=>`<option value="${esc(c)}" ${st.catalogCategory===c?'selected':''}>${c==='alle'?'Alle Kategorien':esc(c)}</option>`).join('')}</select><button class="${st.catalogFavorites?'primary':'ghost'}" onclick="toggleCatalogFavorites()">${st.catalogFavorites?'★ Favoriten aktiv':'☆ Nur Favoriten'}</button><span class="catalogCount">${visible.length} von ${db.catalog.length} Positionen</span></div>
   <div class="card">
     <div class="catalogHead">
       <span>Artikel</span><span>Bezeichnung</span><span>Kategorie</span><span>Einheit</span><span>VK netto</span><span>EK</span><span>Marge</span><span>★</span>
@@ -422,6 +424,7 @@ function catalogPage(){
   </div>`
 }
 function filterCatalog(search,category,keepFocus=false){st.catalogSearch=search;st.catalogCategory=category;render();if(keepFocus)setTimeout(()=>{const input=document.querySelector('.catalogTools input');if(input){input.focus();input.setSelectionRange(search.length,search.length)}},0)}
+function toggleCatalogFavorites(){st.catalogFavorites=!st.catalogFavorites;render()}
 function catalogChange(i,k,v){
   db.catalog[i][k]=['price','cost'].includes(k)?Number(v):v;
   save()
@@ -724,9 +727,9 @@ window.addEventListener('beforeunload',()=>{
 });
 Object.assign(window,{
   go,newOffer,saveCustomer,selectExistingCustomer,analyze,photos,back,newCustomer,openCustomer,filterCustomers,saveCustomerProfile,
-  chg,chgDiscount,addItem,filterOfferCatalog,addCatalogToOffer,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,planFollowUp,clearFollowUp,prepareEmail,markOfferSent,
+  chg,chgDiscount,addItem,filterOfferCatalog,setOfferCatalogCategory,addCatalogToOffer,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,planFollowUp,clearFollowUp,prepareEmail,markOfferSent,
   moveCalendar,addAppointment,removeAppointment,
-  catalogChange,toggleCatalogFavorite,addCatalog,removeCatalog,importCatalog,exportCatalog,filterCatalog,changeCatalogImportMap,cancelCatalogImport,confirmCatalogImport,
+  catalogChange,toggleCatalogFavorite,toggleCatalogFavorites,addCatalog,removeCatalog,importCatalog,exportCatalog,filterCatalog,changeCatalogImportMap,cancelCatalogImport,confirmCatalogImport,
   settingsTab,saveSettings,applyColorPreset,setStatsMode,exportData,importData,
   printOffer,markOpen,persist,authScreen,submitAuth,signOut,resetScreen,sendReset,passwordUpdateScreen,updatePassword,createInvite,copyInvite,onboardingBack,onboardingNext
 });
