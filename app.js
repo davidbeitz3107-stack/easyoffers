@@ -563,10 +563,12 @@ function settingsContent(){
   </div>`;
   if(st.settingsTab==='team')return `<div class="card teamCard"><span class="eyebrow">BETRIEB & MITARBEITER</span><h2>${esc(cloud.workspace?.name||s.company||'Mein Betrieb')}</h2><p class="lead">${cloud.workspace?.role==='owner'?'Du bist Inhaber. Erstelle einen sicheren Einladungslink für Mitarbeiter.':'Du arbeitest als Mitarbeiter in diesem Betrieb.'}</p>${cloud.workspace?.role==='owner'?`<div class="inviteForm"><label class="field"><span>E-Mail des Mitarbeiters</span><input id="inviteEmail" type="email" placeholder="mitarbeiter@betrieb.de"></label><button class="primary" onclick="createInvite()">Einladung erstellen</button></div>${cloud.inviteLink?`<div class="inviteLink"><b>Einladungslink bereit</b><input readonly value="${esc(cloud.inviteLink)}"><button class="ghost" onclick="copyInvite()">Link kopieren</button><small>Sende diesen Link an den Mitarbeiter. Der Link ist nur für diese E-Mail gültig.</small></div>`:''}`:`<div class="aiBox"><b>Gemeinsame Betriebsdaten</b><p>Angebote, Kunden, Katalog und Kalender werden mit deinem Betrieb geteilt.</p></div>`}</div>`;
   if(st.settingsTab==='design')return `<div class="card formgrid">
-    <label class="field"><span>Theme</span><select id="theme"><option value="system" ${s.theme==='system'?'selected':''}>System (automatisch)</option><option value="light" ${s.theme==='light'?'selected':''}>Hell</option><option value="dark" ${s.theme==='dark'?'selected':''}>Dunkel</option></select></label>
+    <div class="wide"><span class="eyebrow">ERSCHEINUNGSBILD</span><h2>Dein EasyOffer-Design.</h2><p class="lead smallLead">Farben und Darstellung werden direkt vorgeschaut. Mit „Speichern“ übernimmst du sie für deinen gesamten Betrieb.</p></div>
+    <label class="field"><span>Theme</span><select id="theme" onchange="previewAppearance('theme',this.value)"><option value="system" ${s.theme==='system'?'selected':''}>System (automatisch)</option><option value="light" ${s.theme==='light'?'selected':''}>Hell</option><option value="dark" ${s.theme==='dark'?'selected':''}>Dunkel</option></select></label>
+    <label class="field"><span>Dichte</span><select id="density" onchange="previewAppearance('density',this.value)"><option value="normal" ${s.density==='normal'?'selected':''}>Normal – angenehm luftig</option><option value="compact" ${s.density==='compact'?'selected':''}>Kompakt – mehr Inhalt auf dem Bildschirm</option></select></label>
     <label class="field"><span>Farbvorlage</span><select id="colorPreset" onchange="applyColorPreset(this.value)">${[['green','Grün'],['blue','Blau'],['violet','Violett'],['orange','Orange'],['graphite','Graphit'],['custom','Eigene Farbe']].map(([v,l])=>`<option value="${v}" ${s.colorPreset===v?'selected':''}>${l}</option>`).join('')}</select></label>
-    <label class="field"><span>Akzentfarbe</span><input id="accent" type="color" value="${s.accent}" oninput="applyColorPreset('custom',this.value)"></label>
-    <label class="field"><span>Dichte</span><select id="density"><option value="normal" ${s.density==='normal'?'selected':''}>Normal</option><option value="compact" ${s.density==='compact'?'selected':''}>Kompakt</option></select></label>
+    <div class="field"><span>Schnellauswahl</span><div style="display:flex;gap:9px;flex-wrap:wrap">${Object.entries(COLORS).map(([name,color])=>`<button class="ghost" title="${name}" style="width:34px;height:34px;border-radius:50%;padding:0;background:${color};border:3px solid ${s.colorPreset===name?'var(--ink)':'#fff'}" onclick="applyColorPreset('${name}')"></button>`).join('')}</div></div>
+    <label class="field"><span>Eigene Akzentfarbe</span><input id="accent" type="color" value="${s.accent}" oninput="applyColorPreset('custom',this.value)"></label>
     <label class="field"><span>Sprache</span><select id="language"><option value="de" ${s.language==='de'?'selected':''}>Deutsch</option><option value="en" ${s.language==='en'?'selected':''}>English</option></select></label>
   </div>`;
   if(st.settingsTab==='offers')return `<div class="card formgrid">
@@ -691,10 +693,23 @@ function applyAppearance(){
   const s=db.settings;
   const mode=s.theme||'system';
   const theme=mode==='system'&&(window.matchMedia?.('(prefers-color-scheme: dark)').matches)?'dark':mode==='system'?'light':mode;
+  let style=document.getElementById('easyofferAppearanceStyles');
+  if(!style){style=document.createElement('style');style.id='easyofferAppearanceStyles';style.textContent=`
+    :root[data-theme="dark"]{--bg:#101827;--card:#172033;--ink:#f3f6fb;--muted:#aeb9c9;--line:#2b394d;--dark:#09111f;--shadow:0 12px 35px #00000030}
+    :root[data-theme="dark"] .field input,:root[data-theme="dark"] .field textarea,:root[data-theme="dark"] .field select,:root[data-theme="dark"] .toolbar input,:root[data-theme="dark"] .toolbar select,:root[data-theme="dark"] .item input{background:#111b2a;color:#f3f6fb;border-color:#34445b}
+    :root[data-theme="dark"] .ghost,:root[data-theme="dark"] .settingsTabs button{background:#172033;color:#f3f6fb;border-color:#34445b}
+    :root[data-theme="dark"] .aiBox,:root[data-theme="dark"] .discountEditor{background:#10261e!important;border-color:#24533e!important}
+    :root[data-theme="dark"] .catalogTools,:root[data-theme="dark"] .paper{background:#172033}
+    :root[data-density="compact"] main{padding:20px}:root[data-density="compact"] .card{padding:16px}:root[data-density="compact"] .row{padding:10px 8px}:root[data-density="compact"] .side{gap:16px}:root[data-density="compact"] .section{margin-top:20px}
+  `;document.head.append(style)}
   document.documentElement.dataset.theme=theme;
   document.documentElement.dataset.themeMode=mode;
   document.documentElement.dataset.density=s.density||'normal';
   document.documentElement.style.setProperty('--accent',s.accent||'#16a36a')
+}
+function previewAppearance(field,value){
+  if(field==='density')document.documentElement.dataset.density=value==='compact'?'compact':'normal';
+  if(field==='theme'){const theme=value==='system'&&(window.matchMedia?.('(prefers-color-scheme: dark)').matches)?'dark':value==='system'?'light':value;document.documentElement.dataset.theme=theme}
 }
 function localize(){
   document.documentElement.lang=db.settings.language||'de';
@@ -730,7 +745,7 @@ Object.assign(window,{
   chg,chgDiscount,addItem,filterOfferCatalog,setOfferCatalogCategory,addCatalogToOffer,del,openOffer,filterOffers,setOfferStatus,duplicateCurrentOffer,planFollowUp,clearFollowUp,prepareEmail,markOfferSent,
   moveCalendar,addAppointment,removeAppointment,
   catalogChange,toggleCatalogFavorite,toggleCatalogFavorites,addCatalog,removeCatalog,importCatalog,exportCatalog,filterCatalog,changeCatalogImportMap,cancelCatalogImport,confirmCatalogImport,
-  settingsTab,saveSettings,applyColorPreset,setStatsMode,exportData,importData,
+  settingsTab,saveSettings,applyColorPreset,previewAppearance,setStatsMode,exportData,importData,
   printOffer,markOpen,persist,authScreen,submitAuth,signOut,resetScreen,sendReset,passwordUpdateScreen,updatePassword,createInvite,copyInvite,onboardingBack,onboardingNext
 });
 bootApp();
