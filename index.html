@@ -2,15 +2,47 @@
 <html lang="de">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b1220">
-  <title>EasyOffer</title>
-    <link rel="stylesheet" href="styles.css?v=international-discounts-20260907">
+  <meta name="description" content="EasyOffer erstellt professionelle Angebote für Handwerk und Service in wenigen Minuten.">
+  <title>EasyOffer – Angebote. In Minuten statt Stunden.</title>
+  <link rel="stylesheet" href="landing.css?v=20260915">
 </head>
 <body>
-  <div id="app"></div>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <script src="app.js?v=clean-offer-preview-20260915"></script>
+  <header class="siteHeader">
+    <a class="brand" href="#top"><span>E</span><b>easyoffer</b></a>
+    <nav><a href="#ablauf">So funktioniert's</a><a href="#funktionen">Funktionen</a><a href="#start">Starten</a></nav>
+    <a class="headerCta" href="app.html">Zur App →</a>
+  </header>
+  <main id="top">
+    <section class="heroSection">
+      <div class="heroCopy">
+        <p class="eyebrow">FÜR HANDWERK & SERVICE</p>
+        <h1>Angebote. <em>In Minuten</em><br>statt Stunden.</h1>
+        <p class="heroLead">EasyOffer macht aus einer Kundenanfrage einen professionellen Angebotsentwurf – mit deinen eigenen Preisen, deiner Kontrolle und ohne komplizierte Software.</p>
+        <div class="heroActions"><a class="primaryCta" href="app.html">Kostenlos starten <span>→</span></a><a class="textCta" href="#ablauf">So funktioniert's <span>↓</span></a></div>
+        <p class="heroHint">Kein Kreditkarten-Zwang · Eigener Preiskatalog · Cloud-Speicher</p>
+      </div>
+      <div class="offerMockup" aria-label="Vorschau eines EasyOffer-Angebots">
+        <div class="mockTop"><span class="mockLogo">E</span><span>easyoffer</span><b>ANGEBOT #1029</b></div>
+        <div class="mockCustomer"><small>FÜR</small><b>Familie Müller</b><span>Modernisierung Heizung</span></div>
+        <div class="mockRows"><div><span>Wärmepumpe</span><b>1 Stk.</b></div><div><span>Montage</span><b>8 Std.</b></div><div><span>Anfahrt</span><b>pa.</b></div></div>
+        <div class="mockTotal"><span>GESAMT</span><b>9.754,43 €</b></div>
+        <div class="mockStatus"><i></i> Bereit zur Prüfung</div>
+      </div>
+    </section>
+    <section class="benefitBar"><div><b>Eigene Preise</b><span>Dein Katalog bleibt die Preisquelle.</span></div><div><b>Volle Kontrolle</b><span>Jede Position bleibt bearbeitbar.</span></div><div><b>Professionell versenden</b><span>PDF und Mail-Vorbereitung inklusive.</span></div></section>
+    <section class="flowSection" id="ablauf">
+      <div class="sectionIntro"><p class="eyebrow">EINFACHER ABLAUF</p><h2>Vom Kundenkontakt<br>zum fertigen Angebot.</h2><p>Kein Wechsel zwischen Listen, Taschenrechner und Word-Dokumenten. EasyOffer bringt die wichtigen Schritte in einen klaren Ablauf.</p></div>
+      <div class="flowSteps"><article><span>01</span><div><h3>Anfrage einfügen</h3><p>Text, Fotos oder Unterlagen zum Projekt direkt beim Angebot ablegen.</p></div></article><article><span>02</span><div><h3>Vorschlag prüfen</h3><p>KI schlägt passende Positionen aus deinem Preiskatalog vor.</p></div></article><article><span>03</span><div><h3>Kalkulieren</h3><p>Mengen, Preise, Rabatt und Marge vor dem Versand kontrollieren.</p></div></article><article><span>04</span><div><h3>Versenden & nachfassen</h3><p>PDF erstellen, E-Mail vorbereiten und Erinnerung im Kalender planen.</p></div></article></div>
+    </section>
+    <section class="featureSection" id="funktionen">
+      <div class="featureHeading"><p class="eyebrow">WAS DIR ARBEIT ABNIMMT</p><h2>Alles Wichtige.<br>Nichts Überflüssiges.</h2></div>
+      <div class="featureGrid"><article><span>✦</span><h3>KI mit Preis-Schutz</h3><p>Die KI erkennt Leistungen – Preise und Einkaufskosten kommen ausschließlich aus deinem Katalog.</p></article><article><span>▤</span><h3>Saubere Angebote</h3><p>Einheitliche Angebotsnummern, Rabatte, MwSt., Bedingungen und ein professionelles PDF.</p></article><article><span>◷</span><h3>Keine Anfrage vergessen</h3><p>Plane Nachfass-Termine direkt am Angebot. Sie erscheinen automatisch im Kalender.</p></article><article><span>♙</span><h3>Gemeinsam im Betrieb</h3><p>Kunden, Angebote, Katalog und Kalender liegen sicher im gemeinsamen Arbeitsbereich.</p></article><article><span>▧</span><h3>Fotos & Unterlagen</h3><p>Baustellenfotos, PDFs und Dokumente bleiben beim passenden Angebot gespeichert.</p></article><article><span>◈</span><h3>Klare Zahlen</h3><p>Umsatz, Gewinn, Abschlussquote und offene Pipeline auf einen Blick.</p></article></div>
+    </section>
+    <section class="trustSection"><div><p class="eyebrow">DEINE DATEN</p><h2>Dein Betrieb.<br>Deine Preise.<br>Deine Entscheidung.</h2></div><div class="trustPoints"><p><b>Preiskatalog als Grundlage</b><span>EasyOffer erfindet keine Preise. Du entscheidest, was angeboten wird.</span></p><p><b>Cloud-Arbeitsbereich</b><span>Deine Betriebsdaten sind getrennt von anderen Betrieben gespeichert.</span></p><p><b>KI nur auf Klick</b><span>Fotos werden nur dann analysiert, wenn du bewusst „KI prüfen“ auswählst.</span></p></div></section>
+    <section class="finalCta" id="start"><p class="eyebrow">BEREIT FÜR WENIGER BÜROKRATIE?</p><h2>Dein nächstes Angebot<br>kann einfacher sein.</h2><p>Starte mit deinem Preiskatalog und erstelle deinen ersten professionellen Entwurf.</p><a class="primaryCta lightCta" href="app.html">EasyOffer kostenlos starten <span>→</span></a></section>
+  </main>
+  <footer><a class="brand" href="#top"><span>E</span><b>easyoffer</b></a><span>© 2026 EasyOffer · Angebote & Kalkulation für Handwerk und Service</span><a href="app.html">Zur App →</a></footer>
 </body>
 </html>
