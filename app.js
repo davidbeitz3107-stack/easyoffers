@@ -304,6 +304,7 @@ function finish(o){
         <button class="ghost" style="width:100%;margin-top:10px" onclick="saveOfferAsTemplate()">☆ Als Vorlage speichern</button>
         <button class="ghost" style="width:100%;margin-top:10px" onclick="st.step=4;render()">Angebot bearbeiten</button>
         ${saved?`<button class="ghost" style="width:100%;margin-top:10px" onclick="duplicateCurrentOffer()">Duplizieren</button>`:''}
+        ${saved&&o.status==='entwurf'?`<button class="textButton dangerText" style="width:100%;margin-top:12px" onclick="deleteCurrentOffer()">Entwurf löschen</button>`:''}
         <button class="ghost" style="width:100%;margin-top:10px" onclick="markOpen()">Als offen speichern</button>
         <button class="ghost" style="width:100%;margin-top:10px" onclick="go('offers')">Zu meinen Angeboten</button>
       </div>
@@ -352,6 +353,7 @@ function clearFollowUp(){st.o.followUp='';db.appointments=(db.appointments||[]).
 function emailValue(text,o){const s=db.settings,offerNo=`${s.offerPrefix||'ANG-'}${o.no}`,values={kunde:o.customer.name||'',firma:s.company||'',nummer:offerNo,betrag:eur(gross(o))};return String(text||'').replace(/\{(kunde|firma|nummer|betrag)\}/g,(_,key)=>values[key])}
 function prepareEmail(){const o=st.o;if(!o.customer.email)return toast('Bitte zuerst eine E-Mail-Adresse beim Kunden hinterlegen.');const s=db.settings,subject=emailValue(s.emailSubject||'Ihr Angebot von {firma} – #{nummer}',o);const message=emailValue(s.emailText||'',o)+(s.emailSignature?`\n\n${emailValue(s.emailSignature,o)}`:'')+'\n\nHinweis: Das Angebots-PDF bitte als Anhang ergänzen.';o.emailPreparedAt=new Date().toISOString();persist();render();window.location.href=`mailto:${encodeURIComponent(o.customer.email)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;toast('E-Mail wurde vorbereitet')}
 function markOfferSent(){st.o.sentAt=new Date().toISOString();st.o.status='offen';persist();toast('Angebot als versendet markiert');render()}
+async function deleteCurrentOffer(){const o=st.o;if(!o||o.status!=='entwurf')return toast('Nur Entwürfe können gelöscht werden.');if(!confirm(`Entwurf #${o.no} wirklich löschen? Angeheftete Dateien werden ebenfalls entfernt.`))return;const paths=(o.attachments||[]).map(file=>file.path).filter(Boolean);if(paths.length&&cloud.client){const {error}=await cloud.client.storage.from('offer-files').remove(paths);if(error)return toast('Dateien konnten nicht gelöscht werden. Der Entwurf bleibt erhalten.')}db.offers=db.offers.filter(item=>item.id!==o.id);db.appointments=(db.appointments||[]).filter(item=>item.offerId!==o.id);save();st.o=null;go('offers');toast('Entwurf gelöscht')}
 function duplicateCurrentOffer(){
   st.o={...JSON.parse(JSON.stringify(st.o)),id:uid(),no:db.settings.next++,status:'entwurf',created:new Date().toISOString(),title:`${st.o.title||'Angebot'} – Kopie`};
   st.step=4;
@@ -847,6 +849,6 @@ Object.assign(window,{
   moveCalendar,addAppointment,removeAppointment,
   catalogChange,toggleCatalogFavorite,toggleCatalogFavorites,addCatalog,removeCatalog,importCatalog,exportCatalog,filterCatalog,changeCatalogImportMap,cancelCatalogImport,confirmCatalogImport,
   settingsTab,saveSettings,uploadLogo,removeLogo,applyColorPreset,previewAppearance,setStatsMode,exportData,importData,
-  printOffer,markOpen,persist,authScreen,submitAuth,signOut,resetScreen,sendReset,passwordUpdateScreen,updatePassword,createInvite,copyInvite,onboardingBack,onboardingNext
+  printOffer,markOpen,persist,deleteCurrentOffer,authScreen,submitAuth,signOut,resetScreen,sendReset,passwordUpdateScreen,updatePassword,createInvite,copyInvite,onboardingBack,onboardingNext
 });
 bootApp();
